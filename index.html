@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miss Daniela Bakery - Calculadora de Precios</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 40px; background: #f9f9f9; }
+        h1 { color: #d2691e; }
+    </style>
+</head>
+<body>
+    <h1>¡Bienvenido a Miss Daniela Bakery!</h1>
+    <p>Calcula el precio de tus productos aquí:</p>
+    
+    
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miss Daniela Bakery - Calculadora de Precios</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Quicksand:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-body { font-family: 'Quicksand', sans-serif; }
+    .cake-shadow { box-shadow: 0 10px 40px rgba(219, 112, 147, 0.2); }
+    .option-card { transition: all 0.3s ease; }
+    .option-card:hover { transform: translateY(-2px); }
+    .option-card.selected { border-color: #DB7093; background: linear-gradient(135deg, #FFF0F5 0%, #FFE4EC 100%); }
+    .candy-item { transition: all 0.2s ease; }
+    .candy-item:hover { background: #FFF0F5; }
+    .pulse-price { animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .gradient-border {
+      background: linear-gradient(white, white) padding-box,
+                  linear-gradient(135deg, #FFB6C1, #DB7093) border-box;
+      border: 2px solid transparent;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'rosa-claro': '#FFF0F5',
+            'rosa-medio': '#FFB6C1',
+            'rosa-fuerte': '#DB7093',
+            'rosa-oscuro': '#C71585',
+            'crema': '#FDF8F5',
+            'dorado': '#D4AF37'
+          }
+        }
+      }
+    }
+  </script>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body bg-crema text-gray-800">
+  <div id="app" class="h-full overflow-auto"><!-- Header -->
+   <header class="bg-gradient-to-r from-rosa-claro via-white to-rosa-claro py-6 px-4 text-center border-b-2 border-rosa-medio">
+    <div class="max-w-4xl mx-auto">
+     <h1 id="business-name" class="font-display text-4xl md:text-5xl text-rosa-fuerte font-bold tracking-wide">Miss Daniela Bakery</h1>
+     <p class="text-rosa-oscuro mt-2 text-lg font-medium">✨ Pastelería Creativa ✨</p>
+     <p class="text-gray-600 mt-1">Armá tu torta ideal y calculá el precio aproximado</p>
+    </div>
+   </header>
+   <main class="max-w-5xl mx-auto px-4 py-8"><!-- Paso 1: Forma de la torta -->
+    <section class="mb-10">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí la forma de tu torta</h2>
+     </div>
+     <div class="grid grid-cols-3 gap-4" id="forma-options"><button onclick="selectForma('redonda')" class="option-card p-4 rounded-2xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-forma="redonda">
+       <div class="text-4xl mb-2">
+        🎂
+       </div><span class="font-semibold text-gray-700">Redonda</span> </button> <button onclick="selectForma('corazon')" class="option-card p-4 rounded-2xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-forma="corazon">
+       <div class="text-4xl mb-2">
+        💖
+       </div><span class="font-semibold text-gray-700">Corazón</span> </button> <button onclick="selectForma('cuadrada')" class="option-card p-4 rounded-2xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-forma="cuadrada">
+       <div class="text-4xl mb-2">
+        🍰
+       </div><span class="font-semibold text-gray-700">Cuadrada</span> </button>
+     </div>
+    </section><!-- Paso 2: Tamaño -->
+    <section class="mb-10" id="tamano-section" style="display: none;">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí el tamaño</h2>
+     </div>
+     <div class="grid grid-cols-2 gap-4" id="tamano-options"></div>
+    </section><!-- Paso 3: Bizcochuelo -->
+    <section class="mb-10" id="bizcochuelo-section" style="display: none;">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí el bizcochuelo</h2>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="bizcochuelo-options"><button onclick="selectBizcochuelo('vainilla')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-bizcochuelo="vainilla">
+       <div class="text-2xl mb-1">
+        🍦
+       </div><span class="font-medium text-gray-700">Vainilla</span> </button> <button onclick="selectBizcochuelo('chocolate')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-bizcochuelo="chocolate">
+       <div class="text-2xl mb-1">
+        🍫
+       </div><span class="font-medium text-gray-700">Chocolate</span> </button> <button onclick="selectBizcochuelo('marmolado')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-bizcochuelo="marmolado">
+       <div class="text-2xl mb-1">
+        🎨
+       </div><span class="font-medium text-gray-700">Marmolado</span> </button> <button onclick="selectBizcochuelo('citrico')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-bizcochuelo="citrico">
+       <div class="text-2xl mb-1">
+        🍋
+       </div><span class="font-medium text-gray-700">Cítrico</span> </button> <button onclick="selectBizcochuelo('redvelvet')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-bizcochuelo="redvelvet">
+       <div class="text-2xl mb-1">
+        ❤️
+       </div><span class="font-medium text-gray-700">Red Velvet</span> <span class="text-xs text-rosa-fuerte block">(consultar)</span> </button>
+     </div>
+    </section><!-- Paso 4: Rellenos -->
+    <section class="mb-10" id="relleno-section" style="display: none;">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">4</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí el/los relleno/s</h2><span id="rellenos-count" class="text-sm text-gray-500 bg-rosa-claro px-3 py-1 rounded-full"></span>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="relleno-options"><button onclick="toggleRelleno('dulcedeleche')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="dulcedeleche"> <span class="font-medium text-gray-700 text-sm">Dulce de leche</span> </button> <button onclick="toggleRelleno('chantilly')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="chantilly"> <span class="font-medium text-gray-700 text-sm">Chantilly con frutas</span> </button> <button onclick="toggleRelleno('bariloche')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="bariloche"> <span class="font-medium text-gray-700 text-sm">Crema Bariloche</span> </button> <button onclick="toggleRelleno('ganache-frutos')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-frutos"> <span class="font-medium text-gray-700 text-sm">Ganache frutos rojos</span> </button> <button onclick="toggleRelleno('ganache-negro')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-negro"> <span class="font-medium text-gray-700 text-sm">Ganache chocolate negro</span> </button> <button onclick="toggleRelleno('ganache-blanco')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-blanco"> <span class="font-medium text-gray-700 text-sm">Ganache chocolate blanco</span> </button> <button onclick="toggleRelleno('nutella')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="nutella"> <span class="font-medium text-gray-700 text-sm">Mousse de Nutella</span> </button> <button onclick="toggleRelleno('bonobon')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="bonobon"> <span class="font-medium text-gray-700 text-sm">Mousse de Bonobón</span> </button> <button onclick="toggleRelleno('oreo')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="oreo"> <span class="font-medium text-gray-700 text-sm">Mousse de Oreo</span> </button> <button onclick="toggleRelleno('marroc')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="marroc"> <span class="font-medium text-gray-700 text-sm">Marroc</span> </button> <button onclick="toggleRelleno('mantecol')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="mantecol"> <span class="font-medium text-gray-700 text-sm">Mantecol</span> </button>
+     </div>
+    </section><!-- Paso 5: Cobertura -->
+    <section class="mb-10" id="cobertura-section" style="display: none;">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">5</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí la cobertura</h2>
+     </div>
+     <div class="grid grid-cols-3 gap-4" id="cobertura-options"><button onclick="selectCobertura('crema')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="crema">
+       <div class="text-3xl mb-2">
+        🍨
+       </div><span class="font-semibold text-gray-700">Crema</span> <span class="text-xs text-gray-500 block">Clásica</span> </button> <button onclick="selectCobertura('buttercream')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="buttercream">
+       <div class="text-3xl mb-2">
+        🧁
+       </div><span class="font-semibold text-gray-700">Buttercream</span> <span class="text-xs text-gray-500 block">Decorativa</span> </button> <button onclick="selectCobertura('fondant')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="fondant">
+       <div class="text-3xl mb-2">
+        ✨
+       </div><span class="font-semibold text-gray-700">Fondant</span> <span class="text-xs text-gray-500 block">Personalizada</span> </button>
+     </div>
+    </section><!-- Mesa Dulce / Candy Bar -->
+    <section class="mb-10" id="extras-section" style="display: none;">
+     <div class="flex items-center gap-3 mb-4"><span class="bg-dorado text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">+</span>
+      <h2 class="font-display text-2xl text-rosa-oscuro">¿Querés agregar mesa dulce o candy bar?</h2>
+     </div>
+     <p class="text-gray-600 mb-4 text-sm">Seleccioná los productos que te interesen (cotización aparte)</p>
+     <div class="grid md:grid-cols-2 gap-6"><!-- Candy Bar -->
+      <div class="bg-white rounded-2xl p-5 cake-shadow">
+       <h3 class="font-display text-lg text-rosa-fuerte mb-3 flex items-center gap-2">🍭 Candy Bar</h3>
+       <div class="space-y-2" id="candy-options"><label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('cupcakes')"> <span class="text-gray-700">Cupcakes personalizados</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('pochoclos')"> <span class="text-gray-700">Bolsitas con pochoclos + sticker</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('chupetines')"> <span class="text-gray-700">Chupetines personalizados</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('souvenir-bolsa')"> <span class="text-gray-700">Souvenir comestible en bolsa</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('souvenir-caja')"> <span class="text-gray-700">Souvenir comestible en caja</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('cookies')"> <span class="text-gray-700">Cookies personalizadas</span> </label>
+       </div>
+      </div><!-- Mesa Dulce -->
+      <div class="bg-white rounded-2xl p-5 cake-shadow">
+       <h3 class="font-display text-lg text-rosa-fuerte mb-3 flex items-center gap-2">🍰 Mesa Dulce</h3>
+       <div class="space-y-2" id="mesa-options"><label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('tartas')"> <span class="text-gray-700">Tartas dulces</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('postres-vaso')"> <span class="text-gray-700">Postres en vaso individuales</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('deli-porciones')"> <span class="text-gray-700">Deli-porciones / mini tortas</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('alfajores')"> <span class="text-gray-700">Alfajores artesanales</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('budines')"> <span class="text-gray-700">Budines caseros</span> </label> <label class="candy-item flex items-center gap-3 p-2 rounded-lg cursor-pointer"> <input type="checkbox" class="w-5 h-5 accent-rosa-fuerte" onchange="toggleExtra('mini-pasteleria')"> <span class="text-gray-700">Mini pastelería variada</span> </label>
+       </div>
+      </div>
+     </div>
+    </section><!-- Resumen y Precio -->
+    <section class="mb-10" id="resumen-section" style="display: none;">
+     <div class="bg-gradient-to-br from-rosa-claro to-white rounded-3xl p-6 cake-shadow gradient-border">
+      <h2 class="font-display text-2xl text-rosa-oscuro mb-4 text-center">📋 Tu Pedido</h2>
+      <div class="bg-white rounded-2xl p-5 mb-4">
+       <h3 class="font-semibold text-rosa-fuerte mb-3">🎂 Tu Torta</h3>
+       <div id="resumen-torta" class="space-y-2 text-gray-700"><!-- Se llena dinámicamente -->
+       </div>
+      </div>
+      <div id="resumen-extras-container" class="bg-white rounded-2xl p-5 mb-4" style="display: none;">
+       <h3 class="font-semibold text-rosa-fuerte mb-3">🍬 Extras seleccionados</h3>
+       <div id="resumen-extras" class="space-y-1 text-gray-700 text-sm"><!-- Se llena dinámicamente -->
+       </div>
+       <p class="text-xs text-gray-500 mt-2 italic">* Precio de extras a cotizar por WhatsApp</p>
+      </div>
+      <div class="text-center py-4 border-t-2 border-rosa-medio border-dashed">
+       <p class="text-gray-600 mb-2">Precio aproximado de la torta:</p>
+       <div class="pulse-price inline-block bg-rosa-fuerte text-white px-8 py-3 rounded-2xl"><span id="precio-total" class="font-display text-3xl font-bold">$0</span>
+       </div>
+       <p class="text-xs text-gray-500 mt-2">* Incluye vela de regalo y decoraciones básicas</p>
+      </div>
+      <div class="mt-6 space-y-3"><a id="whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="block w-full bg-green-500 hover:bg-green-600 text-white text-center py-4 rounded-2xl font-semibold text-lg transition-all transform hover:scale-105"> 📱 Consultar por WhatsApp </a> <button onclick="resetCalculator()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-2xl font-medium transition-all"> 🔄 Empezar de nuevo </button>
+      </div>
+     </div>
+    </section><!-- Info adicional -->
+    <section class="bg-white rounded-2xl p-6 cake-shadow mb-8">
+     <h3 class="font-display text-xl text-rosa-fuerte mb-4">📝 Para cotizar tu torta ideal, indicanos:</h3>
+     <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start gap-2"><span class="text-rosa-fuerte">📅</span> <span>Fecha de entrega</span></li>
+      <li class="flex items-start gap-2"><span class="text-rosa-fuerte">🎨</span> <span>Diseño (temática, colores, nombre y edad)</span></li>
+      <li class="flex items-start gap-2"><span class="text-rosa-fuerte">📷</span> <span>Foto de ejemplo (si tenés)</span></li>
+     </ul>
+     <p class="mt-4 text-sm text-gray-500 italic">Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado.</p>
+    </section>
+   </main><!-- Footer -->
+   <footer class="bg-rosa-fuerte text-white py-8 px-4 text-center">
+    <p class="font-display text-2xl mb-2" id="footer-name">Miss Daniela Bakery</p>
+    <p class="text-rosa-claro mb-4">Creamos cada detalle con amor para que tu evento sea inolvidable 💕</p>
+    <div class="flex justify-center gap-6 text-sm"><a id="footer-instagram" href="https://instagram.com/MISSDANIELABAKERY" target="_blank" rel="noopener noreferrer" class="hover:text-rosa-claro transition-colors">📸 @MISSDANIELABAKERY</a> <span id="footer-phone">📱 11-2253-9954</span>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Estado de la calculadora
+    let state = {
+      forma: null,
+      tamano: null,
+      bizcochuelo: null,
+      rellenos: [],
+      cobertura: null,
+      extras: []
+    };
+
+    // Precios por forma, tamaño y cobertura
+    const precios = {
+      redonda: {
+        chica: { crema: 35000, buttercream: 40000, fondant: 50000, maxRellenos: 1 },
+        grande: { crema: 45000, buttercream: 50000, fondant: 65000, maxRellenos: 2 }
+      },
+      corazon: {
+        chica: { crema: 40000, buttercream: 50000, fondant: 60000, maxRellenos: 1 },
+        grande: { crema: 55000, buttercream: 65000, fondant: 80000, maxRellenos: 2 }
+      },
+      cuadrada: {
+        chica: { crema: 35000, buttercream: 40000, fondant: 50000, maxRellenos: 1 },
+        grande: { crema: 45000, buttercream: 50000, fondant: 65000, maxRellenos: 2 }
+      }
+    };
+
+    // Tamaños disponibles por forma
+    const tamanos = {
+      redonda: [
+        { id: 'chica', nombre: 'Chica', medidas: '16 cm x 12 cm', bizcochuelos: 2, descripcion: '2 bizcochuelos + 1 relleno' },
+        { id: 'grande', nombre: 'Grande', medidas: '22 cm x 16 cm', bizcochuelos: 3, descripcion: '3 bizcochuelos + 2 rellenos' }
+      ],
+      corazon: [
+        { id: 'chica', nombre: 'Chica', medidas: '14 cm x 12 cm', bizcochuelos: 2, descripcion: '2 bizcochuelos + 1 relleno' },
+        { id: 'grande', nombre: 'Grande', medidas: '25 cm x 16 cm', bizcochuelos: 3, descripcion: '3 bizcochuelos + 2 rellenos' }
+      ],
+      cuadrada: [
+        { id: 'chica', nombre: 'Chica', medidas: '12 cm x 12 cm', bizcochuelos: 2, descripcion: '2 bizcochuelos + 1 relleno' },
+        { id: 'grande', nombre: 'Grande', medidas: '22 cm x 16 cm', bizcochuelos: 3, descripcion: '3 bizcochuelos + 2 rellenos' }
+      ]
+    };
+
+    // Nombres legibles
+    const nombres = {
+      formas: { redonda: 'Redonda', corazon: 'Corazón', cuadrada: 'Cuadrada' },
+      tamanos: { chica: 'Chica', grande: 'Grande' },
+      bizcochuelos: { vainilla: 'Vainilla', chocolate: 'Chocolate', marmolado: 'Marmolado', citrico: 'Cítrico', redvelvet: 'Red Velvet' },
+      rellenos: {
+        'dulcedeleche': 'Dulce de leche', 'chantilly': 'Chantilly con frutas', 'bariloche': 'Crema Bariloche',
+        'ganache-frutos': 'Ganache frutos rojos', 'ganache-negro': 'Ganache chocolate negro', 'ganache-blanco': 'Ganache chocolate blanco',
+        'nutella': 'Mousse de Nutella', 'bonobon': 'Mousse de Bonobón', 'oreo': 'Mousse de Oreo',
+        'marroc': 'Marroc', 'mantecol': 'Mantecol'
+      },
+      coberturas: { crema: 'Crema', buttercream: 'Buttercream', fondant: 'Fondant' },
+      extras: {
+        'cupcakes': 'Cupcakes personalizados', 'pochoclos': 'Bolsitas con pochoclos', 'chupetines': 'Chupetines personalizados',
+        'souvenir-bolsa': 'Souvenir en bolsa', 'souvenir-caja': 'Souvenir en caja', 'cookies': 'Cookies personalizadas',
+        'tartas': 'Tartas dulces', 'postres-vaso': 'Postres en vaso', 'deli-porciones': 'Deli-porciones',
+        'alfajores': 'Alfajores artesanales', 'budines': 'Budines caseros', 'mini-pasteleria': 'Mini pastelería variada'
+      }
+    };
+
+    // Funciones de selección
+    function selectForma(forma) {
+      state.forma = forma;
+      state.tamano = null;
+      state.rellenos = [];
+     
+      document.querySelectorAll('[data-forma]').forEach(el => el.classList.remove('selected'));
+      document.querySelector(`[data-forma="${forma}"]`).classList.add('selected');
+     
+      renderTamanos();
+      document.getElementById('tamano-section').style.display = 'block';
+      document.getElementById('bizcochuelo-section').style.display = 'none';
+      document.getElementById('relleno-section').style.display = 'none';
+      document.getElementById('cobertura-section').style.display = 'none';
+      document.getElementById('extras-section').style.display = 'none';
+      document.getElementById('resumen-section').style.display = 'none';
+     
+      scrollToElement('tamano-section');
+    }
+
+    function renderTamanos() {
+      const container = document.getElementById('tamano-options');
+      const opciones = tamanos[state.forma];
+     
+      container.innerHTML = opciones.map(t => `
+        <button onclick="selectTamano('${t.id}')" class="option-card p-5 rounded-2xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-tamano="${t.id}">
+          <div class="text-3xl mb-2">${t.id === 'chica' ? '🎂' : '🎁'}</div>
+          <span class="font-semibold text-gray-700 text-lg">${t.nombre}</span>
+          <span class="text-sm text-gray-500 block">${t.medidas}</span>
+          <span class="text-xs text-rosa-fuerte block mt-1">${t.descripcion}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectTamano(tamano) {
+      state.tamano = tamano;
+      state.rellenos = [];
+     
+      document.querySelectorAll('[data-tamano]').forEach(el => el.classList.remove('selected'));
+      document.querySelector(`[data-tamano="${tamano}"]`).classList.add('selected');
+     
+      document.getElementById('bizcochuelo-section').style.display = 'block';
+      updateRellenosCount();
+      scrollToElement('bizcochuelo-section');
+    }
+
+    function selectBizcochuelo(bizcochuelo) {
+      state.bizcochuelo = bizcochuelo;
+     
+      document.querySelectorAll('[data-bizcochuelo]').forEach(el => el.classList.remove('selected'));
+      document.querySelector(`[data-bizcochuelo="${bizcochuelo}"]`).classList.add('selected');
+     
+      document.getElementById('relleno-section').style.display = 'block';
+      updateRellenosCount();
+      scrollToElement('relleno-section');
+    }
+
+    function toggleRelleno(relleno) {
+      const maxRellenos = precios[state.forma][state.tamano].maxRellenos;
+      const index = state.rellenos.indexOf(relleno);
+     
+      if (index > -1) {
+        state.rellenos.splice(index, 1);
+      } else if (state.rellenos.length < maxRellenos) {
+        state.rellenos.push(relleno);
+      }
+     
+      document.querySelectorAll('[data-relleno]').forEach(el => {
+        el.classList.toggle('selected', state.rellenos.includes(el.dataset.relleno));
+      });
+     
+      updateRellenosCount();
+     
+      if (state.rellenos.length > 0) {
+        document.getElementById('cobertura-section').style.display = 'block';
+      }
+    }
+
+    function updateRellenosCount() {
+      if (!state.forma || !state.tamano) return;
+      const maxRellenos = precios[state.forma][state.tamano].maxRellenos;
+      document.getElementById('rellenos-count').textContent = `${state.rellenos.length}/${maxRellenos} seleccionados`;
+    }
+
+    function selectCobertura(cobertura) {
+      state.cobertura = cobertura;
+     
+      document.querySelectorAll('[data-cobertura]').forEach(el => el.classList.remove('selected'));
+      document.querySelector(`[data-cobertura="${cobertura}"]`).classList.add('selected');
+     
+      document.getElementById('extras-section').style.display = 'block';
+      document.getElementById('resumen-section').style.display = 'block';
+     
+      updateResumen();
+      scrollToElement('extras-section');
+    }
+
+    function toggleExtra(extra) {
+      const index = state.extras.indexOf(extra);
+      if (index > -1) {
+        state.extras.splice(index, 1);
+      } else {
+        state.extras.push(extra);
+      }
+      updateResumen();
+    }
+
+    function updateResumen() {
+      const resumenTorta = document.getElementById('resumen-torta');
+      const resumenExtras = document.getElementById('resumen-extras');
+      const resumenExtrasContainer = document.getElementById('resumen-extras-container');
+      const precioTotal = document.getElementById('precio-total');
+     
+      // Calcular precio
+      let precio = 0;
+      if (state.forma && state.tamano && state.cobertura) {
+        precio = precios[state.forma][state.tamano][state.cobertura];
+      }
+     
+      // Obtener medidas
+      let medidas = '';
+      if (state.forma && state.tamano) {
+        const tam = tamanos[state.forma].find(t => t.id === state.tamano);
+        medidas = tam ? tam.medidas : '';
+      }
+     
+      // Resumen de la torta
+      resumenTorta.innerHTML = `
+        <p><strong>Forma:</strong> ${nombres.formas[state.forma] || '-'}</p>
+        <p><strong>Tamaño:</strong> ${nombres.tamanos[state.tamano] || '-'} ${medidas ? `(${medidas})` : ''}</p>
+        <p><strong>Bizcochuelo:</strong> ${nombres.bizcochuelos[state.bizcochuelo] || '-'}</p>
+        <p><strong>Relleno/s:</strong> ${state.rellenos.map(r => nombres.rellenos[r]).join(', ') || '-'}</p>
+        <p><strong>Cobertura:</strong> ${nombres.coberturas[state.cobertura] || '-'}</p>
+      `;
+     
+      // Resumen de extras
+      if (state.extras.length > 0) {
+        resumenExtrasContainer.style.display = 'block';
+        resumenExtras.innerHTML = state.extras.map(e => `<p>• ${nombres.extras[e]}</p>`).join('');
+      } else {
+        resumenExtrasContainer.style.display = 'none';
+      }
+     
+      // Precio
+      precioTotal.textContent = `$${precio.toLocaleString('es-AR')}`;
+     
+      // Actualizar link de WhatsApp
+      updateWhatsAppLink();
+    }
+
+    function updateWhatsAppLink() {
+      const btn = document.getElementById('whatsapp-btn');
+      const phone = (window.elementSdk?.config?.whatsapp_number || '11-2253-9954').replace(/[^0-9]/g, '');
+     
+      let mensaje = `¡Hola! Me gustaría cotizar una torta:\n\n`;
+      mensaje += `🎂 *Torta*\n`;
+      mensaje += `• Forma: ${nombres.formas[state.forma] || '-'}\n`;
+      mensaje += `• Tamaño: ${nombres.tamanos[state.tamano] || '-'}\n`;
+      mensaje += `• Bizcochuelo: ${nombres.bizcochuelos[state.bizcochuelo] || '-'}\n`;
+      mensaje += `• Relleno/s: ${state.rellenos.map(r => nombres.rellenos[r]).join(', ') || '-'}\n`;
+      mensaje += `• Cobertura: ${nombres.coberturas[state.cobertura] || '-'}\n`;
+     
+      if (state.extras.length > 0) {
+        mensaje += `\n🍬 *Extras*\n`;
+        state.extras.forEach(e => {
+          mensaje += `• ${nombres.extras[e]}\n`;
+        });
+      }
+     
+      mensaje += `\n💰 *Precio aproximado torta: $${(precios[state.forma]?.[state.tamano]?.[state.cobertura] || 0).toLocaleString('es-AR')}*`;
+     
+      btn.href = `https://wa.me/549${phone}?text=${encodeURIComponent(mensaje)}`;
+    }
+
+    function resetCalculator() {
+      state = { forma: null, tamano: null, bizcochuelo: null, rellenos: [], cobertura: null, extras: [] };
+     
+      document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+     
+      document.getElementById('tamano-section').style.display = 'none';
+      document.getElementById('bizcochuelo-section').style.display = 'none';
+      document.getElementById('relleno-section').style.display = 'none';
+      document.getElementById('cobertura-section').style.display = 'none';
+      document.getElementById('extras-section').style.display = 'none';
+      document.getElementById('resumen-section').style.display = 'none';
+     
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToElement(id) {
+      setTimeout(() => {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    // Config del Element SDK
+    const defaultConfig = {
+      business_name: 'Miss Daniela Bakery',
+      whatsapp_number: '11-2253-9954',
+      instagram_handle: '@MISSDANIELABAKERY',
+      primary_color: '#DB7093',
+      secondary_color: '#FFF0F5',
+      text_color: '#374151',
+      accent_color: '#C71585',
+      card_color: '#FFFFFF'
+    };
+
+    async function onConfigChange(config) {
+      const c = { ...defaultConfig, ...config };
+     
+      document.getElementById('business-name').textContent = c.business_name;
+      document.getElementById('footer-name').textContent = c.business_name;
+      document.getElementById('footer-phone').textContent = '📱 ' + c.whatsapp_number;
+     
+      const igHandle = c.instagram_handle.startsWith('@') ? c.instagram_handle : '@' + c.instagram_handle;
+      const igLink = document.getElementById('footer-instagram');
+      igLink.textContent = '📸 ' + igHandle;
+      igLink.href = 'https://instagram.com/' + igHandle.replace('@', '');
+     
+      updateWhatsAppLink();
+    }
+
+    function mapToCapabilities(config) {
+      const c = { ...defaultConfig, ...config };
+      return {
+        recolorables: [
+          {
+            get: () => c.secondary_color,
+            set: (v) => { c.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+          },
+          {
+            get: () => c.card_color,
+            set: (v) => { c.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
+          },
+          {
+            get: () => c.text_color,
+            set: (v) => { c.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+          },
+          {
+            get: () => c.primary_color,
+            set: (v) => { c.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+          },
+          {
+            get: () => c.accent_color,
+            set: (v) => { c.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      const c = { ...defaultConfig, ...config };
+      return new Map([
+        ['business_name', c.business_name],
+        ['whatsapp_number', c.whatsapp_number],
+        ['instagram_handle', c.instagram_handle]
+      ]);
+    }
+
+    // Inicializar SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9db7224b04a8634f',t:'MTc3MzM2Mzk2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+    <!-- Borra esta línea y pega el código completo que copiaste de Canva (el iframe) -->
+    
+</body>
+</html>
