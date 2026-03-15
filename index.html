@@ -143,22 +143,45 @@
      <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="relleno-options"><button onclick="toggleRelleno('dulcedeleche')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="dulcedeleche"> <span class="font-medium text-gray-700 text-sm">Dulce de leche</span> </button> <button onclick="toggleRelleno('chantilly')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="chantilly"> <span class="font-medium text-gray-700 text-sm">Chantilly con frutas</span> </button> <button onclick="toggleRelleno('bariloche')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="bariloche"> <span class="font-medium text-gray-700 text-sm">Crema Bariloche</span> </button> <button onclick="toggleRelleno('ganache-frutos')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-frutos"> <span class="font-medium text-gray-700 text-sm">Ganache frutos rojos</span> </button> <button onclick="toggleRelleno('ganache-negro')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-negro"> <span class="font-medium text-gray-700 text-sm">Ganache chocolate negro</span> </button> <button onclick="toggleRelleno('ganache-blanco')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="ganache-blanco"> <span class="font-medium text-gray-700 text-sm">Ganache chocolate blanco</span> </button> <button onclick="toggleRelleno('nutella')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="nutella"> <span class="font-medium text-gray-700 text-sm">Mousse de Nutella</span> </button> <button onclick="toggleRelleno('bonobon')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="bonobon"> <span class="font-medium text-gray-700 text-sm">Mousse de Bonobón</span> </button> <button onclick="toggleRelleno('oreo')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="oreo"> <span class="font-medium text-gray-700 text-sm">Mousse de Oreo</span> </button> <button onclick="toggleRelleno('marroc')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="marroc"> <span class="font-medium text-gray-700 text-sm">Marroc</span> </button> <button onclick="toggleRelleno('mantecol')" class="option-card p-3 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-relleno="mantecol"> <span class="font-medium text-gray-700 text-sm">Mantecol</span> </button>
      </div>
     </section><!-- Paso 5: Cobertura -->
-    <section class="mb-10" id="cobertura-section" style="display: none;">
-     <div class="flex items-center gap-3 mb-4"><span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">5</span>
-      <h2 class="font-display text-2xl text-rosa-oscuro">Elegí la cobertura</h2>
-     </div>
-     <div class="grid grid-cols-3 gap-4" id="cobertura-options"><button onclick="selectCobertura('crema')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="crema">
-       <div class="text-3xl mb-2">
-        🍨
-       </div><span class="font-semibold text-gray-700">Crema</span> <span class="text-xs text-gray-500 block">Clásica</span> </button> <button onclick="selectCobertura('buttercream')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="buttercream">
-       <div class="text-3xl mb-2">
-        🧁
-       </div><span class="font-semibold text-gray-700">Buttercream</span> <span class="text-xs text-gray-500 block">Decorativa</span> </button> <button onclick="selectCobertura('fondant')" class="option-card p-4 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer" data-cobertura="fondant">
-       <div class="text-3xl mb-2">
-        ✨
-       </div><span class="font-semibold text-gray-700">Fondant</span> <span class="text-xs text-gray-500 block">Personalizada</span> </button>
-     </div>
-    </section><!-- Mesa Dulce / Candy Bar -->
+    <!-- Paso 5: Cobertura -->
+<section class="mb-10" id="cobertura-section" style="display: none;">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="bg-rosa-fuerte text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">5</span>
+    <h2 class="font-display text-2xl md:text-3xl text-rosa-oscuro">Elegí la cobertura</h2>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="cobertura-options">
+    <button 
+      onclick="selectCobertura('crema')" 
+      class="option-card p-5 sm:p-6 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer hover:border-rosa-fuerte hover:shadow-md transition-all duration-200 active:scale-[0.98]"
+      data-cobertura="crema"
+    >
+      <div class="text-4xl sm:text-5xl mb-3">🍨</div>
+      <span class="font-semibold text-gray-800 text-lg sm:text-xl block">Crema</span>
+      <span class="text-sm text-gray-500 block mt-1">Clásica</span>
+    </button>
+
+    <button 
+      onclick="selectCobertura('buttercream')" 
+      class="option-card p-5 sm:p-6 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer hover:border-rosa-fuerte hover:shadow-md transition-all duration-200 active:scale-[0.98]"
+      data-cobertura="buttercream"
+    >
+      <div class="text-4xl sm:text-5xl mb-3">🧁</div>
+      <span class="font-semibold text-gray-800 text-lg sm:text-xl block">Buttercream</span>
+      <span class="text-sm text-gray-500 block mt-1">Decorativa</span>
+    </button>
+
+    <button 
+      onclick="selectCobertura('fondant')" 
+      class="option-card p-5 sm:p-6 rounded-xl border-2 border-rosa-medio bg-white text-center cursor-pointer hover:border-rosa-fuerte hover:shadow-md transition-all duration-200 active:scale-[0.98]"
+      data-cobertura="fondant"
+    >
+      <div class="text-4xl sm:text-5xl mb-3">✨</div>
+      <span class="font-semibold text-gray-800 text-lg sm:text-xl block">Fondant</span>
+      <span class="text-sm text-gray-500 block mt-1">Personalizada</span>
+    </button>
+  </div>
+</section><!-- Mesa Dulce / Candy Bar -->
     <section class="mb-10" id="extras-section" style="display: none;">
      <div class="flex items-center gap-3 mb-4"><span class="bg-dorado text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">+</span>
       <h2 class="font-display text-2xl text-rosa-oscuro">¿Querés agregar mesa dulce o candy bar?</h2>
