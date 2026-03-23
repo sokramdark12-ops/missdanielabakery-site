@@ -8,248 +8,232 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg-pascua: #FDF6EE; 
-            --accent-pascua: #A8552F; 
-            --bg-torta: #FDF8F5;
-            --accent-torta: #DB7093; 
-        }
-        body { font-family: 'DM Sans', sans-serif; margin: 0; transition: background 0.5s; }
+        :root { --bg-pascua: #FDF6EE; --accent-pascua: #A8552F; --bg-torta: #FDF8F5; --accent-torta: #DB7093; }
+        body { font-family: 'DM Sans', sans-serif; margin: 0; background: #FDF6EE; }
         .font-display { font-family: 'Playfair Display', serif; }
         .font-cake { font-family: 'Quicksand', sans-serif; }
         
-        /* Animaciones de Vista */
-        .view-section { display: none; animation: fadeIn 0.4s ease-out; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Estilos Pascuas */
-        .btn-pascua.active { background: var(--accent-pascua); color: white; shadow: 0 4px 15px rgba(168,85,47,0.3); }
+        .option-card { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
+        .option-card.selected { border-color: var(--curr-accent); background: rgba(0,0,0,0.03); }
         
-        /* Estilos Tortas */
-        .btn-torta.active { border-color: var(--accent-torta); background: #FFF0F5; color: var(--accent-torta); }
-
-        /* Toast Push-Up */
-        .toast { position: fixed; top: 20px; right: 20px; transform: translateX(130%); transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 1000; }
+        .toast { position: fixed; top: 20px; right: 20px; transform: translateX(130%); transition: transform 0.4s; z-index: 1000; }
         .toast.show { transform: translateX(0); }
-        
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-overlay.open { display: flex; }
     </style>
 </head>
-<body class="h-full bg-[#FDF6EE]">
+<body class="h-full">
 
     <div id="toast" class="toast bg-white border-l-4 border-green-500 shadow-2xl p-4 rounded-xl flex items-center gap-3">
         <div class="bg-green-100 p-1 rounded-full text-green-600"><i data-lucide="check" style="width:18px;"></i></div>
-        <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Producto agregado!</span>
+        <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Agregado!</span>
     </div>
 
-    <section id="view-home" class="view-section active h-full flex items-center justify-center px-4">
+    <section id="view-home" class="view-section active h-full flex items-center justify-center px-4 bg-[#FDF6EE]">
         <div class="max-w-md w-full text-center space-y-8 bg-white p-10 rounded-[3rem] shadow-2xl border-b-8 border-[#A8552F]">
             <div class="space-y-2">
                 <h1 class="font-display text-4xl text-[#3E2718]">Miss Daniela Bakery</h1>
-                <p class="text-gray-400 text-sm italic">Pastelería artesanal y creativa</p>
+                <p class="text-gray-400 text-sm">Elegí tu calculadora de productos</p>
             </div>
             <div class="grid gap-4">
                 <button onclick="changeView('view-pascuas')" class="group p-6 rounded-2xl border-2 border-[#A8552F] hover:bg-[#A8552F] transition-all text-left">
                     <span class="text-3xl block mb-2">🐣</span>
                     <span class="font-bold text-xl block group-hover:text-white">Pascuas 2026</span>
-                    <span class="text-xs opacity-60 block group-hover:text-white">Huevos personalizados y Roscas</span>
+                    <span class="text-xs opacity-60 block group-hover:text-white">Huevos, Roscas y Figuras Especiales</span>
                 </button>
                 <button onclick="changeView('view-tortas')" class="group p-6 rounded-2xl border-2 border-[#DB7093] hover:bg-[#DB7093] transition-all text-left">
                     <span class="text-3xl block mb-2">🎂</span>
                     <span class="font-bold text-xl block group-hover:text-white">Tortas & Mesa Dulce</span>
-                    <span class="text-xs opacity-60 block group-hover:text-white">Calculá tu torta de evento a medida</span>
+                    <span class="text-xs opacity-60 block group-hover:text-white">Personalizá tu torta a medida</span>
                 </button>
             </div>
-            <p class="text-[10px] text-gray-300 uppercase tracking-widest">Muñiz, Buenos Aires</p>
         </div>
     </section>
 
-    <section id="view-pascuas" class="view-section h-full overflow-auto">
+    <section id="view-pascuas" class="view-section h-full overflow-auto bg-[#FDF6EE]">
         <header class="sticky top-0 z-50 bg-[#3E2718] text-white py-4 px-6 flex justify-between items-center shadow-md">
             <button onclick="changeView('view-home')" class="p-2 hover:bg-white/10 rounded-full"><i data-lucide="chevron-left"></i></button>
-            <h2 class="font-display text-lg">Catálogo de Pascuas</h2>
+            <h2 class="font-display">Catálogo Pascuas</h2>
             <button onclick="toggleCart()" class="relative p-2 bg-[#A8552F] rounded-xl">
                 <i data-lucide="shopping-basket"></i>
                 <span id="pascua-badge" class="absolute -top-2 -right-2 bg-white text-[#A8552F] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
             </button>
         </header>
-        <main id="pascua-main" class="max-w-4xl mx-auto p-6 space-y-12 pb-32">
-            </main>
-        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xs px-4">
-            <button onclick="toggleCart()" class="w-full py-4 bg-[#A8552F] text-white rounded-2xl font-bold shadow-2xl flex items-center justify-center gap-2">
-                <i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar
-            </button>
-        </div>
+        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-40">
+            <section>
+                <h2 class="font-display text-2xl mb-4">1️⃣ Tamaño 📏</h2>
+                <div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            </section>
+            <section>
+                <h2 class="font-display text-2xl mb-4">2️⃣ Temática 🎨</h2>
+                <div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center">
+                    <div><p id="p-sum" class="font-bold text-sm">-</p><p id="p-price" class="text-xl font-bold text-[#A8552F]">-</p></div>
+                    <button onclick="addEgg()" class="bg-[#A8552F] text-white px-6 py-3 rounded-xl font-bold">Agregar 🛒</button>
+                </div>
+            </section>
+            <section>
+                <h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2>
+                <div class="grid gap-3" id="p-specials"></div>
+            </section>
+            <section>
+                <h2 class="font-display text-2xl mb-4">4️⃣ Huevos Corporativos 🏢</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div>
+            </section>
+            <section>
+                <h2 class="font-display text-2xl mb-4">5️⃣ Rosca de Pascuas 🧁</h2>
+                <div class="bg-white p-6 rounded-3xl flex justify-between items-center shadow-sm border-t-4 border-[#A8552F]">
+                    <div><p class="font-bold">Rosca Artesanal Tradicional</p><p class="text-sm opacity-60">$10.000</p></div>
+                    <button onclick="addGeneric('Rosca de Pascuas', 10000, '🧁')" class="bg-[#A8552F] text-white px-6 py-3 rounded-xl font-bold">Agregar 🛒</button>
+                </div>
+            </section>
+            <div class="pt-10 text-center"><button onclick="toggleCart()" class="bg-[#3E2718] text-white px-10 py-4 rounded-2xl font-bold">Ver Carrito y Finalizar</button></div>
+        </main>
     </section>
 
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
-        <header class="sticky top-0 z-50 bg-white border-b-2 border-[#FFB6C1] py-4 px-6 flex justify-between items-center">
-            <button onclick="changeView('view-home')" class="p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
-            <h2 class="font-display text-lg text-[#DB7093]">Calculadora de Tortas</h2>
-            <div class="w-10"></div>
+        <header class="bg-gradient-to-r from-[#FFF0F5] via-white to-[#FFF0F5] py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative">
+            <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
+            <h1 class="font-display text-4xl text-[#DB7093] font-bold">Miss Daniela Bakery</h1>
+            <p class="text-[#C71585] mt-1 font-medium">✨ Pastelería Creativa ✨</p>
         </header>
-        <main id="torta-main" class="max-w-4xl mx-auto p-6 space-y-12 pb-32">
-            </main>
+        <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+            <section>
+                <div class="flex items-center gap-3 mb-4"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Forma de la torta</h2></div>
+                <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
+            </section>
+            <section id="t-tamano-sec" class="hidden">
+                <div class="flex items-center gap-3 mb-4"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Tamaño</h2></div>
+                <div class="grid grid-cols-2 gap-4" id="t-tamano"></div>
+            </section>
+            <div id="t-final-sections" class="hidden space-y-10">
+                <div id="t-bizco-sec"></div>
+                <div id="t-relleno-sec"></div>
+                <div id="t-cober-sec"></div>
+                <div class="bg-white p-8 rounded-[3rem] shadow-xl border-2 border-[#FFB6C1]">
+                    <h2 class="font-display text-2xl text-[#C71585] text-center mb-6">📋 Tu Pedido</h2>
+                    <div id="t-resumen-list" class="space-y-3 mb-6 text-gray-700"></div>
+                    <div class="text-center py-6 border-t-2 border-dashed border-[#FFB6C1]">
+                        <p class="text-sm opacity-60">Precio aproximado torta:</p>
+                        <div class="inline-block bg-[#DB7093] text-white px-10 py-4 rounded-3xl mt-2"><span id="t-precio-total" class="text-3xl font-bold">$0</span></div>
+                    </div>
+                    <button onclick="sendWhatsAppTorta()" class="w-full py-5 bg-[#25D366] text-white rounded-3xl font-bold text-xl mt-6">Consultar por WhatsApp 📱</button>
+                </div>
+            </div>
+        </main>
     </section>
 
     <div id="cart-modal" class="modal-overlay" onclick="if(event.target===this)toggleCart()">
         <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl">Tu Carrito Pascuas</h3>
-                <button onclick="toggleCart()" class="text-gray-400"><i data-lucide="x"></i></button>
-            </div>
+            <h3 class="font-display text-2xl mb-6">Tu Carrito Pascuas</h3>
             <div id="cart-items" class="space-y-3 mb-6"></div>
             <div class="space-y-4 bg-gray-50 p-5 rounded-3xl mb-6">
-                <input type="text" id="user-name" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-[#A8552F] outline-none" placeholder="Ingresá tu nombre">
-                <textarea id="order-notes" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 outline-none" placeholder="Notas adicionales..."></textarea>
+                <input type="text" id="user-name" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Tu Nombre">
+                <textarea id="order-notes" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Notas extras..."></textarea>
             </div>
-            <div class="flex justify-between items-center mb-6 px-2">
-                <span class="font-bold text-gray-400">Total:</span>
-                <span id="cart-total" class="text-3xl font-bold text-[#A8552F]">$0</span>
-            </div>
-            <button onclick="sendWhatsAppPascuas()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold flex justify-center gap-3 shadow-lg">
-                <i data-lucide="send"></i> Enviar por WhatsApp
-            </button>
+            <div class="flex justify-between items-center mb-6 px-2"><span class="font-bold opacity-40 uppercase text-xs">Total Pedido:</span><span id="cart-total" class="text-3xl font-bold text-[#A8552F]">$0</span></div>
+            <button onclick="sendWhatsAppPascuas()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold flex justify-center gap-3">Enviar por WhatsApp</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN Y ESTADO
-        let cartPascua = [];
-        let pSelectedSize = null, pSelectedTheme = null;
-
-        const P_SIZES = [
-            {id:'n8', l:'N° 8', p:4500}, {id:'n10', l:'N° 10', p:6600}, 
-            {id:'n11', l:'N° 11', p:7700}, {id:'n12', l:'N° 12', p:9800},
-            {id:'n15', l:'N° 15', p:15500}, {id:'n18', l:'N° 18', p:21500}
-        ];
-        const P_THEMES = [
-            {id:'dino', l:'Dino', e:'🦕'}, {id:'super', l:'Hero', e:'🦸'},
-            {id:'floral', l:'Flores', e:'🌸'}, {id:'futbol', l:'Fútbol', e:'⚽'},
-            {id:'animales', l:'Animales', e:'🐱'}, {id:'otro', l:'Otro', e:'📷'}
-        ];
-
-        // NAVEGACIÓN
+        // --- NAVEGACIÓN ---
         function changeView(id) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
-            if(id === 'view-pascuas') renderPascuas();
-            if(id === 'view-tortas') renderTortas();
+            if(id === 'view-pascuas') initPascuas();
+            if(id === 'view-tortas') initTortas();
             lucide.createIcons();
         }
 
-        // LÓGICA PASCUAS
-        function renderPascuas() {
-            const container = document.getElementById('pascua-main');
-            container.innerHTML = `
-                <section>
-                    <h2 class="font-display text-2xl mb-4">1️⃣ Tamaño 📏</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        ${P_SIZES.map(s => `<button onclick="selPSize('${s.id}')" class="p-4 bg-white rounded-2xl shadow-sm border-2 ${pSelectedSize===s.id?'border-[#A8552F] bg-orange-50':'border-transparent'}"><b>${s.l}</b><br><span class="text-xs opacity-60">$${s.p.toLocaleString()}</span></button>`).join('')}
-                    </div>
-                </section>
-                <section>
-                    <h2 class="font-display text-2xl mb-4">2️⃣ Temática 🎨</h2>
-                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                        ${P_THEMES.map(t => `<button onclick="selPTheme('${t.id}')" class="p-4 bg-white rounded-2xl shadow-sm border-2 ${pSelectedTheme===t.id?'border-[#A8552F] bg-orange-50':'border-transparent'}"><span class="text-2xl">${t.e}</span><br><small class="font-bold uppercase text-[9px]">${t.l}</small></button>`).join('')}
-                    </div>
-                </section>
-                ${pSelectedSize && pSelectedTheme ? `
-                    <div class="bg-white p-6 rounded-3xl border-2 border-[#A8552F] flex justify-between items-center shadow-xl">
-                        <div><p class="font-bold text-sm">Huevo ${P_SIZES.find(x=>x.id===pSelectedSize).l}</p><p class="text-xl font-bold text-[#A8552F]">$${P_SIZES.find(x=>x.id===pSelectedSize).p.toLocaleString()}</p></div>
-                        <button onclick="addPascua()" class="px-8 py-3 bg-[#A8552F] text-white rounded-xl font-bold">Agregar 🛒</button>
-                    </div>
-                ` : ''}
-                <section>
-                    <h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2>
-                    <div class="grid gap-3">
-                        <div class="bg-white p-4 rounded-2xl flex justify-between items-center"><span>🐹 Capibara</span><button onclick="addGeneric('Capibara', 15000, '🐹')" class="bg-gray-100 px-4 py-2 rounded-lg font-bold text-xs">$15.000 +</button></div>
-                        <div class="bg-white p-4 rounded-2xl flex justify-between items-center"><span>🏆 Copa del Mundo</span><button onclick="addGeneric('Copa Mundo', 15000, '🏆')" class="bg-gray-100 px-4 py-2 rounded-lg font-bold text-xs">$15.000 +</button></div>
-                    </div>
-                </section>
-                <section>
-                    <h2 class="font-display text-2xl mb-4">4️⃣ Rosca de Pascuas 🧁</h2>
-                    <div class="bg-white p-5 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F]">
-                        <div class="flex items-center gap-3"><span class="text-3xl">🧁</span><p class="font-bold">Rosca Artesanal</p></div>
-                        <button onclick="addGeneric('Rosca de Pascuas', 10000, '🧁')" class="bg-[#A8552F] text-white px-6 py-2 rounded-xl font-bold text-xs">Agregar $10.000</button>
-                    </div>
-                </section>
-            `;
-            lucide.createIcons();
+        // --- LÓGICA PASCUAS ---
+        let cartP = [];
+        let pSelSize = null, pSelTheme = null;
+        const P_DATA = {
+            sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
+            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'Hero',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
+            specials: [{n:'Capibara',p:15000,e:'🐹'},{n:'Copa del Mundo',p:15000,e:'🏆'},{n:'Joystick Gamer',p:13000,e:'🎮'}],
+            corp: [{l:'N° 20',p:32000},{l:'N° 25',p:46000},{l:'N° 30',p:67000}]
+        };
+
+        function initPascuas() {
+            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="selPSize('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center ${pSelSize===s.id?'selected':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
+            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="selPTheme('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center ${pSelTheme===t.id?'selected':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] uppercase font-bold">${t.l}</small></div>`).join('');
+            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
+            document.getElementById('p-corp').innerHTML = P_DATA.corp.map(c => `<div class="bg-white p-4 rounded-2xl text-center"><b>${c.l}</b><br><p class="text-[#A8552F] font-bold mb-2">$${c.p.toLocaleString()}</p><button onclick="addGeneric('Corp. ${c.l}',${c.p},'🏢')" class="w-full py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
 
-        function selPSize(id) { pSelectedSize = id; renderPascuas(); }
-        function selPTheme(id) { pSelectedTheme = id; renderPascuas(); }
-        
-        function addPascua() {
-            const s = P_SIZES.find(x=>x.id===pSelectedSize);
-            const t = P_THEMES.find(x=>x.id===pSelectedTheme);
-            cartPascua.push({n:`Huevo ${s.l} (${t.l})`, p:s.p, e:t.e});
+        function selPSize(id) { pSelSize = id; updatePAction(); initPascuas(); }
+        function selPTheme(id) { pSelTheme = id; updatePAction(); initPascuas(); }
+        function updatePAction() {
+            const sec = document.getElementById('p-egg-action');
+            if(pSelSize && pSelTheme) {
+                sec.classList.remove('hidden');
+                const s = P_DATA.sizes.find(x=>x.id===pSelSize);
+                const t = P_DATA.themes.find(x=>x.id===pSelTheme);
+                document.getElementById('p-sum').textContent = `Huevo ${s.l} + ${t.l}`;
+                document.getElementById('p-price').textContent = `$${s.p.toLocaleString()}`;
+            }
+        }
+        function addEgg() {
+            const s = P_DATA.sizes.find(x=>x.id===pSelSize);
+            const t = P_DATA.themes.find(x=>x.id===pSelTheme);
+            cartP.push({n:`Huevo ${s.l} (${t.l})`,p:s.p,e:t.e});
             showToast(`${s.l} ${t.l} agregado`);
-            pSelectedSize = null; pSelectedTheme = null;
-            updatePascuaUI(); renderPascuas();
+            pSelSize = null; pSelTheme = null;
+            document.getElementById('p-egg-action').classList.add('hidden');
+            updatePCart(); initPascuas();
         }
-
-        function addGeneric(n, p, e) {
-            cartPascua.push({n, p, e});
-            showToast(`${n} agregado`);
-            updatePascuaUI();
-        }
-
-        function updatePascuaUI() {
-            document.getElementById('pascua-badge').textContent = cartPascua.length;
-            const items = document.getElementById('cart-items');
-            items.innerHTML = cartPascua.map((i, idx) => `
-                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
-                    <div class="flex items-center gap-2"><span>${i.e}</span><span class="text-sm font-bold">${i.n}</span></div>
-                    <button onclick="removeP(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button>
-                </div>
-            `).join('');
-            document.getElementById('cart-total').textContent = `$${cartPascua.reduce((a,b)=>a+b.p,0).toLocaleString()}`;
+        function addGeneric(n,p,e) { cartP.push({n,p,e}); showToast(`${n} agregado`); updatePCart(); }
+        function updatePCart() {
+            document.getElementById('pascua-badge').textContent = cartP.length;
+            document.getElementById('cart-items').innerHTML = cartP.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl"><span>${i.e} ${i.n}</span><button onclick="removeP(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`).join('');
+            document.getElementById('cart-total').textContent = `$${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}`;
             lucide.createIcons();
         }
-
-        function removeP(i) { cartPascua.splice(i,1); updatePascuaUI(); }
-
-        // LÓGICA TORTAS
-        function renderTortas() {
-            const container = document.getElementById('torta-main');
-            container.innerHTML = `
-                <div class="text-center py-10 space-y-4">
-                    <h3 class="font-display text-3xl text-[#DB7093]">¡Pastelería Creativa!</h3>
-                    <p class="text-gray-500 text-sm">Próximamente: Calculadora detallada de tortas</p>
-                    <div class="p-8 bg-white rounded-[2rem] shadow-sm border-2 border-[#FFB6C1] inline-block">
-                        <p class="font-bold text-[#DB7093] mb-4 text-lg">¿Necesitás una torta personalizada?</p>
-                        <a href="https://wa.me/5491122539954?text=Hola!%20Quiero%20consultar%20por%20una%20torta%20personalizada" target="_blank" class="bg-[#DB7093] text-white px-8 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
-                            <i data-lucide="message-circle"></i> Consultar por WhatsApp
-                        </a>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        // GENERAL
+        function removeP(i) { cartP.splice(i,1); updatePCart(); }
         function toggleCart() { document.getElementById('cart-modal').classList.toggle('open'); }
-        function showToast(msg) {
+
+        // --- LÓGICA TORTAS (SINTETIZADA) ---
+        let tState = { f:null, t:null, b:null, r:[], c:null };
+        const T_PRECIOS = { redonda: { chica: { crema: 35000, buttercream: 40000, fondant: 50000 }, grande: { crema: 45000, buttercream: 50000, fondant: 65000 } } }; // Simplificado para el ejemplo
+
+        function initTortas() {
+            const formas = [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}];
+            document.getElementById('t-forma').innerHTML = formas.map(f => `<div onclick="selTForma('${f.id}')" class="option-card p-6 bg-white rounded-2xl text-center ${tState.f===f.id?'selected':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
+        }
+        function selTForma(f) { tState.f = f; document.getElementById('t-tamano-sec').classList.remove('hidden'); renderTTamanos(); initTortas(); }
+        function renderTTamanos() {
+            const ts = [{id:'chica',n:'Chica',m:'16cm'},{id:'grande',n:'Grande',m:'22cm'}];
+            document.getElementById('t-tamano').innerHTML = ts.map(t => `<div onclick="selTTamano('${t.id}')" class="option-card p-5 bg-white rounded-2xl text-center ${tState.t===t.id?'selected':''}"><b>${t.n}</b><br><small>${t.m}</small></div>`).join('');
+        }
+        function selTTamano(t) { tState.t = t; document.getElementById('t-final-sections').classList.remove('hidden'); updateTResumen(); renderTTamanos(); }
+
+        function updateTResumen() {
+            const precio = T_PRECIOS[tState.f]?.[tState.t]?.crema || 0; // Ejemplo
+            document.getElementById('t-precio-total').textContent = `$${precio.toLocaleString()}`;
+            document.getElementById('t-resumen-list').innerHTML = `• Forma: ${tState.f || '-'}<br>• Tamaño: ${tState.t || '-'}`;
+        }
+
+        // --- GENERAL ---
+        function showToast(m) {
             const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            t.classList.add('show');
-            setTimeout(()=>t.classList.remove('show'), 3000);
+            document.getElementById('toast-msg').textContent = m;
+            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
         }
 
         function sendWhatsAppPascuas() {
-            const name = document.getElementById('user-name').value;
-            const notes = document.getElementById('order-notes').value;
-            if(!name) return alert("Por favor ingresá tu nombre");
-            let msg = `🐣 *PEDIDO PASCUAS - MISS DANIELA BAKERY*\n👤 Cliente: ${name}\n`;
-            cartPascua.forEach(i => msg += `- ${i.e} ${i.n}: $${i.p.toLocaleString()}\n`);
-            if(notes) msg += `\n📝 Notas: ${notes}\n`;
-            msg += `\n*TOTAL: $${cartPascua.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
-            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(msg)}`);
+            const n = document.getElementById('user-name').value;
+            if(!n) return alert("Poné tu nombre");
+            let m = `🐣 *PEDIDO PASCUAS*\nCliente: ${n}\n`;
+            cartP.forEach(i => m += `- ${i.e} ${i.n}: $${i.p.toLocaleString()}\n`);
+            m += `*TOTAL: $${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
+            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
 
         lucide.createIcons();
