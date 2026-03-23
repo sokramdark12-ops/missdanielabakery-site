@@ -24,7 +24,7 @@
         
         .toast { position: fixed; top: 20px; right: 20px; transform: translateX(130%); transition: transform 0.4s; z-index: 1000; }
         .toast.show { transform: translateX(0); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-overlay.open { display: flex; }
     </style>
 </head>
@@ -65,214 +65,169 @@
                 <span id="pascua-badge" class="absolute -top-2 -right-2 bg-white text-[#A8552F] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
             </button>
         </header>
-        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-40 text-[#3E2718]">
-            <section>
-                <h2 class="font-display text-2xl mb-4">1️⃣ Elegí el tamaño 📏</h2>
-                <div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
-            </section>
-            <section>
-                <h2 class="font-display text-2xl mb-4">2️⃣ Elegí la temática 🎨</h2>
-                <div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-20 text-[#3E2718]">
+            <section id="p-step-1"><h2 class="font-display text-2xl mb-4">1️⃣ Tamaño 📏</h2><div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div></section>
+            <section id="p-step-2"><h2 class="font-display text-2xl mb-4">2️⃣ Temática 🎨</h2><div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
                 <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center shadow-lg">
                     <div><p id="p-sum" class="font-bold text-sm">-</p><p id="p-price" class="text-xl font-bold text-[#A8552F]">-</p></div>
                     <button onclick="addEgg()" class="bg-[#A8552F] text-white px-8 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
-            <section>
-                <h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2>
-                <p class="text-sm opacity-60 mb-4">Productos únicos fuera del formato huevo con precio fijo.</p>
-                <div class="grid gap-3" id="p-specials"></div>
-            </section>
-            <section>
-                <h2 class="font-display text-2xl mb-4">4️⃣ Huevos Corporativos 🏢</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div>
-            </section>
-            <section>
-                <h2 class="font-display text-2xl mb-4">5️⃣ Rosca de Pascuas 🧁</h2>
+            <section id="p-step-3"><h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2><div class="grid gap-3" id="p-specials"></div></section>
+            <section id="p-step-4"><h2 class="font-display text-2xl mb-4">4️⃣ Huevos Corporativos 🏢</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
+            <section id="p-step-5"><h2 class="font-display text-2xl mb-4">5️⃣ Rosca de Pascuas 🧁</h2>
                 <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
                     <div><p class="font-bold">Rosca Clásica Artesanal</p><p class="text-sm opacity-60">$10.000</p></div>
                     <button onclick="addGeneric('Rosca de Pascuas', 10000, '🧁')" class="bg-[#A8552F] text-white px-6 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
+            <div class="pt-10 flex justify-center"><button onclick="toggleCart()" class="bg-[#3E2718] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button></div>
         </main>
     </section>
 
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
-        <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative">
+        <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative shadow-sm sticky top-0 z-50">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
             <h1 class="font-display text-3xl text-[#DB7093] font-bold">Miss Daniela Bakery</h1>
-            <p class="text-[#C71585] text-sm font-medium uppercase tracking-widest">✨ Pastelería Creativa ✨</p>
+            <button onclick="toggleCart()" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="shopping-basket"></i></button>
         </header>
-        <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
-            <section id="t-step-1">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
-                <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
-            </section>
-            <section id="t-step-2" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
-                <div class="grid grid-cols-2 gap-4" id="t-tamano"></div>
-            </section>
-            <section id="t-step-3" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el bizcochuelo</h2></div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div>
-            </section>
-            <section id="t-step-4" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Relleno/s</h2><span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded text-pink-600"></span></div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="t-relleno"></div>
-            </section>
-            <section id="t-step-5" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span><h2 class="font-display text-2xl text-[#C71585]">Cobertura</h2></div>
-                <div class="grid grid-cols-3 gap-4" id="t-cober"></div>
-            </section>
-
-            <section id="t-resumen" class="hidden pb-20">
-                <div class="bg-white p-8 rounded-[3rem] shadow-xl border-2 border-[#FFB6C1]">
-                    <h3 class="font-display text-2xl text-center mb-6 text-[#C71585]">📋 Tu Pedido</h3>
-                    <div id="t-resumen-txt" class="space-y-2 mb-6 text-sm border-b pb-4"></div>
-                    <div class="text-center">
-                        <p class="text-xs text-gray-400 uppercase font-bold">Precio aproximado:</p>
-                        <div class="inline-block bg-[#DB7093] text-white px-10 py-4 rounded-3xl mt-2 shadow-lg"><span id="t-total" class="text-4xl font-bold">$0</span></div>
-                    </div>
-                    <button onclick="sendWhatsAppTorta()" class="w-full mt-8 py-5 bg-[#25D366] text-white rounded-2xl font-bold text-xl shadow-xl flex items-center justify-center gap-3">
-                        <i data-lucide="message-circle"></i> Consultar por WhatsApp
-                    </button>
-                </div>
-            </section>
+        <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
+            <section id="t-step-1"><div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div><div class="grid grid-cols-3 gap-4" id="t-forma"></div></section>
+            <section id="t-step-2" class="hidden"><div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div><div class="grid grid-cols-2 gap-4" id="t-tamano"></div></section>
+            <section id="t-step-3" class="hidden"><div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el bizcochuelo</h2></div><div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div></section>
+            <section id="t-step-4" class="hidden"><div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Relleno/s</h2></div><div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="t-relleno"></div></section>
+            <section id="t-step-5" class="hidden"><div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span><h2 class="font-display text-2xl text-[#C71585]">Cobertura</h2></div><div class="grid grid-cols-3 gap-4" id="t-cober"></div></section>
+            <div id="t-final-action" class="hidden flex justify-center pt-6"><button onclick="addTortaToCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3">Agregar Torta y Ver Carrito 🛒</button></div>
         </main>
     </section>
 
     <div id="cart-modal" class="modal-overlay" onclick="if(event.target===this)toggleCart()">
         <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h3 class="font-display text-2xl mb-6">Carrito Pascuas</h3>
-            <div id="cart-items" class="space-y-3 mb-6"></div>
+            <h3 class="font-display text-2xl mb-6">Tu Pedido 🧺</h3>
+            <div id="cart-items" class="space-y-3 mb-6 border-b pb-4"></div>
             <div class="space-y-4 mb-6">
-                <input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Tu Nombre">
-                <textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Notas (nombres, detalles)..."></textarea>
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Tu Nombre Completo</label><input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-gray-200" placeholder="Ej: Daniela Marata"></div>
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">¿Algún comentario extra?</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-gray-200" placeholder="Ej: Nombre para el huevo Dino..."></textarea></div>
             </div>
-            <div class="flex justify-between items-center mb-6 px-2"><span class="font-bold opacity-30 text-xs uppercase">Total:</span><span id="cart-total" class="text-3xl font-bold text-[#A8552F]">$0</span></div>
-            <button onclick="sendWhatsAppPascuas()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold shadow-lg">Enviar por WhatsApp 📱</button>
+            <div class="flex justify-between items-center mb-6 px-2"><span class="font-bold opacity-30 text-xs uppercase tracking-widest">Total:</span><span id="cart-total" class="text-3xl font-bold text-gray-800">$0</span></div>
+            <button onclick="sendWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold text-lg shadow-lg flex justify-center items-center gap-2"><i data-lucide="message-circle"></i> Enviar por WhatsApp</button>
         </div>
     </div>
 
     <script>
-        // --- NAVEGACIÓN ---
+        let currentView = 'view-home';
+        let cart = [];
+        let pS = null, pT = null;
+        let tS = { f:null, sz:null, b:null, r:[], c:null };
+
+        const P_DATA = {
+            sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
+            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'Hero',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
+            specials: [{n:'Capibara',p:15000,e:'🐹'},{n:'Copa del Mundo',p:15000,e:'🏆'},{n:'Joystick Gamer',p:13000,e:'🎮'}]
+        };
+
+        const T_DATA = {
+            formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
+            precios: { redonda: { chica: 35000, grande: 45000 }, corazon: { chica: 40000, grande: 55000 }, cuadrada: { chica: 35000, grande: 45000 } }
+        };
+
         function changeView(id) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
+            const target = document.getElementById(id);
+            target.classList.add('active');
+            currentView = id;
+            if(id !== 'view-home') {
+                setTimeout(() => target.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+            }
             if(id === 'view-pascuas') initPascuas();
             if(id === 'view-tortas') initTortas();
             lucide.createIcons();
         }
 
-        // --- LÓGICA PASCUAS ---
-        let cartP = [];
-        let pS = null, pT = null;
-        const P_DATA = {
-            sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
-            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'Hero',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
-            specials: [{n:'Capibara',p:15000,e:'🐹'},{n:'Copa del Mundo',p:15000,e:'🏆'},{n:'Joystick Gamer',p:13000,e:'🎮'}],
-            corp: [{l:'N° 20',p:32000},{l:'N° 25',p:46000},{l:'N° 30',p:67000}]
-        };
-
+        // --- PASCUAS ---
         function initPascuas() {
-            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'selected text-[#A8552F]':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
-            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'selected text-[#A8552F]':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
-            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#A8552F] hover:text-white">$${sp.p.toLocaleString()} +</button></div>`).join('');
-            document.getElementById('p-corp').innerHTML = P_DATA.corp.map(c => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>${c.l}</b><br><p class="text-[#A8552F] font-bold mb-2">$${c.p.toLocaleString()}</p><button onclick="addGeneric('Corp. ${c.l}',${c.p},'🏢')" class="w-full py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
+            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'selected text-[#A8552F] border-[#A8552F]':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
+            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'selected text-[#A8552F] border-[#A8552F]':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
+            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGen('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
+            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><button onclick="addGen('Huevo Corporativo N° ${n}',${n*1000},'🏢')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
-        function setPS(id) { pS = id; checkP(); initPascuas(); }
-        function setPT(id) { pT = id; checkP(); initPascuas(); }
-        function checkP() {
-            const el = document.getElementById('p-egg-action');
+        function setPS(id) { pS = id; updateP(); initPascuas(); }
+        function setPT(id) { pT = id; updateP(); initPascuas(); }
+        function updateP() {
             if(pS && pT) {
-                el.classList.remove('hidden');
+                document.getElementById('p-egg-action').classList.remove('hidden');
                 const s = P_DATA.sizes.find(x=>x.id===pS);
-                const t = P_DATA.themes.find(x=>x.id===pT);
-                document.getElementById('p-sum').textContent = `${s.l} — Estilo ${t.l}`;
+                document.getElementById('p-sum').textContent = `Huevo ${s.l}`;
                 document.getElementById('p-price').textContent = `$${s.p.toLocaleString()}`;
             }
         }
         function addEgg() {
             const s = P_DATA.sizes.find(x=>x.id===pS);
             const t = P_DATA.themes.find(x=>x.id===pT);
-            cartP.push({n:`Huevo ${s.l} (${t.l})`,p:s.p,e:t.e});
-            showT(`Huevo ${s.l} agregado`);
-            pS = null; pT = null;
+            cart.push({n:`Huevo ${s.l} (${t.l})`,p:s.p,e:t.e});
+            showT(`${s.l} Agregado`); pS=null; pT=null;
             document.getElementById('p-egg-action').classList.add('hidden');
-            upP(); initPascuas();
+            upCart(); initPascuas();
         }
-        function addGeneric(n,p,e) { cartP.push({n,p,e}); showT(`${n} agregado`); upP(); }
-        function upP() {
-            document.getElementById('pascua-badge').textContent = cartP.length;
-            document.getElementById('cart-items').innerHTML = cartP.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100"><span>${i.e} ${i.n}</span><button onclick="remP(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:16px"></i></button></div>`).join('');
-            document.getElementById('cart-total').textContent = `$${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}`;
-            lucide.createIcons();
-        }
-        function remP(i) { cartP.splice(i,1); upP(); }
-        function toggleCart() { document.getElementById('cart-modal').classList.toggle('open'); }
 
-        // --- LÓGICA TORTAS ---
-        let tState = { f:null, s:null, b:null, r:[], c:null };
-        const T_DATA = {
-            formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
-            precios: { redonda: { chica: 35000, grande: 45000 }, corazon: { chica: 40000, grande: 55000 }, cuadrada: { chica: 35000, grande: 45000 } }
-        };
-
+        // --- TORTAS ---
         function initTortas() {
-            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-6 bg-white rounded-[2rem] text-center shadow-sm ${tState.f===f.id?'selected text-[#DB7093]':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
+            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'selected text-[#DB7093] border-[#DB7093]':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
         }
-        function setTF(id) { tState.f = id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollTo('t-step-2'); }
+        function setTF(id) { tS.f=id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollT('t-step-2'); }
         function renderTS() {
-            const sizes = [{id:'chica',n:'Chica (16cm)',r:1},{id:'grande',n:'Grande (22cm)',r:2}];
-            document.getElementById('t-tamano').innerHTML = sizes.map(s => `<div onclick="setTS('${s.id}')" class="option-card p-5 bg-white rounded-2xl text-center shadow-sm ${tState.s===s.id?'selected text-[#DB7093]':''}"><b>${s.n}</b></div>`).join('');
+            document.getElementById('t-tamano').innerHTML = ['chica','grande'].map(s => `<div onclick="setTSz('${s}')" class="option-card p-5 bg-white rounded-2xl text-center shadow-sm ${tS.sz===s?'selected text-[#DB7093] border-[#DB7093]':''}"><b>${s.toUpperCase()}</b></div>`).join('');
         }
-        function setTS(id) { tState.s = id; tState.r = []; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollTo('t-step-3'); }
+        function setTSz(id) { tS.sz=id; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollT('t-step-3'); }
         function renderTB() {
-            const bs = [{id:'vainilla',n:'Vainilla',e:'🍦'},{id:'chocolate',n:'Chocolate',e:'🍫'},{id:'marmolado',n:'Marmolado',e:'🎨'}];
-            document.getElementById('t-bizco').innerHTML = bs.map(b => `<div onclick="setTB('${b.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tState.b===b.id?'selected text-[#DB7093]':''}"><span>${b.e}</span><br><small>${b.n}</small></div>`).join('');
+            const bs = [{id:'vainilla',n:'Vainilla',e:'🍦'},{id:'chocolate',n:'Chocolate',e:'🍫'}];
+            document.getElementById('t-bizco').innerHTML = bs.map(b => `<div onclick="setTB('${b.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.b===b.id?'selected text-[#DB7093] border-[#DB7093]':''}"><span>${b.e}</span><br><small>${b.n}</small></div>`).join('');
         }
-        function setTB(id) { tState.b = id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollTo('t-step-4'); }
+        function setTB(id) { tS.b=id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollT('t-step-4'); }
         function renderTR() {
-            const rs = ['Dulce de Leche','Crema Bariloche','Mousse Oreo','Nutella','Frutos Rojos','Bonobón'];
-            const max = tState.s === 'chica' ? 1 : 2;
-            document.getElementById('t-relleno-count').textContent = `${tState.r.length}/${max} seleccionados`;
-            document.getElementById('t-relleno').innerHTML = rs.map(r => `<div onclick="setTR('${r}')" class="option-card p-3 bg-white rounded-xl text-center shadow-sm ${tState.r.includes(r)?'selected text-[#DB7093]':''}"><small>${r}</small></div>`).join('');
+            const rs = ['Dulce de Leche','Oreo','Frutos Rojos'];
+            document.getElementById('t-relleno').innerHTML = rs.map(r => `<div onclick="setTR('${r}')" class="option-card p-3 bg-white rounded-xl text-center shadow-sm ${tS.r.includes(r)?'selected text-[#DB7093] border-[#DB7093]':''}"><small>${r}</small></div>`).join('');
         }
         function setTR(r) {
-            const max = tState.s === 'chica' ? 1 : 2;
-            if(tState.r.includes(r)) tState.r = tState.r.filter(x=>x!==r);
-            else if(tState.r.length < max) tState.r.push(r);
-            renderTR();
-            if(tState.r.length > 0) { document.getElementById('t-step-5').classList.remove('hidden'); renderTC(); }
+            if(tS.r.includes(r)) tS.r = tS.r.filter(x=>x!==r);
+            else if(tS.r.length < 2) tS.r.push(r);
+            renderTR(); if(tS.r.length > 0) { document.getElementById('t-step-5').classList.remove('hidden'); renderTC(); scrollT('t-step-5'); }
         }
         function renderTC() {
-            const cs = [{id:'crema',n:'Crema'},{id:'butter',n:'Buttercream'},{id:'fondant',n:'Fondant'}];
-            document.getElementById('t-cober').innerHTML = cs.map(c => `<div onclick="setTC('${c.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tState.c===c.id?'selected text-[#DB7093]':''}"><b>${c.n}</b></div>`).join('');
+            const cs = ['Crema','Buttercream','Fondant'];
+            document.getElementById('t-cober').innerHTML = cs.map(c => `<div onclick="setTC('${c}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.c===c?'selected text-[#DB7093] border-[#DB7093]':''}"><b>${c}</b></div>`).join('');
         }
-        function setTC(id) { tState.c = id; document.getElementById('t-resumen').classList.remove('hidden'); upT(); renderTC(); scrollTo('t-resumen'); }
-        function upT() {
-            const p = T_DATA.precios[tState.f][tState.t] || 45000; // Fallback
-            document.getElementById('t-total').textContent = `$${p.toLocaleString()}`;
-            document.getElementById('t-resumen-txt').innerHTML = `• <b>Forma:</b> ${tState.f}<br>• <b>Tamaño:</b> ${tState.s}<br>• <b>Bizcochuelo:</b> ${tState.b}<br>• <b>Rellenos:</b> ${tState.r.join(', ')}<br>• <b>Cobertura:</b> ${tState.c}`;
+        function setTC(id) { tS.c=id; document.getElementById('t-final-action').classList.remove('hidden'); renderTC(); scrollT('t-final-action'); }
+        
+        function addTortaToCart() {
+            const p = T_DATA.precios[tS.f][tS.sz];
+            cart.push({n:`Torta ${tS.f} ${tS.sz} (${tS.b}, ${tS.r.join('/')})`, p, e:'🎂'});
+            upCart(); toggleCart();
         }
 
         // --- GENERAL ---
-        function showT(m) { const el = document.getElementById('toast'); document.getElementById('toast-msg').textContent = m; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
-        function scrollTo(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
-        function sendWhatsAppPascuas() {
-            const n = document.getElementById('user-name').value;
-            if(!n) return alert("Poné tu nombre");
-            let m = `🐣 *PEDIDO PASCUAS*\nCliente: ${n}\n`;
-            cartP.forEach(i => m += `- ${i.e} ${i.n}: $${i.p.toLocaleString()}\n`);
-            m += `\n*TOTAL: $${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
+        function addGen(n,p,e) { cart.push({n,p,e}); showT(`${n} agregado`); upCart(); }
+        function upCart() {
+            document.getElementById('pascua-badge').textContent = cart.length;
+            document.getElementById('cart-items').innerHTML = cart.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl"><span>${i.e} ${i.n}</span><button onclick="remI(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:16px"></i></button></div>`).join('');
+            document.getElementById('cart-total').textContent = `$${cart.reduce((a,b)=>a+b.p,0).toLocaleString()}`;
+            lucide.createIcons();
+        }
+        function remI(i) { cart.splice(i,1); upCart(); }
+        function toggleCart() { document.getElementById('cart-modal').classList.toggle('open'); }
+        function scrollT(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
+        function showT(m) { const t=document.getElementById('toast'); document.getElementById('toast-msg').textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('user-name').value;
+            const notes = document.getElementById('order-notes').value;
+            if(!name) return alert("Por favor, ingresá tu nombre");
+            let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${name}\n`;
+            cart.forEach(i => m += `- ${i.e} ${i.n}: $${i.p.toLocaleString()}\n`);
+            if(notes) m += `\n📝 Notas: ${notes}\n`;
+            m += `\n*TOTAL: $${cart.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
-        function sendWhatsAppTorta() {
-            let m = `🎂 *CONSULTA TORTA*\nForma: ${tState.f}\nTamaño: ${tState.s}\nBizcochuelo: ${tState.b}\nRellenos: ${tState.r.join(', ')}\nCobertura: ${tState.c}\n\n*Total aprox: ${document.getElementById('t-total').textContent}*`;
-            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
-        }
-        lucide.createIcons();
     </script>
 </body>
 </html>
