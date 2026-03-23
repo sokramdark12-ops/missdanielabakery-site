@@ -16,7 +16,10 @@
         #view-home { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
-        #view-home.active { display: flex; }
+        
+        /* Modificación para ocultar el menú molesto */
+        #view-home:not(.active) { display: none !important; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .option-card { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
@@ -73,7 +76,10 @@
                     <button onclick="addEgg()" class="bg-[#A8552F] text-white px-8 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
-            <section id="p-step-3"><h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2><div class="grid gap-3" id="p-specials"></div></section>
+            <section id="p-step-3">
+                <h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2>
+                <div class="grid gap-3" id="p-specials"></div>
+            </section>
             <section id="p-step-4"><h2 class="font-display text-2xl mb-4">4️⃣ Huevos Corporativos 🏢</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
             <section id="p-step-5"><h2 class="font-display text-2xl mb-4">5️⃣ Rosca de Pascuas 🧁</h2>
                 <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
@@ -115,7 +121,6 @@
     </div>
 
     <script>
-        let currentView = 'view-home';
         let cart = [];
         let pS = null, pT = null;
         let tS = { f:null, sz:null, b:null, r:[], c:null };
@@ -135,9 +140,8 @@
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             const target = document.getElementById(id);
             target.classList.add('active');
-            currentView = id;
             if(id !== 'view-home') {
-                setTimeout(() => target.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+                setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
             }
             if(id === 'view-pascuas') initPascuas();
             if(id === 'view-tortas') initTortas();
@@ -148,8 +152,8 @@
         function initPascuas() {
             document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'selected text-[#A8552F] border-[#A8552F]':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
             document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'selected text-[#A8552F] border-[#A8552F]':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
-            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGen('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
-            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><button onclick="addGen('Huevo Corporativo N° ${n}',${n*1000},'🏢')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
+            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
+            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><button onclick="addGeneric('Huevo Corporativo N° ${n}',${n*1000},'🏢')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
         function setPS(id) { pS = id; updateP(); initPascuas(); }
         function setPT(id) { pT = id; updateP(); initPascuas(); }
@@ -206,7 +210,7 @@
         }
 
         // --- GENERAL ---
-        function addGen(n,p,e) { cart.push({n,p,e}); showT(`${n} agregado`); upCart(); }
+        function addGeneric(n,p,e) { cart.push({n,p,e}); showT(`${n} agregado`); upCart(); }
         function upCart() {
             document.getElementById('pascua-badge').textContent = cart.length;
             document.getElementById('cart-items').innerHTML = cart.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl"><span>${i.e} ${i.n}</span><button onclick="remI(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:16px"></i></button></div>`).join('');
