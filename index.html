@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miss Daniela Bakery - Calculadora de Precios</title>
+    <title>Miss Daniela Bakery - Calculadora Unificada</title>
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-pascua: #FDF6EE; --accent-pascua: #A8552F; --bg-torta: #FDF8F5; --accent-torta: #DB7093; }
-        body { font-family: 'DM Sans', sans-serif; margin: 0; background: #FDF6EE; }
+        :root { --pascua: #A8552F; --torta: #DB7093; }
+        body, html { height: 100%; margin: 0; scroll-behavior: smooth; }
         .font-display { font-family: 'Playfair Display', serif; }
         .font-cake { font-family: 'Quicksand', sans-serif; }
         
+        #view-home { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        #view-home.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .option-card { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
-        .option-card.selected { border-color: var(--curr-accent); background: rgba(0,0,0,0.03); }
+        .option-card.selected { border-color: currentColor; background: rgba(0,0,0,0.03); transform: scale(1.02); }
         
         .toast { position: fixed; top: 20px; right: 20px; transform: translateX(130%); transition: transform 0.4s; z-index: 1000; }
         .toast.show { transform: translateX(0); }
@@ -26,29 +28,29 @@
         .modal-overlay.open { display: flex; }
     </style>
 </head>
-<body class="h-full">
+<body class="h-full bg-[#FDF6EE]">
 
     <div id="toast" class="toast bg-white border-l-4 border-green-500 shadow-2xl p-4 rounded-xl flex items-center gap-3">
         <div class="bg-green-100 p-1 rounded-full text-green-600"><i data-lucide="check" style="width:18px;"></i></div>
         <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Agregado!</span>
     </div>
 
-    <section id="view-home" class="view-section active h-full flex items-center justify-center px-4 bg-[#FDF6EE]">
+    <section id="view-home" class="view-section active px-4">
         <div class="max-w-md w-full text-center space-y-8 bg-white p-10 rounded-[3rem] shadow-2xl border-b-8 border-[#A8552F]">
             <div class="space-y-2">
                 <h1 class="font-display text-4xl text-[#3E2718]">Miss Daniela Bakery</h1>
-                <p class="text-gray-400 text-sm">Elegí tu calculadora de productos</p>
+                <p class="text-gray-400 text-sm italic">Pastelería artesanal y creativa</p>
             </div>
-            <div class="grid gap-4">
-                <button onclick="changeView('view-pascuas')" class="group p-6 rounded-2xl border-2 border-[#A8552F] hover:bg-[#A8552F] transition-all text-left">
+            <div class="grid gap-4 text-left">
+                <button onclick="changeView('view-pascuas')" class="group p-6 rounded-2xl border-2 border-[#A8552F] hover:bg-[#A8552F] transition-all">
                     <span class="text-3xl block mb-2">🐣</span>
                     <span class="font-bold text-xl block group-hover:text-white">Pascuas 2026</span>
-                    <span class="text-xs opacity-60 block group-hover:text-white">Huevos, Roscas y Figuras Especiales</span>
+                    <span class="text-xs opacity-60 block group-hover:text-white">Catálogo con precios y pedidos</span>
                 </button>
-                <button onclick="changeView('view-tortas')" class="group p-6 rounded-2xl border-2 border-[#DB7093] hover:bg-[#DB7093] transition-all text-left">
+                <button onclick="changeView('view-tortas')" class="group p-6 rounded-2xl border-2 border-[#DB7093] hover:bg-[#DB7093] transition-all">
                     <span class="text-3xl block mb-2">🎂</span>
                     <span class="font-bold text-xl block group-hover:text-white">Tortas & Mesa Dulce</span>
-                    <span class="text-xs opacity-60 block group-hover:text-white">Personalizá tu torta a medida</span>
+                    <span class="text-xs opacity-60 block group-hover:text-white">Calculá tu presupuesto ideal</span>
                 </button>
             </div>
         </div>
@@ -57,27 +59,28 @@
     <section id="view-pascuas" class="view-section h-full overflow-auto bg-[#FDF6EE]">
         <header class="sticky top-0 z-50 bg-[#3E2718] text-white py-4 px-6 flex justify-between items-center shadow-md">
             <button onclick="changeView('view-home')" class="p-2 hover:bg-white/10 rounded-full"><i data-lucide="chevron-left"></i></button>
-            <h2 class="font-display">Catálogo Pascuas</h2>
+            <h2 class="font-display">Pascuas 2026</h2>
             <button onclick="toggleCart()" class="relative p-2 bg-[#A8552F] rounded-xl">
                 <i data-lucide="shopping-basket"></i>
                 <span id="pascua-badge" class="absolute -top-2 -right-2 bg-white text-[#A8552F] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
             </button>
         </header>
-        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-40">
+        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-40 text-[#3E2718]">
             <section>
-                <h2 class="font-display text-2xl mb-4">1️⃣ Tamaño 📏</h2>
+                <h2 class="font-display text-2xl mb-4">1️⃣ Elegí el tamaño 📏</h2>
                 <div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
             </section>
             <section>
-                <h2 class="font-display text-2xl mb-4">2️⃣ Temática 🎨</h2>
+                <h2 class="font-display text-2xl mb-4">2️⃣ Elegí la temática 🎨</h2>
                 <div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
-                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center">
+                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center shadow-lg">
                     <div><p id="p-sum" class="font-bold text-sm">-</p><p id="p-price" class="text-xl font-bold text-[#A8552F]">-</p></div>
-                    <button onclick="addEgg()" class="bg-[#A8552F] text-white px-6 py-3 rounded-xl font-bold">Agregar 🛒</button>
+                    <button onclick="addEgg()" class="bg-[#A8552F] text-white px-8 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
             <section>
                 <h2 class="font-display text-2xl mb-4">3️⃣ Figuras Especiales ✨</h2>
+                <p class="text-sm opacity-60 mb-4">Productos únicos fuera del formato huevo con precio fijo.</p>
                 <div class="grid gap-3" id="p-specials"></div>
             </section>
             <section>
@@ -86,57 +89,68 @@
             </section>
             <section>
                 <h2 class="font-display text-2xl mb-4">5️⃣ Rosca de Pascuas 🧁</h2>
-                <div class="bg-white p-6 rounded-3xl flex justify-between items-center shadow-sm border-t-4 border-[#A8552F]">
-                    <div><p class="font-bold">Rosca Artesanal Tradicional</p><p class="text-sm opacity-60">$10.000</p></div>
+                <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
+                    <div><p class="font-bold">Rosca Clásica Artesanal</p><p class="text-sm opacity-60">$10.000</p></div>
                     <button onclick="addGeneric('Rosca de Pascuas', 10000, '🧁')" class="bg-[#A8552F] text-white px-6 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
-            <div class="pt-10 text-center"><button onclick="toggleCart()" class="bg-[#3E2718] text-white px-10 py-4 rounded-2xl font-bold">Ver Carrito y Finalizar</button></div>
         </main>
     </section>
 
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
-        <header class="bg-gradient-to-r from-[#FFF0F5] via-white to-[#FFF0F5] py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative">
+        <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
-            <h1 class="font-display text-4xl text-[#DB7093] font-bold">Miss Daniela Bakery</h1>
-            <p class="text-[#C71585] mt-1 font-medium">✨ Pastelería Creativa ✨</p>
+            <h1 class="font-display text-3xl text-[#DB7093] font-bold">Miss Daniela Bakery</h1>
+            <p class="text-[#C71585] text-sm font-medium uppercase tracking-widest">✨ Pastelería Creativa ✨</p>
         </header>
-        <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
-            <section>
-                <div class="flex items-center gap-3 mb-4"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Forma de la torta</h2></div>
+        <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+            <section id="t-step-1">
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
                 <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
             </section>
-            <section id="t-tamano-sec" class="hidden">
-                <div class="flex items-center gap-3 mb-4"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Tamaño</h2></div>
+            <section id="t-step-2" class="hidden">
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
                 <div class="grid grid-cols-2 gap-4" id="t-tamano"></div>
             </section>
-            <div id="t-final-sections" class="hidden space-y-10">
-                <div id="t-bizco-sec"></div>
-                <div id="t-relleno-sec"></div>
-                <div id="t-cober-sec"></div>
+            <section id="t-step-3" class="hidden">
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el bizcochuelo</h2></div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div>
+            </section>
+            <section id="t-step-4" class="hidden">
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Relleno/s</h2><span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded text-pink-600"></span></div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="t-relleno"></div>
+            </section>
+            <section id="t-step-5" class="hidden">
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span><h2 class="font-display text-2xl text-[#C71585]">Cobertura</h2></div>
+                <div class="grid grid-cols-3 gap-4" id="t-cober"></div>
+            </section>
+
+            <section id="t-resumen" class="hidden pb-20">
                 <div class="bg-white p-8 rounded-[3rem] shadow-xl border-2 border-[#FFB6C1]">
-                    <h2 class="font-display text-2xl text-[#C71585] text-center mb-6">📋 Tu Pedido</h2>
-                    <div id="t-resumen-list" class="space-y-3 mb-6 text-gray-700"></div>
-                    <div class="text-center py-6 border-t-2 border-dashed border-[#FFB6C1]">
-                        <p class="text-sm opacity-60">Precio aproximado torta:</p>
-                        <div class="inline-block bg-[#DB7093] text-white px-10 py-4 rounded-3xl mt-2"><span id="t-precio-total" class="text-3xl font-bold">$0</span></div>
+                    <h3 class="font-display text-2xl text-center mb-6 text-[#C71585]">📋 Tu Pedido</h3>
+                    <div id="t-resumen-txt" class="space-y-2 mb-6 text-sm border-b pb-4"></div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400 uppercase font-bold">Precio aproximado:</p>
+                        <div class="inline-block bg-[#DB7093] text-white px-10 py-4 rounded-3xl mt-2 shadow-lg"><span id="t-total" class="text-4xl font-bold">$0</span></div>
                     </div>
-                    <button onclick="sendWhatsAppTorta()" class="w-full py-5 bg-[#25D366] text-white rounded-3xl font-bold text-xl mt-6">Consultar por WhatsApp 📱</button>
+                    <button onclick="sendWhatsAppTorta()" class="w-full mt-8 py-5 bg-[#25D366] text-white rounded-2xl font-bold text-xl shadow-xl flex items-center justify-center gap-3">
+                        <i data-lucide="message-circle"></i> Consultar por WhatsApp
+                    </button>
                 </div>
-            </div>
+            </section>
         </main>
     </section>
 
     <div id="cart-modal" class="modal-overlay" onclick="if(event.target===this)toggleCart()">
         <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h3 class="font-display text-2xl mb-6">Tu Carrito Pascuas</h3>
+            <h3 class="font-display text-2xl mb-6">Carrito Pascuas</h3>
             <div id="cart-items" class="space-y-3 mb-6"></div>
-            <div class="space-y-4 bg-gray-50 p-5 rounded-3xl mb-6">
-                <input type="text" id="user-name" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Tu Nombre">
-                <textarea id="order-notes" class="w-full p-3 rounded-xl border-none ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Notas extras..."></textarea>
+            <div class="space-y-4 mb-6">
+                <input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Tu Nombre">
+                <textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-[#A8552F]" placeholder="Notas (nombres, detalles)..."></textarea>
             </div>
-            <div class="flex justify-between items-center mb-6 px-2"><span class="font-bold opacity-40 uppercase text-xs">Total Pedido:</span><span id="cart-total" class="text-3xl font-bold text-[#A8552F]">$0</span></div>
-            <button onclick="sendWhatsAppPascuas()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold flex justify-center gap-3">Enviar por WhatsApp</button>
+            <div class="flex justify-between items-center mb-6 px-2"><span class="font-bold opacity-30 text-xs uppercase">Total:</span><span id="cart-total" class="text-3xl font-bold text-[#A8552F]">$0</span></div>
+            <button onclick="sendWhatsAppPascuas()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold shadow-lg">Enviar por WhatsApp 📱</button>
         </div>
     </div>
 
@@ -153,7 +167,7 @@
 
         // --- LÓGICA PASCUAS ---
         let cartP = [];
-        let pSelSize = null, pSelTheme = null;
+        let pS = null, pT = null;
         const P_DATA = {
             sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
             themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'Hero',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
@@ -162,80 +176,102 @@
         };
 
         function initPascuas() {
-            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="selPSize('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center ${pSelSize===s.id?'selected':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
-            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="selPTheme('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center ${pSelTheme===t.id?'selected':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] uppercase font-bold">${t.l}</small></div>`).join('');
-            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
-            document.getElementById('p-corp').innerHTML = P_DATA.corp.map(c => `<div class="bg-white p-4 rounded-2xl text-center"><b>${c.l}</b><br><p class="text-[#A8552F] font-bold mb-2">$${c.p.toLocaleString()}</p><button onclick="addGeneric('Corp. ${c.l}',${c.p},'🏢')" class="w-full py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
+            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'selected text-[#A8552F]':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
+            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'selected text-[#A8552F]':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
+            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#A8552F] hover:text-white">$${sp.p.toLocaleString()} +</button></div>`).join('');
+            document.getElementById('p-corp').innerHTML = P_DATA.corp.map(c => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>${c.l}</b><br><p class="text-[#A8552F] font-bold mb-2">$${c.p.toLocaleString()}</p><button onclick="addGeneric('Corp. ${c.l}',${c.p},'🏢')" class="w-full py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
-
-        function selPSize(id) { pSelSize = id; updatePAction(); initPascuas(); }
-        function selPTheme(id) { pSelTheme = id; updatePAction(); initPascuas(); }
-        function updatePAction() {
-            const sec = document.getElementById('p-egg-action');
-            if(pSelSize && pSelTheme) {
-                sec.classList.remove('hidden');
-                const s = P_DATA.sizes.find(x=>x.id===pSelSize);
-                const t = P_DATA.themes.find(x=>x.id===pSelTheme);
-                document.getElementById('p-sum').textContent = `Huevo ${s.l} + ${t.l}`;
+        function setPS(id) { pS = id; checkP(); initPascuas(); }
+        function setPT(id) { pT = id; checkP(); initPascuas(); }
+        function checkP() {
+            const el = document.getElementById('p-egg-action');
+            if(pS && pT) {
+                el.classList.remove('hidden');
+                const s = P_DATA.sizes.find(x=>x.id===pS);
+                const t = P_DATA.themes.find(x=>x.id===pT);
+                document.getElementById('p-sum').textContent = `${s.l} — Estilo ${t.l}`;
                 document.getElementById('p-price').textContent = `$${s.p.toLocaleString()}`;
             }
         }
         function addEgg() {
-            const s = P_DATA.sizes.find(x=>x.id===pSelSize);
-            const t = P_DATA.themes.find(x=>x.id===pSelTheme);
+            const s = P_DATA.sizes.find(x=>x.id===pS);
+            const t = P_DATA.themes.find(x=>x.id===pT);
             cartP.push({n:`Huevo ${s.l} (${t.l})`,p:s.p,e:t.e});
-            showToast(`${s.l} ${t.l} agregado`);
-            pSelSize = null; pSelTheme = null;
+            showT(`Huevo ${s.l} agregado`);
+            pS = null; pT = null;
             document.getElementById('p-egg-action').classList.add('hidden');
-            updatePCart(); initPascuas();
+            upP(); initPascuas();
         }
-        function addGeneric(n,p,e) { cartP.push({n,p,e}); showToast(`${n} agregado`); updatePCart(); }
-        function updatePCart() {
+        function addGeneric(n,p,e) { cartP.push({n,p,e}); showT(`${n} agregado`); upP(); }
+        function upP() {
             document.getElementById('pascua-badge').textContent = cartP.length;
-            document.getElementById('cart-items').innerHTML = cartP.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl"><span>${i.e} ${i.n}</span><button onclick="removeP(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`).join('');
+            document.getElementById('cart-items').innerHTML = cartP.map((i,idx)=>`<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100"><span>${i.e} ${i.n}</span><button onclick="remP(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:16px"></i></button></div>`).join('');
             document.getElementById('cart-total').textContent = `$${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}`;
             lucide.createIcons();
         }
-        function removeP(i) { cartP.splice(i,1); updatePCart(); }
+        function remP(i) { cartP.splice(i,1); upP(); }
         function toggleCart() { document.getElementById('cart-modal').classList.toggle('open'); }
 
-        // --- LÓGICA TORTAS (SINTETIZADA) ---
-        let tState = { f:null, t:null, b:null, r:[], c:null };
-        const T_PRECIOS = { redonda: { chica: { crema: 35000, buttercream: 40000, fondant: 50000 }, grande: { crema: 45000, buttercream: 50000, fondant: 65000 } } }; // Simplificado para el ejemplo
+        // --- LÓGICA TORTAS ---
+        let tState = { f:null, s:null, b:null, r:[], c:null };
+        const T_DATA = {
+            formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
+            precios: { redonda: { chica: 35000, grande: 45000 }, corazon: { chica: 40000, grande: 55000 }, cuadrada: { chica: 35000, grande: 45000 } }
+        };
 
         function initTortas() {
-            const formas = [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}];
-            document.getElementById('t-forma').innerHTML = formas.map(f => `<div onclick="selTForma('${f.id}')" class="option-card p-6 bg-white rounded-2xl text-center ${tState.f===f.id?'selected':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
+            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-6 bg-white rounded-[2rem] text-center shadow-sm ${tState.f===f.id?'selected text-[#DB7093]':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
         }
-        function selTForma(f) { tState.f = f; document.getElementById('t-tamano-sec').classList.remove('hidden'); renderTTamanos(); initTortas(); }
-        function renderTTamanos() {
-            const ts = [{id:'chica',n:'Chica',m:'16cm'},{id:'grande',n:'Grande',m:'22cm'}];
-            document.getElementById('t-tamano').innerHTML = ts.map(t => `<div onclick="selTTamano('${t.id}')" class="option-card p-5 bg-white rounded-2xl text-center ${tState.t===t.id?'selected':''}"><b>${t.n}</b><br><small>${t.m}</small></div>`).join('');
+        function setTF(id) { tState.f = id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollTo('t-step-2'); }
+        function renderTS() {
+            const sizes = [{id:'chica',n:'Chica (16cm)',r:1},{id:'grande',n:'Grande (22cm)',r:2}];
+            document.getElementById('t-tamano').innerHTML = sizes.map(s => `<div onclick="setTS('${s.id}')" class="option-card p-5 bg-white rounded-2xl text-center shadow-sm ${tState.s===s.id?'selected text-[#DB7093]':''}"><b>${s.n}</b></div>`).join('');
         }
-        function selTTamano(t) { tState.t = t; document.getElementById('t-final-sections').classList.remove('hidden'); updateTResumen(); renderTTamanos(); }
-
-        function updateTResumen() {
-            const precio = T_PRECIOS[tState.f]?.[tState.t]?.crema || 0; // Ejemplo
-            document.getElementById('t-precio-total').textContent = `$${precio.toLocaleString()}`;
-            document.getElementById('t-resumen-list').innerHTML = `• Forma: ${tState.f || '-'}<br>• Tamaño: ${tState.t || '-'}`;
+        function setTS(id) { tState.s = id; tState.r = []; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollTo('t-step-3'); }
+        function renderTB() {
+            const bs = [{id:'vainilla',n:'Vainilla',e:'🍦'},{id:'chocolate',n:'Chocolate',e:'🍫'},{id:'marmolado',n:'Marmolado',e:'🎨'}];
+            document.getElementById('t-bizco').innerHTML = bs.map(b => `<div onclick="setTB('${b.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tState.b===b.id?'selected text-[#DB7093]':''}"><span>${b.e}</span><br><small>${b.n}</small></div>`).join('');
+        }
+        function setTB(id) { tState.b = id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollTo('t-step-4'); }
+        function renderTR() {
+            const rs = ['Dulce de Leche','Crema Bariloche','Mousse Oreo','Nutella','Frutos Rojos','Bonobón'];
+            const max = tState.s === 'chica' ? 1 : 2;
+            document.getElementById('t-relleno-count').textContent = `${tState.r.length}/${max} seleccionados`;
+            document.getElementById('t-relleno').innerHTML = rs.map(r => `<div onclick="setTR('${r}')" class="option-card p-3 bg-white rounded-xl text-center shadow-sm ${tState.r.includes(r)?'selected text-[#DB7093]':''}"><small>${r}</small></div>`).join('');
+        }
+        function setTR(r) {
+            const max = tState.s === 'chica' ? 1 : 2;
+            if(tState.r.includes(r)) tState.r = tState.r.filter(x=>x!==r);
+            else if(tState.r.length < max) tState.r.push(r);
+            renderTR();
+            if(tState.r.length > 0) { document.getElementById('t-step-5').classList.remove('hidden'); renderTC(); }
+        }
+        function renderTC() {
+            const cs = [{id:'crema',n:'Crema'},{id:'butter',n:'Buttercream'},{id:'fondant',n:'Fondant'}];
+            document.getElementById('t-cober').innerHTML = cs.map(c => `<div onclick="setTC('${c.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tState.c===c.id?'selected text-[#DB7093]':''}"><b>${c.n}</b></div>`).join('');
+        }
+        function setTC(id) { tState.c = id; document.getElementById('t-resumen').classList.remove('hidden'); upT(); renderTC(); scrollTo('t-resumen'); }
+        function upT() {
+            const p = T_DATA.precios[tState.f][tState.t] || 45000; // Fallback
+            document.getElementById('t-total').textContent = `$${p.toLocaleString()}`;
+            document.getElementById('t-resumen-txt').innerHTML = `• <b>Forma:</b> ${tState.f}<br>• <b>Tamaño:</b> ${tState.s}<br>• <b>Bizcochuelo:</b> ${tState.b}<br>• <b>Rellenos:</b> ${tState.r.join(', ')}<br>• <b>Cobertura:</b> ${tState.c}`;
         }
 
         // --- GENERAL ---
-        function showToast(m) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = m;
-            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
-        }
-
+        function showT(m) { const el = document.getElementById('toast'); document.getElementById('toast-msg').textContent = m; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
+        function scrollTo(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
         function sendWhatsAppPascuas() {
             const n = document.getElementById('user-name').value;
             if(!n) return alert("Poné tu nombre");
             let m = `🐣 *PEDIDO PASCUAS*\nCliente: ${n}\n`;
             cartP.forEach(i => m += `- ${i.e} ${i.n}: $${i.p.toLocaleString()}\n`);
-            m += `*TOTAL: $${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
+            m += `\n*TOTAL: $${cartP.reduce((a,b)=>a+b.p,0).toLocaleString()}*`;
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
-
+        function sendWhatsAppTorta() {
+            let m = `🎂 *CONSULTA TORTA*\nForma: ${tState.f}\nTamaño: ${tState.s}\nBizcochuelo: ${tState.b}\nRellenos: ${tState.r.join(', ')}\nCobertura: ${tState.c}\n\n*Total aprox: ${document.getElementById('t-total').textContent}*`;
+            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
+        }
         lucide.createIcons();
     </script>
 </body>
