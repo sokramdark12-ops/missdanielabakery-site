@@ -91,7 +91,7 @@
         <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
             <section id="t-step-1">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
-                <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
+                <div class="grid grid-cols-3 gap-2 sm:gap-4" id="t-forma"></div>
             </section>
             <section id="t-step-2" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
@@ -131,18 +131,10 @@
             
             <div class="space-y-4 mb-8">
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">👤 Tu Nombre</label><input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📆 Fecha de entrega</label><input type="date" id="delivery-date" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">🎨 Diseño (temática, colores, nombre y edad)</label><textarea id="order-design" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2" placeholder="Ej: Dinosaurios verdes, nombre Tiago, 5 años..."></textarea></div>
-
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📷 Foto de ejemplo (adjuntalo en whatsapp!)</label><textarea id="order-photo-ref" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="1" placeholder="Ej: Vi una foto en tu Instagram..."></textarea></div>
-
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Comentario extra o notas</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2"></textarea></div>
-            </div>
-
-            <div class="mb-6 p-4 bg-gray-50 rounded-xl text-[10px] text-gray-500 leading-relaxed">
-                Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
             </div>
 
             <div class="flex justify-between mb-6 px-2"><span class="font-bold opacity-30 text-xs">Total Estimado:</span><span id="cart-total" class="text-3xl font-bold text-gray-800">$0</span></div>
@@ -163,7 +155,12 @@
 
         const T_DATA = {
             formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
-            precios: { redonda: { chica: 35000, grande: 45000 }, corazon: { chica: 40000, grande: 55000 }, cuadrada: { chica: 35000, grande: 45000 } },
+            precios: { 
+                redonda: { chica: 35000, grande: 50000 }, 
+                corazon: { chica: 40000, grande: 55000 }, 
+                cuadrada: { chica: 35000, grande: 50000 } 
+            },
+            coberturaPlus: { crema: 0, butter: 15000, fondant: 20000 },
             candy: ["Cupcakes personalizados", "Bolsitas con pochoclos", "Chupetines personalizados", "Souvenir en bolsa", "Souvenir en caja", "Cookies personalizadas"],
             mesa: ["Tartas dulces", "Postres en vaso", "Deli-porciones", "Alfajores artesanales", "Budines caseros", "Mini pastelería"]
         };
@@ -216,7 +213,7 @@
 
         // --- TORTAS ---
         function initTortas() {
-            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'border-[#DB7093] bg-pink-50':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
+            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-4 sm:p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'border-[#DB7093] bg-pink-50':''}"><span>${f.e}</span><br><b class="text-[12px] sm:text-base">${f.n}</b></div>`).join('');
         }
         function setTF(id) { tS.f=id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollT('t-step-2'); }
         
@@ -267,8 +264,13 @@
             const items = document.getElementById('cart-items');
             items.innerHTML = cart.map((i,idx)=>`<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border-l-4 border-pink-400"><div><p class="text-sm font-bold">${i.e} ${i.n}</p><p class="text-[10px] italic opacity-50">${i.cat}</p></div><button onclick="remI(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`).join('');
             
-            if(tS.c) {
-                const pTorta = T_DATA.precios[tS.f][tS.sz];
+            let total = cart.reduce((a,b)=>a+b.p,0);
+
+            if(tS.c && tS.f && tS.sz) {
+                const basePrice = T_DATA.precios[tS.f][tS.sz];
+                const plusPrice = T_DATA.coberturaPlus[tS.c];
+                const pTorta = basePrice + plusPrice;
+                total += pTorta;
                 items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div>`;
             }
             
@@ -276,13 +278,12 @@
                 items.innerHTML += `<div class="bg-blue-50 p-3 rounded-xl border-l-4 border-blue-400 text-[10px] font-bold">COTIZAR APARTE: ${tS.extras.join(', ')}</div>`;
             }
 
-            const total = cart.reduce((a,b)=>a+b.p,0) + (tS.c ? T_DATA.precios[tS.f][tS.sz] : 0);
             document.getElementById('cart-total').textContent = `$${total.toLocaleString()}`;
             lucide.createIcons();
         }
 
         function remI(i) { cart.splice(i,1); upCart(); }
-        function toggleCart() { document.getElementById('cart-modal').classList.toggle('open'); }
+        function toggleCart() { upCart(); document.getElementById('cart-modal').classList.toggle('open'); }
         function scrollT(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
 
         function sendWhatsApp() {
@@ -291,26 +292,28 @@
             const design = document.getElementById('order-design').value;
             const photo = document.getElementById('order-photo-ref').value;
             const nt = document.getElementById('order-notes').value;
-
             if(!n || !d) return alert("Por favor, completá nombre y fecha de entrega");
 
             let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${n}\n📆 Fecha entrega: ${d}\n`;
-            
             if(design) m += `🎨 Diseño: ${design}\n`;
             if(photo) m += `📷 Ref. Foto: ${photo}\n`;
 
             cart.forEach(i => m += `\n- ${i.e} ${i.n}\n  _Cat: ${i.cat}_ ($${i.p.toLocaleString()})`);
             
+            let total = cart.reduce((a,b)=>a+b.p,0);
+
             if(tS.c) {
-                m += `\n\n🎂 *TORTA PERSONALIZADA*\n- Forma: ${tS.f}\n- Tamaño: ${tS.sz}\n- Bizco: ${tS.b}\n- Rellenos: ${tS.r.join(' / ')}\n- Cobertura: ${tS.c}\n- Precio: $${T_DATA.precios[tS.f][tS.sz].toLocaleString()}`;
+                const basePrice = T_DATA.precios[tS.f][tS.sz];
+                const plusPrice = T_DATA.coberturaPlus[tS.c];
+                const pTorta = basePrice + plusPrice;
+                total += pTorta;
+                m += `\n\n🎂 *TORTA PERSONALIZADA*\n- Forma: ${tS.f}\n- Tamaño: ${tS.sz}\n- Bizco: ${tS.b}\n- Rellenos: ${tS.r.join(' / ')}\n- Cobertura: ${tS.c}\n- Precio: $${pTorta.toLocaleString()}`;
             }
 
             if(tS.extras.length > 0) m += `\n\n🍭 *MESA DULCE / CANDY BAR* (Cotizar):\n- ${tS.extras.join('\n- ')}`;
             if(nt) m += `\n\n📝 *Notas extras:* ${nt}`;
             
-            const total = cart.reduce((a,b)=>a+b.p,0) + (tS.c ? T_DATA.precios[tS.f][tS.sz] : 0);
             m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
-            
             m += `\n\n-------------------------------\n⚠️ *INFORMACIÓN IMPORTANTE:*\nLas tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!`;
             
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
