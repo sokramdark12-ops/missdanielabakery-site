@@ -18,7 +18,6 @@
         #view-home:not(.active) { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Notificación Toast Corregida */
         .toast { 
             position: fixed; top: 20px; right: 20px; 
             transform: translateX(150%); transition: transform 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
@@ -36,7 +35,7 @@
 
     <div id="toast" class="toast bg-white border-l-4 border-green-500 shadow-2xl p-4 rounded-xl flex items-center gap-3">
         <div class="bg-green-100 p-1 rounded-full text-green-600"><i data-lucide="check" style="width:18px;"></i></div>
-        <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Producto agregado!</span>
+        <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Agregado!</span>
     </div>
 
     <section id="view-home" class="view-section active px-4">
@@ -65,10 +64,10 @@
             <div class="w-10"></div>
         </header>
         <main class="max-w-4xl mx-auto p-6 space-y-12 pb-20 text-[#3E2718]">
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">1️⃣ Tamaño 📏</h2><div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">2️⃣ Temática 🎨</h2><div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
-                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center">
-                    <div><p id="p-sum" class="font-bold text-sm">-</p><p id="p-price" class="text-xl font-bold text-[#A8552F]">-</p></div>
+            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">1️⃣ Elegí el tamaño 📏</h2><div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div></section>
+            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">2️⃣ Elegí la temática 🎨</h2><div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center shadow-lg">
+                    <div><p id="p-sum" class="font-bold text-sm text-gray-700"></p><p id="p-price" class="text-xl font-bold text-[#A8552F]"></p></div>
                     <button onclick="addEgg()" class="bg-[#A8552F] text-white px-8 py-3 rounded-xl font-bold">Agregar 🛒</button>
                 </div>
             </section>
@@ -87,7 +86,7 @@
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
         <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative shadow-sm sticky top-0 z-50">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
-            <h1 class="font-display text-2xl text-[#DB7093] font-bold tracking-tight">¡Bienvenido a Miss Daniela Bakery!</h1>
+            <h1 class="font-display text-2xl text-[#DB7093] font-bold">¡Bienvenido a Miss Daniela Bakery!</h1>
         </header>
         <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
             <section id="t-step-1">
@@ -173,9 +172,19 @@
             document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}','Figura Especial')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
             document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><button onclick="addGeneric('Huevo Corp. N° ${n}',${n*1500},'🏢','Corporativo')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
-        function setPS(id) { pS = id; checkP(); initPascuas(); }
-        function setPT(id) { pT = id; checkP(); initPascuas(); }
-        function checkP() { if(pS && pT) document.getElementById('p-egg-action').classList.remove('hidden'); }
+
+        function setPS(id) { pS = id; updateP(); initPascuas(); }
+        function setPT(id) { pT = id; updateP(); initPascuas(); }
+
+        function updateP() { 
+            if(pS && pT) { 
+                const s = P_DATA.sizes.find(x => x.id === pS);
+                const t = P_DATA.themes.find(x => x.id === pT);
+                document.getElementById('p-egg-action').classList.remove('hidden'); 
+                document.getElementById('p-sum').textContent = `Huevo ${s.l} - ${t.l}`; 
+                document.getElementById('p-price').textContent = `$${s.p.toLocaleString()}`; 
+            } 
+        }
         
         function addEgg() {
             const s = P_DATA.sizes.find(x=>x.id===pS);
