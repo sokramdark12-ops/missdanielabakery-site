@@ -117,7 +117,7 @@
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">+</span><h2 class="font-display text-2xl text-[#C71585]">¿Mesa dulce o candy bar?</h2></div>
                 <div class="grid md:grid-cols-2 gap-8"><div id="candy-list" class="space-y-2"></div><div id="mesa-list" class="space-y-2"></div></div>
                 <div class="mt-8 p-6 bg-pink-50 rounded-2xl border-l-4 border-[#DB7093] text-gray-700 text-sm italic">
-                    Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
+                    📣 INFORMACIÓN IMPORTANTE: Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
                 </div>
             </section>
             <div id="t-final-action" class="hidden flex justify-center pt-10"><button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button></div>
@@ -271,7 +271,7 @@
                 const plusPrice = T_DATA.coberturaPlus[tS.c];
                 const pTorta = basePrice + plusPrice;
                 total += pTorta;
-                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div>`;
+                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600 flex justify-between items-center"><div class="flex-1"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div><button onclick="remTorta()" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`;
             }
             
             if(tS.extras.length > 0) {
@@ -283,6 +283,17 @@
         }
 
         function remI(i) { cart.splice(i,1); upCart(); }
+        
+        function remTorta() {
+            tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
+            document.querySelectorAll('#view-tortas section').forEach(s => {
+                if(s.id !== 't-step-1') s.classList.add('hidden');
+            });
+            document.getElementById('t-final-action').classList.add('hidden');
+            initTortas();
+            upCart();
+        }
+
         function toggleCart() { upCart(); document.getElementById('cart-modal').classList.toggle('open'); }
         function scrollT(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
 
@@ -314,8 +325,7 @@
             if(nt) m += `\n\n📝 *Notas extras:* ${nt}`;
             
             m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
-            m += `\n\n-------------------------------\n⚠️ *INFORMACIÓN IMPORTANTE:*\nLas tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!`;
-            
+                                
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
     </script>
