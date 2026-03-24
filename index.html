@@ -232,7 +232,7 @@
         function setTB(id) { tS.b=id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollT('t-step-4'); }
         
         function renderTR() {
-            const rls = ["🍯 Dulce de leche", "🍮 Crema bariloche", "🍪 Mousse oreo", "🌰 Mousse de Nutella", "🍸 Tiramisú", "🍒 Frutos rojos", "🍩 Mousse de Marroc", "🍌 Mousse de Bananita dolca", "🍬 Bonobon", "🍦 Crema chantillí con frutas", "🍫 Ganache de chocolate"];
+            const rls = ["🍯 Dulce de leche", "🍮 Crema bariloche", "🍪 Mousse oreo", "🌰 Mousse de Nutella", "🍸 Tiramisú", "🍒 Frutos rojos", "🍩 Mousse de Marroc", "🍌 Mousse de Bananita dolca", "🍫 Ganache de chocolate", "🍦 Crema chantillí con frutas", "🍬 Bonobón"];
             const max = tS.sz === 'chica' ? 1 : 2;
             document.getElementById('t-relleno-count').textContent = `${tS.r.length}/${max} seleccionados`;
             document.getElementById('t-relleno').innerHTML = rls.map(r => `<div onclick="setTR('${r}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.r.includes(r)?'border-[#DB7093] bg-pink-50':''}"><small class="text-base font-bold">${r}</small></div>`).join('');
