@@ -72,7 +72,7 @@
                 </div>
             </section>
             <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">3️⃣ Figuras Especiales ✨</h2><div class="grid gap-3" id="p-specials"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">4️⃣ Huevos Corporativos 🏢</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
+            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">4️⃣ Pascuas a lo grande 🎁</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
             <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">5️⃣ Rosca 🧁</h2>
                 <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
                     <p class="font-bold">Rosca Clásica $10.000</p>
@@ -117,7 +117,7 @@
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">+</span><h2 class="font-display text-2xl text-[#C71585]">¿Mesa dulce o candy bar?</h2></div>
                 <div class="grid md:grid-cols-2 gap-8"><div id="candy-list" class="space-y-2"></div><div id="mesa-list" class="space-y-2"></div></div>
                 <div class="mt-8 p-6 bg-pink-50 rounded-2xl border-l-4 border-[#DB7093] text-gray-700 text-sm italic">
-                  📣 INFORMACIÓN IMPORTANTE: Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
+                    📣 INFORMACIÓN IMPORTANTE: Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
                 </div>
             </section>
             <div id="t-final-action" class="hidden flex justify-center pt-10"><button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button></div>
@@ -186,7 +186,9 @@
             document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'border-[#A8552F] bg-orange-50':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
             document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'border-[#A8552F] bg-orange-50':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
             document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}','Figura Especial')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
-            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><button onclick="addGeneric('Huevo Corp. N° ${n}',${n*1500},'🏢','Corporativo')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
+            
+            const bigEggPrices = { 20: 35000, 25: 46000, 30: 67000 };
+            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><small class="text-gray-500">$${bigEggPrices[n].toLocaleString()}</small><br><button onclick="addGeneric('Huevo Corp. N° ${n}',${bigEggPrices[n]},'🏢','Corporativo')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
         }
 
         function setPS(id) { pS = id; updateP(); initPascuas(); }
@@ -271,7 +273,7 @@
                 const plusPrice = T_DATA.coberturaPlus[tS.c];
                 const pTorta = basePrice + plusPrice;
                 total += pTorta;
-                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div>`;
+                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600 flex justify-between items-center"><div class="flex-1"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div><button onclick="remTorta()" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`;
             }
             
             if(tS.extras.length > 0) {
@@ -283,6 +285,17 @@
         }
 
         function remI(i) { cart.splice(i,1); upCart(); }
+        
+        function remTorta() {
+            tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
+            document.querySelectorAll('#view-tortas section').forEach(s => {
+                if(s.id !== 't-step-1') s.classList.add('hidden');
+            });
+            document.getElementById('t-final-action').classList.add('hidden');
+            initTortas();
+            upCart();
+        }
+
         function toggleCart() { upCart(); document.getElementById('cart-modal').classList.toggle('open'); }
         function scrollT(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
 
@@ -314,7 +327,7 @@
             if(nt) m += `\n\n📝 *Notas extras:* ${nt}`;
             
             m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
-                        
+                                
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
     </script>
