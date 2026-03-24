@@ -72,7 +72,7 @@
                 </div>
             </section>
             <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">3️⃣ Figuras Especiales ✨</h2><div class="grid gap-3" id="p-specials"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">4️⃣ Corporativos 🏢</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
+            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">4️⃣ Huevos Corporativos 🏢</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
             <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">5️⃣ Rosca 🧁</h2>
                 <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
                     <p class="font-bold">Rosca Clásica $10.000</p>
@@ -102,7 +102,11 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div>
             </section>
             <section id="t-step-4" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Elegí los rellenos</h2></div>
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span>
+                    <h2 class="font-display text-2xl text-[#C71585]">Elegí los rellenos</h2>
+                    <span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded-lg text-pink-600 font-bold ml-2">0 seleccionados</span>
+                </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-relleno"></div>
             </section>
             <section id="t-step-5" class="hidden">
@@ -205,7 +209,7 @@
             const szs = [{id:'chica', l:'✨ Torta Chica', d:'16x12cm'}, {id:'grande', l:'🌟 Torta Grande', d:'22x16cm'}];
             document.getElementById('t-tamano').innerHTML = szs.map(s => `<div onclick="setTSz('${s.id}')" class="option-card p-5 bg-white rounded-2xl text-center shadow-sm ${tS.sz===s.id?'border-[#DB7093] bg-pink-50':''}"><b>${s.l}</b><br><small class="text-[10px] opacity-60">${s.d}</small></div>`).join('');
         }
-        function setTSz(id) { tS.sz=id; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollT('t-step-3'); }
+        function setTSz(id) { tS.sz=id; tS.r = []; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollT('t-step-3'); }
         
         function renderTB() {
             const bzs = [{id:'vainilla',n:'Vainilla',e:'🍦'},{id:'chocolate',n:'Chocolate',e:'🍫'},{id:'marmolado',n:'Marmolado',e:'🎨'},{id:'citrico',n:'Cítrico',e:'🍋'},{id:'redvelvet',n:'Red Velvet',e:'❤️'}];
@@ -214,7 +218,9 @@
         function setTB(id) { tS.b=id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollT('t-step-4'); }
         
         function renderTR() {
-            const rls = ["🍯 Dulce de leche", "🍮 Crema bariloche", "🍪 Mousse oreo", "🌰 Mousse de Nutella", "🍸 Tiramisú", "🍒 Frutos rojos", "🍩Mousse de Marroc", "🍌 Mousse de Bananita dolca", "🍬 Bonobon", "🍦 Crema chantillí con frutas", "🍫 Ganache de chocolate"];
+            const rls = ["🍯 Dulce de leche", "🍮 Crema bariloche", "🍪 Mousse oreo", "🌰 Mousse de Nutella", "🍸 Tiramisú", "🍒 Frutos rojos", "🍩 Mousse de Marroc", "🍌 Mousse de Bananita dolca", "🍬 Bonobon", "🍦 Crema chantillí con frutas", "🍫 Ganache de chocolate"];
+            const max = tS.sz === 'chica' ? 1 : 2;
+            document.getElementById('t-relleno-count').textContent = `${tS.r.length}/${max} seleccionados`;
             document.getElementById('t-relleno').innerHTML = rls.map(r => `<div onclick="setTR('${r}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.r.includes(r)?'border-[#DB7093] bg-pink-50':''}"><small class="text-base font-bold">${r}</small></div>`).join('');
         }
         function setTR(r) {
@@ -279,6 +285,11 @@
 
             if(tS.extras.length > 0) m += `\n\n🍭 *MESA DULCE / CANDY BAR* (Cotizar):\n- ${tS.extras.join('\n- ')}`;
             if(nt) m += `\n\n📝 *Notas:* ${nt}`;
+            
+            const total = cart.reduce((a,b)=>a+b.p,0) + (tS.c ? T_DATA.precios[tS.f][tS.sz] : 0);
+            m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
+            
+            m += `\n\n-------------------------------\n📅 Fecha de entrega\n🎨 Diseño (temática, colores, nombre y edad)\n📷 Foto de ejemplo (si tenés)\n\nLas tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado.`;
             
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
