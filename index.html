@@ -125,11 +125,19 @@
         <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
             <h3 class="font-display text-2xl mb-6 text-gray-800 border-b pb-2">Resumen de Pedido</h3>
             <div id="cart-items" class="space-y-4 mb-8"></div>
+            
             <div class="space-y-4 mb-8">
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Tu Nombre</label><input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Fecha de entrega</label><input type="date" id="delivery-date" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Notas</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2"></textarea></div>
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">👤 Tu Nombre</label><input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
+                
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📆 Fecha de entrega</label><input type="date" id="delivery-date" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
+                
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">🎨 Diseño (temática, colores, nombre y edad)</label><textarea id="order-design" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2" placeholder="Ej: Dinosaurios verdes, nombre Tiago, 5 años..."></textarea></div>
+
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📷 Foto de ejemplo (Podes adjuntarlo en whatsapp!)</label><textarea id="order-photo-ref" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="1" placeholder="Ej: Vi una foto en tu Instagram..."></textarea></div>
+
+                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Comentario extra o notas</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2"></textarea></div>
             </div>
+
             <div class="flex justify-between mb-6 px-2"><span class="font-bold opacity-30 text-xs">Total Estimado:</span><span id="cart-total" class="text-3xl font-bold text-gray-800">$0</span></div>
             <button onclick="sendWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold text-lg shadow-lg flex justify-center items-center gap-2"><i data-lucide="message-circle"></i> Enviar WhatsApp</button>
         </div>
@@ -273,10 +281,17 @@
         function sendWhatsApp() {
             const n = document.getElementById('user-name').value;
             const d = document.getElementById('delivery-date').value;
+            const design = document.getElementById('order-design').value;
+            const photo = document.getElementById('order-photo-ref').value;
             const nt = document.getElementById('order-notes').value;
-            if(!n || !d) return alert("Completá nombre y fecha");
 
-            let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${n}\n📅 Fecha: ${d}\n`;
+            if(!n || !d) return alert("Por favor, completá nombre y fecha de entrega");
+
+            let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${n}\n📆 Fecha entrega: ${d}\n`;
+            
+            if(design) m += `🎨 Diseño: ${design}\n`;
+            if(photo) m += `📷 Ref. Foto: ${photo}\n`;
+
             cart.forEach(i => m += `\n- ${i.e} ${i.n}\n  _Cat: ${i.cat}_ ($${i.p.toLocaleString()})`);
             
             if(tS.c) {
@@ -284,12 +299,12 @@
             }
 
             if(tS.extras.length > 0) m += `\n\n🍭 *MESA DULCE / CANDY BAR* (Cotizar):\n- ${tS.extras.join('\n- ')}`;
-            if(nt) m += `\n\n📝 *Notas:* ${nt}`;
+            if(nt) m += `\n\n📝 *Notas extras:* ${nt}`;
             
             const total = cart.reduce((a,b)=>a+b.p,0) + (tS.c ? T_DATA.precios[tS.f][tS.sz] : 0);
             m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
             
-            m += `\n\n-------------------------------\n📅 Fecha de entrega\n🎨 Diseño (temática, colores, nombre y edad)\n📷 Foto de ejemplo (si tenés)\n\nLas tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado.`;
+            m += `\n\n-------------------------------\n⚠️ *INFORMACIÓN IMPORTANTE:*\nLas tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado.`;
             
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
         }
