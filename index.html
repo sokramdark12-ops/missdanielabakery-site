@@ -91,7 +91,7 @@
         <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
             <section id="t-step-1">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
-                <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
+                <div class="grid grid-cols-3 gap-2 sm:gap-4" id="t-forma"></div>
             </section>
             <section id="t-step-2" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
@@ -141,10 +141,6 @@
                 <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Comentario extra o notas</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2"></textarea></div>
             </div>
 
-            <div class="mb-6 p-4 bg-gray-50 rounded-xl text-[10px] text-gray-500 leading-relaxed">
-                Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
-            </div>
-
             <div class="flex justify-between mb-6 px-2"><span class="font-bold opacity-30 text-xs">Total Estimado:</span><span id="cart-total" class="text-3xl font-bold text-gray-800">$0</span></div>
             <button onclick="sendWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold text-lg shadow-lg flex justify-center items-center gap-2"><i data-lucide="message-circle"></i> Enviar WhatsApp</button>
         </div>
@@ -157,7 +153,7 @@
 
         const P_DATA = {
             sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
-            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'SUPERHEROES',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
+            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'Hero',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
             specials: [{n:'Capibara',p:15000,e:'🐹'},{n:'Copa del Mundo',p:15000,e:'🏆'},{n:'Joystick Gamer',p:13000,e:'🎮'}]
         };
 
@@ -216,7 +212,7 @@
 
         // --- TORTAS ---
         function initTortas() {
-            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'border-[#DB7093] bg-pink-50':''}"><span>${f.e}</span><br><b>${f.n}</b></div>`).join('');
+            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-4 sm:p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'border-[#DB7093] bg-pink-50':''}"><span>${f.e}</span><br><b class="text-[12px] sm:text-base">${f.n}</b></div>`).join('');
         }
         function setTF(id) { tS.f=id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollT('t-step-2'); }
         
@@ -295,7 +291,6 @@
             if(!n || !d) return alert("Por favor, completá nombre y fecha de entrega");
 
             let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${n}\n📆 Fecha entrega: ${d}\n`;
-            
             if(design) m += `🎨 Diseño: ${design}\n`;
             if(photo) m += `📷 Ref. Foto: ${photo}\n`;
 
