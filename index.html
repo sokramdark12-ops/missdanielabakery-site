@@ -42,15 +42,9 @@
             font-size: 28px;
         }
 
-        .insta {
-            font-size: 15px;
-            opacity: 0.9;
-            margin-top: 8px;
-        }
+        .insta { font-size: 15px; opacity: 0.9; margin-top: 8px; }
 
-        .calculadora {
-            padding: 25px;
-        }
+        .calculadora { padding: 25px; }
 
         label {
             font-weight: 500;
@@ -91,14 +85,13 @@
             padding-bottom: 8px;
         }
 
-        .item {
-            margin-bottom: 18px;
+        .premium-list {
+            line-height: 1.8;
+            font-size: 15px;
+            padding-left: 20px;
         }
 
-        .item label {
-            font-size: 15px;
-            color: #555;
-        }
+        .item { margin-bottom: 18px; }
 
         .total {
             font-size: 28px;
@@ -135,6 +128,7 @@
             text-align: center;
             color: #666;
             margin: 20px 0;
+            line-height: 1.4;
         }
 
         .nota {
@@ -173,35 +167,32 @@
                     <h4>🌸 Opciones Dulces</h4>
                     <div class="item">
                         <label>Budín (elegí uno)</label>
-                        <select id="budin" class="item-select" data-base="Budín">
+                        <select id="budin" class="item-select">
                             <option value="Banana con chips y chocolate">Porción de budín banana con chips bañado en chocolate</option>
                             <option value="Marmolado bañado">Porción de budín vainilla y chocolate marmolado</option>
                             <option value="Naranja glaseado">Porción de budín de naranja con glaseado cítrico</option>
                             <option value="Limón glaseado">Porción de budín de limón con glaseado cítrico</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Porción Dulce (elegí una)</label>
-                        <select id="porcion" class="item-select" data-base="Porción Dulce">
+                        <select id="porcion" class="item-select">
                             <option value="Pastafrola Membrillo">Pastafrola de membrillo estilo crumble</option>
                             <option value="Pastafrola Batata">Pastafrola de batata estilo crumble</option>
                             <option value="Crumble Manzana" data-extra="2000">Crumble de manzana (+$2.000)</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Alfajor (elegí uno)</label>
-                        <select id="alfajor" class="item-select" data-base="Alfajor">
+                        <select id="alfajor" class="item-select">
                             <option value="Dulce de Leche y Marroc">Alfajor de dulce de leche y marroc</option>
                             <option value="Fruta glaseado">Alfajor de fruta con glaseado cítrico</option>
                             <option value="Patagónico" data-extra="1000">Alfajor Patagónico (+$1.000)</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Cookies (elegí una)</label>
-                        <select id="cookies" class="item-select" data-base="Cookies">
+                        <select id="cookies" class="item-select">
                             <option value="2 NY Marroc">2 Cookies NY rellenas de marroc</option>
                             <option value="2 NY Bananita">2 Cookies NY rellenas de bananita dolca</option>
                         </select>
@@ -213,32 +204,29 @@
                     <h4>🥪 Opciones Saladas</h4>
                     <div class="item">
                         <label>Scones (elegí uno)</label>
-                        <select id="scones" class="item-select" data-base="Scones">
+                        <select id="scones" class="item-select">
                             <option value="4 Queso Orégano">4 Scones de queso y orégano</option>
                             <option value="4 Queso Salame">4 Scones de queso y salame</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Chipá (elegí una)</label>
-                        <select id="chipa" class="item-select" data-base="Chipá">
+                        <select id="chipa" class="item-select">
                             <option value="4 Clásicos">4 Chipá clásico variedad de quesos</option>
                             <option value="4 Mixtos" data-extra="2000">4 Chipá mixto jamón y quesos (+$2.000)</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Sambuchito (elegí uno)</label>
-                        <select id="sambu" class="item-select" data-base="Sambuchito">
+                        <select id="sambu" class="item-select">
                             <option value="Jamón Natural">Jamón natural + queso</option>
                             <option value="Salame">Salame + queso</option>
                             <option value="Jamón Crudo" data-extra="2000">Jamón crudo + queso (+$2.000)</option>
                         </select>
                     </div>
-
                     <div class="item">
                         <label>Jugo (elegí uno)</label>
-                        <select id="jugo" class="item-select" data-base="Jugo">
+                        <select id="jugo" class="item-select">
                             <option value="Durazno">Jugo de Durazno</option>
                             <option value="Naranja">Jugo de Naranja dulce</option>
                             <option value="Manzana">Jugo de Manzana</option>
@@ -246,11 +234,55 @@
                     </div>
                 </div>
 
+                <!-- MIXTO -->
+                <div id="mixto-options" class="grupo">
+                    <h4>🌸 Opciones Dulces (Mixto)</h4>
+                    <div class="item">
+                        <label>Budín</label>
+                        <select id="mixto-budin" class="item-select"></select>
+                    </div>
+                    <div class="item">
+                        <label>Porción Dulce</label>
+                        <select id="mixto-porcion" class="item-select"></select>
+                    </div>
+                    <div class="item">
+                        <label>Cookies</label>
+                        <select id="mixto-cookies" class="item-select"></select>
+                    </div>
+
+                    <h4>🥪 Opciones Saladas (Mixto)</h4>
+                    <div class="item">
+                        <label>Chipá</label>
+                        <select id="mixto-chipa" class="item-select"></select>
+                    </div>
+                    <div class="item">
+                        <label>Sambuchito</label>
+                        <select id="mixto-sambu" class="item-select"></select>
+                    </div>
+                    <div class="item">
+                        <label>Jugo</label>
+                        <select id="mixto-jugo" class="item-select"></select>
+                    </div>
+                </div>
+
+                <!-- PREMIUM -->
+                <div id="premium-options" class="grupo">
+                    <h4>✨ Lo que incluye la Bandeja Premium</h4>
+                    <ul class="premium-list">
+                        <li>🥖 1 Pan de campo artesanal</li>
+                        <li>🥩 Variedad de fiambres (lomito natural, salame, jamón natural)</li>
+                        <li>🧀 Variedad de quesos seleccionados (Gruyere, Roquefort, Pategrás)</li>
+                        <li>🥣 Variedad de dips y salsas para acompañar</li>
+                        <li>🫒 Aceitunas negras y aceitunas rellenas</li>
+                        <li>🍺 1 Chopp personalizable + 1 lata de cerveza a elección</li>
+                    </ul>
+                </div>
+
                 <!-- PERSONALIZACIÓN -->
                 <div class="grupo">
-                    <h4>🎨 Personalización</h4>
-                    <label for="textoTaza">Texto para la taza / chop personalizada:</label>
-                    <input type="text" id="textoTaza" placeholder="Ej: ¡Feliz Cumple Juan!" maxlength="60">
+                    <h4 id="personalizacion-titulo">🎨 Personalización</h4>
+                    <label id="personalizacion-label">Texto para la taza personalizada:</label>
+                    <input type="text" id="textoPersonalizado" placeholder="Ej: ¡Feliz Cumple Juan!" maxlength="60">
                 </div>
             </div>
 
@@ -258,21 +290,29 @@
                 Total: <span id="totalVisual">$0</span>
             </div>
 
-            <div class="info">
-                <small>✅ Incluye taza/chop personalizada + infusiones (café o té)<br>
-                🕒 Pedidos con anticipación • 50% de seña</small>
+            <div class="info" id="info-legend">
+                ✅ Incluye taza personalizada + infusiones (café o té)
             </div>
 
             <button onclick="enviarWhatsApp()">📲 Enviar Pedido por WhatsApp</button>
 
             <div class="nota">
                 <strong>💡 Recordá:</strong> Todas las bandejas son 100% artesanales y personalizadas. 
-                Te contactaremos para confirmar detalles y coordinar la entrega.
+                Te contactaremos para confirmar disponibilidad y coordinar la entrega.
             </div>
         </div>
     </div>
 
     <script>
+        function copiarOpciones() {
+            document.getElementById('mixto-budin').innerHTML = document.getElementById('budin').innerHTML;
+            document.getElementById('mixto-porcion').innerHTML = document.getElementById('porcion').innerHTML;
+            document.getElementById('mixto-cookies').innerHTML = document.getElementById('cookies').innerHTML;
+            document.getElementById('mixto-chipa').innerHTML = document.getElementById('chipa').innerHTML;
+            document.getElementById('mixto-sambu').innerHTML = document.getElementById('sambu').innerHTML;
+            document.getElementById('mixto-jugo').innerHTML = document.getElementById('jugo').innerHTML;
+        }
+
         function actualizarVista() {
             const selector = document.getElementById('tipoBandeja');
             const tipo = selector.options[selector.selectedIndex].getAttribute('data-tipo');
@@ -280,16 +320,36 @@
 
             document.getElementById('sweet-options').style.display = 'none';
             document.getElementById('salado-options').style.display = 'none';
+            document.getElementById('mixto-options').style.display = 'none';
+            document.getElementById('premium-options').style.display = 'none';
 
             if (tipo) {
                 opcionesDiv.style.display = 'block';
+
                 if (tipo === 'sweet') {
                     document.getElementById('sweet-options').style.display = 'block';
                 } else if (tipo === 'salado') {
                     document.getElementById('salado-options').style.display = 'block';
                 } else if (tipo === 'mixto') {
-                    document.getElementById('sweet-options').style.display = 'block';
-                    document.getElementById('salado-options').style.display = 'block';
+                    document.getElementById('mixto-options').style.display = 'block';
+                    copiarOpciones();
+                } else if (tipo === 'premium') {
+                    document.getElementById('premium-options').style.display = 'block';
+                }
+
+                // Personalización según tipo
+                const titulo = document.getElementById('personalizacion-titulo');
+                const label = document.getElementById('personalizacion-label');
+                const legend = document.getElementById('info-legend');
+
+                if (tipo === 'premium') {
+                    titulo.textContent = '🎨 Personalización';
+                    label.textContent = 'Texto para el chopp personalizable:';
+                    legend.innerHTML = '✅ Incluye chopp personalizable + 1 lata de cerveza';
+                } else {
+                    titulo.textContent = '🎨 Personalización';
+                    label.textContent = 'Texto para la taza personalizada:';
+                    legend.innerHTML = '✅ Incluye taza personalizada + infusiones (café o té)';
                 }
             } else {
                 opcionesDiv.style.display = 'none';
@@ -319,41 +379,56 @@
             const total = calcularTotal();
             const bandejaSelect = document.getElementById('tipoBandeja');
             const bandeja = bandejaSelect.options[bandejaSelect.selectedIndex].text;
+            const tipo = bandejaSelect.options[bandejaSelect.selectedIndex].getAttribute('data-tipo');
 
             let detalle = "";
 
-            if (document.getElementById('sweet-options').style.display !== 'none') {
+            if (tipo === 'sweet') {
                 detalle += `🧁 *Budín:* ${document.getElementById('budin').value}\n`;
                 detalle += `🍰 *Porción dulce:* ${document.getElementById('porcion').value}\n`;
                 detalle += `🥐 *Alfajor:* ${document.getElementById('alfajor').value}\n`;
                 detalle += `🍪 *Cookies:* ${document.getElementById('cookies').value}\n\n`;
-            }
-
-            if (document.getElementById('salado-options').style.display !== 'none') {
+            } else if (tipo === 'salado') {
                 detalle += `🥟 *Scones:* ${document.getElementById('scones').value}\n`;
                 detalle += `🧀 *Chipá:* ${document.getElementById('chipa').value}\n`;
                 detalle += `🥪 *Sambuchito:* ${document.getElementById('sambu').value}\n`;
                 detalle += `🧃 *Jugo:* ${document.getElementById('jugo').value}\n\n`;
+            } else if (tipo === 'mixto') {
+                detalle += `🧁 *Budín:* ${document.getElementById('mixto-budin').value}\n`;
+                detalle += `🍰 *Porción dulce:* ${document.getElementById('mixto-porcion').value}\n`;
+                detalle += `🍪 *Cookies:* ${document.getElementById('mixto-cookies').value}\n\n`;
+                detalle += `🧀 *Chipá:* ${document.getElementById('mixto-chipa').value}\n`;
+                detalle += `🥪 *Sambuchito:* ${document.getElementById('mixto-sambu').value}\n`;
+                detalle += `🧃 *Jugo:* ${document.getElementById('mixto-jugo').value}\n\n`;
+            } else if (tipo === 'premium') {
+                detalle += `✨ *Bandeja Premium incluye:*\n`;
+                detalle += `• 1 Pan de campo artesanal\n`;
+                detalle += `• Variedad de fiambres (lomito natural, salame, jamón natural)\n`;
+                detalle += `• Variedad de quesos (Gruyere, Roquefort, Pategrás)\n`;
+                detalle += `• Variedad de dips y salsas\n`;
+                detalle += `• Aceitunas negras y rellenas\n`;
+                detalle += `• 1 Chopp personalizable + 1 lata de cerveza\n\n`;
             }
 
-            const personalizacion = document.getElementById('textoTaza').value.trim() || "Sin personalización";
+            const personalizacion = document.getElementById('textoPersonalizado').value.trim() || "Sin personalización";
 
             const mensaje = `¡Hola Miss Daniela Bakery! 🌸\n\n` +
                             `Quiero encargar el siguiente desayuno:\n\n` +
                             `*Bandeja:* ${bandeja}\n\n` +
                             `${detalle}` +
-                            `*Personalización taza/chop:* ${personalizacion}\n\n` +
+                            `*Personalización:* ${personalizacion}\n\n` +
                             `*Total:* $${total.toLocaleString('es-AR')}\n\n` +
                             `✅ Hago la seña del 50% cuando me confirmes disponibilidad.\n` +
                             `Gracias!`;
 
             const telefono = "5491122539954";
             const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-            
             window.open(url, '_blank');
         }
 
-        window.onload = calcularTotal;
+        window.onload = function() {
+            calcularTotal();
+        };
     </script>
 </body>
 </html>
