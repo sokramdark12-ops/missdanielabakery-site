@@ -1,335 +1,84 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miss Daniela Bakery - Calculadora Unificada</title>
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --pascua: #A8552F; --torta: #DB7093; }
-        body, html { height: 100%; margin: 0; scroll-behavior: smooth; }
-        .font-display { font-family: 'Playfair Display', serif; }
-        .font-cake { font-family: 'Quicksand', sans-serif; }
-        #view-home { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
-        #view-home:not(.active) { display: none !important; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .toast { 
-            position: fixed; top: 20px; right: 20px; 
-            transform: translateX(150%); transition: transform 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            z-index: 9999; 
-        }
-        .toast.show { transform: translateX(0); }
-
-        .option-card { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
-        .option-card.selected { border-color: currentColor; background: rgba(0,0,0,0.03); transform: scale(1.02); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-overlay.open { display: flex; }
-    </style>
+    <title>Calculadora de Desayunos - Mi Emprendimiento</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="h-full bg-[#FDF6EE]">
+<body>
 
-    <div id="toast" class="toast bg-white border-l-4 border-green-500 shadow-2xl p-4 rounded-xl flex items-center gap-3">
-        <div class="bg-green-100 p-1 rounded-full text-green-600"><i data-lucide="check" style="width:18px;"></i></div>
-        <span id="toast-msg" class="font-bold text-sm text-gray-800">¡Agregado!</span>
-    </div>
+    <h2>Calculadora de Desayunos Artesanales</h2>
+    <p>Personalizá tu bandeja y calculá el presupuesto al instante.</p>
 
-    <section id="view-home" class="view-section active px-4">
-        <div class="max-w-md w-full text-center space-y-8 bg-white p-10 rounded-[3rem] shadow-2xl border-b-8 border-[#A8552F]">
-            <div class="space-y-2">
-                <h1 class="font-display text-3xl text-[#3E2718]">¡Bienvenido a Miss Daniela Bakery!</h1>
-                <p class="text-gray-400 text-sm italic">Calcula el precio de tus productos aquí:</p>
+    <div class="calculadora">
+        <!-- SELECCIÓN DE BANDEJA -->
+        <label for="tipoBandeja">Seleccioná tu tipo de bandeja:</label>
+        <select id="tipoBandeja" onchange="mostrarOpciones()">
+            <option value="0">-- Elegir --</option>
+            <option value="45000" data-tipo="sweet">Desayuno Sweet ($45.000)</option>
+            <option value="45000" data-tipo="salado">Desayuno Salado ($45.000)</option>
+            <option value="50000" data-tipo="mixto">Desayuno Mixto ($50.000)</option>
+            <option value="65000" data-tipo="premium">Bandeja Premium ($65.000)</option>
+        </select>
+
+        <hr>
+
+        <!-- CONTENEDOR DINÁMICO DE OPCIONES -->
+        <div id="opcionesDetalle" style="display:none;">
+            <div id="grupo-sweet" class="grupo-opcion">
+                <h4>Opciones Dulces:</h4>
+                <p>Budín:</p>
+                <select class="item-desayuno" data-base="Budín">
+                    <option value="Banana con Chips">Banana con Chips</option>
+                    <option value="Marmolado">Marmolado</option>
+                    <option value="Naranja">Naranja</option>
+                    <option value="Limón">Limón</option>
+                </select>
+
+                <p>Porción Dulce:</p>
+                <select class="item-desayuno" data-base="Porción">
+                    <option value="Frola Membrillo">Pastafrola Membrillo</option>
+                    <option value="Frola Batata">Pastafrola Batata</option>
+                    <option value="Crumble de Manzana" data-extra="2000">Crumble de Manzana (+$2.000)</option>
+                </select>
+
+                <p>Alfajor:</p>
+                <select class="item-desayuno" data-base="Alfajor">
+                    <option value="Marroc">Dulce de Leche y Marroc</option>
+                    <option value="Fruta">Fruta y Glaseado</option>
+                    <option value="Patagónico" data-extra="1000">Patagónico (+$1.000)</option>
+                </select>
             </div>
-            <div class="grid gap-4 text-left">
-                <button onclick="changeView('view-pascuas')" class="group p-6 rounded-2xl border-2 border-[#A8552F] hover:bg-[#A8552F] transition-all">
-                    <span class="text-3xl block mb-2">🐣</span>
-                    <span class="font-bold text-xl block group-hover:text-white">Pascuas 2026</span>
-                </button>
-                <button onclick="changeView('view-tortas')" class="group p-6 rounded-2xl border-2 border-[#DB7093] hover:bg-[#DB7093] transition-all">
-                    <span class="text-3xl block mb-2">🎂</span>
-                    <span class="font-bold text-xl block group-hover:text-white">Tortas & Mesa Dulce</span>
-                </button>
+
+            <div id="grupo-salado" class="grupo-opcion">
+                <h4>Opciones Saladas:</h4>
+                <p>Chipá:</p>
+                <select class="item-desayuno" data-base="Chipá">
+                    <option value="Clásico">4 Chipá Clásicos</option>
+                    <option value="Mixto" data-extra="2000">4 Chipá Mixtos J&Q (+$2.000)</option>
+                </select>
+
+                <p>Sándwich:</p>
+                <select class="item-desayuno" data-base="Sándwich">
+                    <option value="Jamón y Queso">Jamón Natural y Queso</option>
+                    <option value="Salame y Queso">Salame y Queso</option>
+                    <option value="Jamón Crudo" data-extra="2000">Jamón Crudo y Queso (+$2.000)</option>
+                </select>
+            </div>
+            
+            <div class="personalizacion">
+                <h4>Personalización:</h4>
+                <input type="text" id="textoTaza" placeholder="Nombre/Frase para la taza o chop">
             </div>
         </div>
-    </section>
 
-    <section id="view-pascuas" class="view-section h-full overflow-auto bg-[#FDF6EE]">
-        <header class="sticky top-0 z-50 bg-[#3E2718] text-white py-4 px-6 flex justify-between items-center shadow-md">
-            <button onclick="changeView('view-home')" class="p-2 hover:bg-white/10 rounded-full"><i data-lucide="chevron-left"></i></button>
-            <h2 class="font-display">Pascuas 2026</h2>
-            <div class="w-10"></div>
-        </header>
-        <main class="max-w-4xl mx-auto p-6 space-y-12 pb-20 text-[#3E2718]">
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">1️⃣ Elegí el tamaño 📏</h2><div id="p-sizes" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">2️⃣ Elegí la temática 🎨</h2><div id="p-themes" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
-                <div id="p-egg-action" class="mt-6 hidden p-6 bg-white rounded-3xl border-2 border-[#A8552F] flex justify-between items-center shadow-lg">
-                    <div><p id="p-sum" class="font-bold text-sm text-gray-700"></p><p id="p-price" class="text-xl font-bold text-[#A8552F]"></p></div>
-                    <button onclick="addEgg()" class="bg-[#A8552F] text-white px-8 py-3 rounded-xl font-bold">Agregar 🛒</button>
-                </div>
-            </section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">3️⃣ Figuras Especiales ✨</h2><div class="grid gap-3" id="p-specials"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">4️⃣ Pascuas a lo grande 🎁</h2><div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="p-corp"></div></section>
-            <section><h2 class="font-display text-2xl mb-4 text-[#A8552F]">5️⃣ Rosca 🧁</h2>
-                <div class="bg-white p-6 rounded-3xl flex justify-between items-center border-t-4 border-[#A8552F] shadow-sm">
-                    <p class="font-bold">Rosca Clásica $10.000</p>
-                    <button onclick="addGeneric('Rosca de Pascuas', 10000, '🧁', 'Rosca')" class="bg-[#A8552F] text-white px-6 py-2 rounded-xl font-bold">Agregar 🛒</button>
-                </div>
-            </section>
-            <div class="pt-10 flex justify-center"><button onclick="toggleCart()" class="bg-[#3E2718] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button></div>
-        </main>
-    </section>
-
-    <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
-        <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative shadow-sm sticky top-0 z-50">
-            <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
-            <h1 class="font-display text-2xl text-[#DB7093] font-bold">¡Bienvenido a Miss Daniela Bakery!</h1>
-        </header>
-        <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
-            <section id="t-step-1">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
-                <div class="grid grid-cols-3 gap-2 sm:gap-4" id="t-forma"></div>
-            </section>
-            <section id="t-step-2" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="t-tamano"></div>
-            </section>
-            <section id="t-step-3" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el bizcochuelo</h2></div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div>
-            </section>
-            <section id="t-step-4" class="hidden">
-                <div class="flex items-center gap-3 mb-6">
-                    <span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span>
-                    <h2 class="font-display text-2xl text-[#C71585]">Elegí los rellenos</h2>
-                    <span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded-lg text-pink-600 font-bold ml-2">0 seleccionados</span>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-relleno"></div>
-            </section>
-            <section id="t-step-5" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la cobertura</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="t-cober"></div>
-            </section>
-            <section id="t-step-extra" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">+</span><h2 class="font-display text-2xl text-[#C71585]">¿Mesa dulce o candy bar?</h2></div>
-                <div class="grid md:grid-cols-2 gap-8"><div id="candy-list" class="space-y-2"></div><div id="mesa-list" class="space-y-2"></div></div>
-                <div class="mt-8 p-6 bg-pink-50 rounded-2xl border-l-4 border-[#DB7093] text-gray-700 text-sm italic">
-                    📣 INFORMACIÓN IMPORTANTE: Las tortas clásicas con crema están disponibles en 24 hs. Todas las tortas se entregan en plato de fibrofácil y caja acorde para traslado + una vela de regalo!
-                </div>
-            </section>
-            <div id="t-final-action" class="hidden flex justify-center pt-10"><button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button></div>
-        </main>
-    </section>
-
-    <div id="cart-modal" class="modal-overlay" onclick="if(event.target===this)toggleCart()">
-        <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h3 class="font-display text-2xl mb-6 text-gray-800 border-b pb-2">Resumen de Pedido</h3>
-            <div id="cart-items" class="space-y-4 mb-8"></div>
-            
-            <div class="space-y-4 mb-8">
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">👤 Tu Nombre</label><input type="text" id="user-name" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📆 Fecha de entrega</label><input type="date" id="delivery-date" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200"></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">🎨 Diseño (temática, colores, nombre y edad)</label><textarea id="order-design" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2" placeholder="Ej: Dinosaurios verdes, nombre Tiago, 5 años..."></textarea></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">📷 Foto de ejemplo (adjuntalo en whatsapp!)</label><textarea id="order-photo-ref" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="1" placeholder="Ej: Vi una foto en tu Instagram..."></textarea></div>
-                <div><label class="text-[10px] font-bold uppercase opacity-40 ml-2">Comentario extra o notas</label><textarea id="order-notes" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none focus:ring-2 focus:ring-pink-200" rows="2"></textarea></div>
-            </div>
-
-            <div class="flex justify-between mb-6 px-2"><span class="font-bold opacity-30 text-xs">Total Estimado:</span><span id="cart-total" class="text-3xl font-bold text-gray-800">$0</span></div>
-            <button onclick="sendWhatsApp()" class="w-full py-5 bg-[#25D366] text-white rounded-2xl font-bold text-lg shadow-lg flex justify-center items-center gap-2"><i data-lucide="message-circle"></i> Enviar WhatsApp</button>
+        <div class="resumen">
+            <h3>Total: <span id="totalVisual">$0</span></h3>
+            <p><small>* Los pedidos se señan con el 50%.</small></p>
+            <button onclick="enviarWhatsApp()">Enviar Pedido por WhatsApp</button>
         </div>
     </div>
 
-    <script>
-        let cart = [];
-        let pS = null, pT = null;
-        let tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
-
-        const P_DATA = {
-            sizes: [{id:'n8',l:'N° 8',p:4500},{id:'n10',l:'N° 10',p:6600},{id:'n11',l:'N° 11',p:7700},{id:'n12',l:'N° 12',p:9800},{id:'n15',l:'N° 15',p:15500},{id:'n18',l:'N° 18',p:21500}],
-            themes: [{id:'dino',l:'Dino',e:'🦕'},{id:'hero',l:'SUPERHEROES',e:'🦸'},{id:'star',l:'StarWars',e:'⚔️'},{id:'flo',l:'Flores',e:'🌸'},{id:'pers',l:'Personajes',e:'🎭'},{id:'fut',l:'Futbol',e:'⚽'},{id:'ani',l:'Animales',e:'🐱'},{id:'otro',l:'Otro',e:'📷'}],
-            specials: [{n:'Capibara',p:15000,e:'🐹'},{n:'Copa del Mundo',p:15000,e:'🏆'},{n:'Joystick Gamer',p:13000,e:'🎮'}]
-        };
-
-        const T_DATA = {
-            formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
-            precios: { 
-                redonda: { chica: 35000, grande: 50000 }, 
-                corazon: { chica: 40000, grande: 55000 }, 
-                cuadrada: { chica: 35000, grande: 50000 } 
-            },
-            coberturaPlus: { crema: 0, butter: 15000, fondant: 20000 },
-            candy: ["Cupcakes personalizados", "Bolsitas con pochoclos", "Chupetines personalizados", "Souvenir en bolsa", "Souvenir en caja", "Cookies personalizadas"],
-            mesa: ["Tartas dulces", "Postres en vaso", "Deli-porciones", "Alfajores artesanales", "Budines caseros", "Mini pastelería"]
-        };
-
-        function showPushUp(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function changeView(id) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if(id === 'view-pascuas') initPascuas();
-            if(id === 'view-tortas') initTortas();
-            lucide.createIcons();
-        }
-
-        // --- PASCUAS ---
-        function initPascuas() {
-            document.getElementById('p-sizes').innerHTML = P_DATA.sizes.map(s => `<div onclick="setPS('${s.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pS===s.id?'border-[#A8552F] bg-orange-50':''}"><b>${s.l}</b><br><small>$${s.p.toLocaleString()}</small></div>`).join('');
-            document.getElementById('p-themes').innerHTML = P_DATA.themes.map(t => `<div onclick="setPT('${t.id}')" class="option-card p-4 bg-white rounded-2xl text-center shadow-sm ${pT===t.id?'border-[#A8552F] bg-orange-50':''}"><span class="text-2xl">${t.e}</span><br><small class="text-[9px] font-bold uppercase">${t.l}</small></div>`).join('');
-            document.getElementById('p-specials').innerHTML = P_DATA.specials.map(sp => `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm"><span>${sp.e} ${sp.n}</span><button onclick="addGeneric('${sp.n}',${sp.p},'${sp.e}','Figura Especial')" class="bg-gray-100 px-4 py-2 rounded-xl text-xs font-bold">$${sp.p.toLocaleString()} +</button></div>`).join('');
-            
-            const bigEggPrices = { 20: 35000, 25: 46000, 30: 67000 };
-            document.getElementById('p-corp').innerHTML = [20,25,30].map(n => `<div class="bg-white p-4 rounded-2xl text-center shadow-sm border border-gray-100"><b>N° ${n}</b><br><small class="text-gray-500">$${bigEggPrices[n].toLocaleString()}</small><br><button onclick="addGeneric('Huevo Corp. N° ${n}',${bigEggPrices[n]},'🏢','Corporativo')" class="w-full mt-2 py-2 bg-gray-50 rounded-lg text-[10px] font-bold">Agregar</button></div>`).join('');
-        }
-
-        function setPS(id) { pS = id; updateP(); initPascuas(); }
-        function setPT(id) { pT = id; updateP(); initPascuas(); }
-
-        function updateP() { 
-            if(pS && pT) { 
-                const s = P_DATA.sizes.find(x => x.id === pS);
-                const t = P_DATA.themes.find(x => x.id === pT);
-                document.getElementById('p-egg-action').classList.remove('hidden'); 
-                document.getElementById('p-sum').textContent = `Huevo ${s.l} - ${t.l}`; 
-                document.getElementById('p-price').textContent = `$${s.p.toLocaleString()}`; 
-            } 
-        }
-        
-        function addEgg() {
-            const s = P_DATA.sizes.find(x=>x.id===pS);
-            const t = P_DATA.themes.find(x=>x.id===pT);
-            cart.push({n:`Huevo ${s.l} (${t.l})`,p:s.p,e:t.e, cat:'Huevo Tradicional'});
-            showPushUp(`Agregado: ${s.l}`);
-            pS=null; pT=null; document.getElementById('p-egg-action').classList.add('hidden');
-            upCart(); initPascuas();
-        }
-
-        // --- TORTAS ---
-        function initTortas() {
-            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="option-card p-4 sm:p-6 bg-white rounded-3xl text-center shadow-sm ${tS.f===f.id?'border-[#DB7093] bg-pink-50':''}"><span>${f.e}</span><br><b class="text-[12px] sm:text-base">${f.n}</b></div>`).join('');
-        }
-        function setTF(id) { tS.f=id; document.getElementById('t-step-2').classList.remove('hidden'); renderTS(); initTortas(); scrollT('t-step-2'); }
-        
-        function renderTS() {
-            const szs = [{id:'chica', l:'✨ Torta Chica', d:'16x12cm'}, {id:'grande', l:'🌟 Torta Grande', d:'22x16cm'}];
-            document.getElementById('t-tamano').innerHTML = szs.map(s => `<div onclick="setTSz('${s.id}')" class="option-card p-5 bg-white rounded-2xl text-center shadow-sm ${tS.sz===s.id?'border-[#DB7093] bg-pink-50':''}"><b>${s.l}</b><br><small class="text-[10px] opacity-60">${s.d}</small></div>`).join('');
-        }
-        function setTSz(id) { tS.sz=id; tS.r = []; document.getElementById('t-step-3').classList.remove('hidden'); renderTB(); renderTS(); scrollT('t-step-3'); }
-        
-        function renderTB() {
-            const bzs = [{id:'vainilla',n:'Vainilla',e:'🍦'},{id:'chocolate',n:'Chocolate',e:'🍫'},{id:'marmolado',n:'Marmolado',e:'🎨'},{id:'citrico',n:'Cítrico',e:'🍋'},{id:'redvelvet',n:'Red Velvet',e:'❤️'}];
-            document.getElementById('t-bizco').innerHTML = bzs.map(b => `<div onclick="setTB('${b.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.b===b.id?'border-[#DB7093] bg-pink-50':''}"><span>${b.e}</span><br><small class="font-bold">${b.n}</small></div>`).join('');
-        }
-        function setTB(id) { tS.b=id; document.getElementById('t-step-4').classList.remove('hidden'); renderTR(); renderTB(); scrollT('t-step-4'); }
-        
-        function renderTR() {
-            const rls = ["🍯 Dulce de leche", "🍮 Crema bariloche", "🍪 Mousse oreo", "🌰 Mousse de Nutella", "🍸 Tiramisú", "🍒 Frutos rojos", "🍩 Mousse de Marroc", "🍌 Mousse de Bananita dolca", "🍬 Bonobon", "🍦 Crema chantillí con frutas", "🍫 Ganache de chocolate"];
-            const max = tS.sz === 'chica' ? 1 : 2;
-            document.getElementById('t-relleno-count').textContent = `${tS.r.length}/${max} seleccionados`;
-            document.getElementById('t-relleno').innerHTML = rls.map(r => `<div onclick="setTR('${r}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.r.includes(r)?'border-[#DB7093] bg-pink-50':''}"><small class="text-base font-bold">${r}</small></div>`).join('');
-        }
-        function setTR(r) {
-            const max = tS.sz === 'chica' ? 1 : 2;
-            if(tS.r.includes(r)) tS.r = tS.r.filter(x=>x!==r);
-            else if(tS.r.length < max) tS.r.push(r);
-            renderTR(); if(tS.r.length > 0) { document.getElementById('t-step-5').classList.remove('hidden'); renderTC(); scrollT('t-step-5'); }
-        }
-        function renderTC() {
-            const cs = [{id:'crema', n:'🧁Crema chantillí'},{id:'butter', n:'🧁Buttercream'},{id:'fondant', n:'🎂Fondant'}];
-            document.getElementById('t-cober').innerHTML = cs.map(c => `<div onclick="setTC('${c.id}')" class="option-card p-4 bg-white rounded-xl text-center shadow-sm ${tS.c===c.id?'border-[#DB7093] bg-pink-50':''}"><b>${c.n}</b></div>`).join('');
-        }
-        function setTC(id) { tS.c=id; document.getElementById('t-step-extra').classList.remove('hidden'); document.getElementById('t-final-action').classList.remove('hidden'); renderExtras(); renderTC(); scrollT('t-step-extra'); }
-
-        function renderExtras() {
-            document.getElementById('candy-list').innerHTML = `<p class="font-bold text-xs text-pink-400">🍭 CANDY BAR</p>` + T_DATA.candy.map(i => `<label class="flex items-center gap-2 p-2 bg-white rounded-lg text-sm"><input type="checkbox" onchange="toggleExtra('${i}')" ${tS.extras.includes(i)?'checked':''}> ${i}</label>`).join('');
-            document.getElementById('mesa-list').innerHTML = `<p class="font-bold text-xs text-pink-400">🍰 MESA DULCE</p>` + T_DATA.mesa.map(i => `<label class="flex items-center gap-2 p-2 bg-white rounded-lg text-sm"><input type="checkbox" onchange="toggleExtra('${i}')" ${tS.extras.includes(i)?'checked':''}> ${i}</label>`).join('');
-        }
-
-        function toggleExtra(i) {
-            if(tS.extras.includes(i)) tS.extras = tS.extras.filter(x=>x!==i); else tS.extras.push(i);
-            upCart();
-        }
-
-        // --- GENERAL ---
-        function addGeneric(n,p,e,cat) { cart.push({n,p,e,cat}); showPushUp(`Agregado: ${n}`); upCart(); }
-        
-        function upCart() {
-            const items = document.getElementById('cart-items');
-            items.innerHTML = cart.map((i,idx)=>`<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border-l-4 border-pink-400"><div><p class="text-sm font-bold">${i.e} ${i.n}</p><p class="text-[10px] italic opacity-50">${i.cat}</p></div><button onclick="remI(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`).join('');
-            
-            let total = cart.reduce((a,b)=>a+b.p,0);
-
-            if(tS.c && tS.f && tS.sz) {
-                const basePrice = T_DATA.precios[tS.f][tS.sz];
-                const plusPrice = T_DATA.coberturaPlus[tS.c];
-                const pTorta = basePrice + plusPrice;
-                total += pTorta;
-                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600 flex justify-between items-center"><div class="flex-1"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div><button onclick="remTorta()" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`;
-            }
-            
-            if(tS.extras.length > 0) {
-                items.innerHTML += `<div class="bg-blue-50 p-3 rounded-xl border-l-4 border-blue-400 text-[10px] font-bold">COTIZAR APARTE: ${tS.extras.join(', ')}</div>`;
-            }
-
-            document.getElementById('cart-total').textContent = `$${total.toLocaleString()}`;
-            lucide.createIcons();
-        }
-
-        function remI(i) { cart.splice(i,1); upCart(); }
-        
-        function remTorta() {
-            tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
-            document.querySelectorAll('#view-tortas section').forEach(s => {
-                if(s.id !== 't-step-1') s.classList.add('hidden');
-            });
-            document.getElementById('t-final-action').classList.add('hidden');
-            initTortas();
-            upCart();
-        }
-
-        function toggleCart() { upCart(); document.getElementById('cart-modal').classList.toggle('open'); }
-        function scrollT(id) { setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),100); }
-
-        function sendWhatsApp() {
-            const n = document.getElementById('user-name').value;
-            const d = document.getElementById('delivery-date').value;
-            const design = document.getElementById('order-design').value;
-            const photo = document.getElementById('order-photo-ref').value;
-            const nt = document.getElementById('order-notes').value;
-            if(!n || !d) return alert("Por favor, completá nombre y fecha de entrega");
-
-            let m = `🐣 *PEDIDO MISS DANIELA BAKERY*\n👤 Cliente: ${n}\n📆 Fecha entrega: ${d}\n`;
-            if(design) m += `🎨 Diseño: ${design}\n`;
-            if(photo) m += `📷 Ref. Foto: ${photo}\n`;
-
-            cart.forEach(i => m += `\n- ${i.e} ${i.n}\n  _Cat: ${i.cat}_ ($${i.p.toLocaleString()})`);
-            
-            let total = cart.reduce((a,b)=>a+b.p,0);
-
-            if(tS.c) {
-                const basePrice = T_DATA.precios[tS.f][tS.sz];
-                const plusPrice = T_DATA.coberturaPlus[tS.c];
-                const pTorta = basePrice + plusPrice;
-                total += pTorta;
-                m += `\n\n🎂 *TORTA PERSONALIZADA*\n- Forma: ${tS.f}\n- Tamaño: ${tS.sz}\n- Bizco: ${tS.b}\n- Rellenos: ${tS.r.join(' / ')}\n- Cobertura: ${tS.c}\n- Precio: $${pTorta.toLocaleString()}`;
-            }
-
-            if(tS.extras.length > 0) m += `\n\n🍭 *MESA DULCE / CANDY BAR* (Cotizar):\n- ${tS.extras.join('\n- ')}`;
-            if(nt) m += `\n\n📝 *Notas extras:* ${nt}`;
-            
-            m += `\n\n💰 *TOTAL ESTIMADO: $${total.toLocaleString()}*`;
-                                
-            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(m)}`);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
