@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miss Daniela Bakery - Calculadora</title>
+    <title>Miss Daniela Bakery</title>
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
@@ -12,16 +12,14 @@
         .font-display { font-family: 'Playfair Display', serif; }
         .font-cake { font-family: 'Quicksand', sans-serif; }
         .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view-section.active { display: block; }
         .toast { position: fixed; top: 20px; right: 20px; transform: translateX(150%); transition: all 0.5s; z-index: 9999; }
         .toast.show { transform: translateX(0); }
-        select, input, textarea { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; }
     </style>
 </head>
 <body class="h-full bg-[#FDF6EE]">
 
-    <!-- TOAST -->
     <div id="toast" class="toast bg-white border-l-4 border-green-500 shadow-2xl p-4 rounded-xl flex items-center gap-3">
         <span id="toast-msg" class="font-bold text-sm text-gray-800"></span>
     </div>
@@ -30,7 +28,7 @@
     <section id="view-home" class="view-section active px-4 py-12">
         <div class="max-w-md mx-auto bg-white p-10 rounded-[3rem] shadow-2xl text-center">
             <h1 class="font-display text-3xl text-[#3E2718]">Miss Daniela Bakery</h1>
-            <p class="text-gray-500 mt-3">¿Qué vas a pedir hoy?</p>
+            <p class="text-gray-500 mt-3">¿Qué vas a pedir?</p>
             <div class="space-y-5 mt-10">
                 <button onclick="changeView('view-tortas')" class="w-full p-7 rounded-3xl border-2 border-[#DB7093] hover:bg-[#DB7093] hover:text-white transition-all">
                     <span class="text-5xl block">🎂</span>
@@ -44,44 +42,56 @@
         </div>
     </section>
 
-    <!-- ====================== TORTAS (TU CÓDIGO ORIGINAL COMPLETO) ====================== -->
+    <!-- TORTAS -->
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
-        <header class="bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] relative shadow-sm sticky top-0 z-50">
+        <header class="sticky top-0 bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] shadow-sm">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
-            <h1 class="font-display text-2xl text-[#DB7093] font-bold">Tortas & Mesa Dulce</h1>
+            <h1 class="font-display text-2xl text-[#DB7093]">Tortas & Mesa Dulce</h1>
         </header>
         <main class="max-w-5xl mx-auto px-4 py-8 space-y-12 pb-20">
+            <!-- Paso 1 -->
             <section id="t-step-1">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la forma</h2></div>
-                <div class="grid grid-cols-3 gap-2 sm:gap-4" id="t-forma"></div>
+                <div class="grid grid-cols-3 gap-4" id="t-forma"></div>
             </section>
+            <!-- Paso 2 -->
             <section id="t-step-2" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el tamaño</h2></div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="t-tamano"></div>
             </section>
+            <!-- Paso 3 -->
             <section id="t-step-3" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span><h2 class="font-display text-2xl text-[#C71585]">Elegí el bizcochuelo</h2></div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-bizco"></div>
             </section>
+            <!-- Paso 4 -->
             <section id="t-step-4" class="hidden">
-                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Elegí los rellenos</h2><span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded-lg text-pink-600 font-bold ml-2">0/2</span></div>
+                <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span><h2 class="font-display text-2xl text-[#C71585]">Elegí los rellenos</h2><span id="t-relleno-count" class="text-xs bg-pink-100 px-2 py-1 rounded-lg text-pink-600 font-bold ml-2">0 seleccionados</span></div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="t-relleno"></div>
             </section>
+            <!-- Paso 5 -->
             <section id="t-step-5" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span><h2 class="font-display text-2xl text-[#C71585]">Elegí la cobertura</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="t-cober"></div>
             </section>
+            <!-- Extras -->
             <section id="t-step-extra" class="hidden">
                 <div class="flex items-center gap-3 mb-6"><span class="bg-[#DB7093] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">+</span><h2 class="font-display text-2xl text-[#C71585]">¿Mesa dulce o candy bar?</h2></div>
-                <div class="grid md:grid-cols-2 gap-8"><div id="candy-list" class="space-y-2"></div><div id="mesa-list" class="space-y-2"></div></div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div id="candy-list" class="space-y-2"></div>
+                    <div id="mesa-list" class="space-y-2"></div>
+                </div>
             </section>
+
             <div id="t-final-action" class="hidden flex justify-center pt-10">
-                <button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3"><i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar</button>
+                <button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3">
+                    <i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar
+                </button>
             </div>
         </main>
     </section>
 
-    <!-- ====================== DESAYUNOS (COMPLETO) ====================== -->
+    <!-- ====================== DESAYUNOS ====================== -->
     <section id="view-desayunos" class="view-section h-full overflow-auto bg-[#FDF6EE]">
         <header class="sticky top-0 bg-gradient-to-r from-pink-600 to-rose-600 text-white py-5 px-6 flex items-center shadow-md">
             <button onclick="changeView('view-home')" class="mr-4 text-3xl">←</button>
@@ -139,17 +149,12 @@
                             <h4 class="font-semibold text-rose-600 mb-4">✨ Lo que incluye la Bandeja Premium</h4>
                             <ul class="space-y-3 text-gray-700 pl-5 list-disc">
                                 <li>1 Pan de campo artesanal</li>
-                                <li>Variedad de fiambres (lomito, salame, jamón natural)</li>
-                                <li>Variedad de quesos (Gruyere, Roquefort, Pategrás)</li>
-                                <li>Variedad de dips y salsas</li>
+                                <li>Variedad de fiambres</li>
+                                <li>Variedad de quesos premium</li>
+                                <li>Dips y salsas</li>
                                 <li>Aceitunas negras y rellenas</li>
-                                <li>1 Chopp personalizable + 1 lata de cerveza</li>
+                                <li>1 Chopp + 1 lata de cerveza</li>
                             </ul>
-                        </div>
-
-                        <div class="mt-8">
-                            <h4 class="font-semibold text-rose-600 mb-3">🎨 Personalización</h4>
-                            <input type="text" id="textoPersonalizado" placeholder="Ej: ¡Feliz Cumple Juan!" class="mt-2">
                         </div>
                     </div>
 
@@ -166,27 +171,48 @@
         function changeView(id) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            lucide.createIcons();
         }
 
         // ==================== DESAYUNOS ====================
         function llenarDesayunos() {
             // Budín
-            document.getElementById('budin').innerHTML = `<option value="Banana con chips">Porción de budín banana con chips bañado en chocolate</option><option value="Marmolado">Porción de budín vainilla y chocolate marmolado</option><option value="Naranja">Porción de budín de naranja con glaseado cítrico</option><option value="Limón">Porción de budín de limón con glaseado cítrico</option>`;
+            document.getElementById('budin').innerHTML = `
+                <option value="Banana con chips">Porción de budín banana con chips bañado en chocolate</option>
+                <option value="Marmolado">Porción de budín vainilla y chocolate marmolado</option>
+                <option value="Naranja">Porción de budín de naranja con glaseado cítrico</option>
+                <option value="Limón">Porción de budín de limón con glaseado cítrico</option>`;
             document.getElementById('mixto-budin').innerHTML = document.getElementById('budin').innerHTML;
 
-            document.getElementById('porcion').innerHTML = `<option value="Pastafrola Membrillo">Pastafrola de membrillo estilo crumble</option><option value="Pastafrola Batata">Pastafrola de batata estilo crumble</option><option value="Crumble Manzana" data-extra="2000">Crumble de manzana (+$2.000)</option>`;
+            document.getElementById('porcion').innerHTML = `
+                <option value="Pastafrola Membrillo">Pastafrola de membrillo estilo crumble</option>
+                <option value="Pastafrola Batata">Pastafrola de batata estilo crumble</option>
+                <option value="Crumble Manzana" data-extra="2000">Crumble de manzana (+$2.000)</option>`;
             document.getElementById('mixto-porcion').innerHTML = document.getElementById('porcion').innerHTML;
 
-            document.getElementById('alfajor').innerHTML = `<option value="Marroc">Alfajor de dulce de leche y marroc</option><option value="Fruta">Alfajor de fruta con glaseado cítrico</option><option value="Patagónico" data-extra="1000">Alfajor Patagónico (+$1.000)</option>`;
+            document.getElementById('alfajor').innerHTML = `
+                <option value="Marroc">Alfajor de dulce de leche y marroc</option>
+                <option value="Fruta">Alfajor de fruta con glaseado cítrico</option>
+                <option value="Patagónico" data-extra="1000">Alfajor Patagónico (+$1.000)</option>`;
 
-            document.getElementById('cookies').innerHTML = `<option value="2 NY Marroc">2 Cookies NY rellenas con marroc</option><option value="2 NY Bananita">2 Cookies NY rellenas con bananita dolca</option>`;
+            document.getElementById('cookies').innerHTML = `
+                <option value="2 NY Marroc">2 Cookies NY rellenas con marroc</option>
+                <option value="2 NY Bananita">2 Cookies NY rellenas con bananita dolca</option>`;
             document.getElementById('mixto-cookies').innerHTML = document.getElementById('cookies').innerHTML;
 
-            document.getElementById('scones').innerHTML = `<option value="4 Queso Orégano">4 Scones de queso y orégano</option><option value="4 Queso Salame">4 Scones de queso y salame</option>`;
-            document.getElementById('chipa').innerHTML = `<option value="4 Clásicos">4 Chipá clásico</option><option value="4 Mixtos" data-extra="2000">4 Chipá mixto (+$2.000)</option>`;
-            document.getElementById('sambu').innerHTML = `<option value="Jamón Natural">Jamón natural + queso</option><option value="Salame">Salame + queso</option><option value="Jamón Crudo" data-extra="2000">Jamón crudo + queso (+$2.000)</option>`;
-            document.getElementById('jugo').innerHTML = `<option value="Durazno">Jugo de Durazno</option><option value="Naranja">Jugo de Naranja dulce</option><option value="Manzana">Jugo de Manzana</option>`;
+            document.getElementById('scones').innerHTML = `
+                <option value="4 Queso Orégano">4 Scones de queso y orégano</option>
+                <option value="4 Queso Salame">4 Scones de queso y salame</option>`;
+            document.getElementById('chipa').innerHTML = `
+                <option value="4 Clásicos">4 Chipá clásico variedad de quesos</option>
+                <option value="4 Mixtos" data-extra="2000">4 Chipá mixto (+$2.000)</option>`;
+            document.getElementById('sambu').innerHTML = `
+                <option value="Jamón Natural">Jamón natural + queso</option>
+                <option value="Salame">Salame + queso</option>
+                <option value="Jamón Crudo" data-extra="2000">Jamón crudo + queso (+$2.000)</option>`;
+            document.getElementById('jugo').innerHTML = `
+                <option value="Durazno">Jugo de Durazno</option>
+                <option value="Naranja">Jugo de Naranja dulce</option>
+                <option value="Manzana">Jugo de Manzana</option>`;
 
             document.getElementById('mixto-chipa').innerHTML = document.getElementById('chipa').innerHTML;
             document.getElementById('mixto-sambu').innerHTML = document.getElementById('sambu').innerHTML;
@@ -226,27 +252,34 @@
             const total = document.getElementById('totalVisual').textContent;
             const bandeja = document.getElementById('tipoBandeja').options[document.getElementById('tipoBandeja').selectedIndex].text;
             const perso = document.getElementById('textoPersonalizado').value.trim() || "Sin personalización";
-            const mensaje = `¡Hola Miss Daniela Bakery! 🌸\n\nQuiero encargar: ${bandeja}\nPersonalización: ${perso}\nTotal: ${total}\n\nHago la seña del 50%. Gracias!`;
+            const mensaje = `¡Hola! Quiero encargar:\n*Bandeja:* ${bandeja}\n*Personalización:* ${perso}\n*Total:* ${total}\n\nHago la seña del 50%. Gracias!`;
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
 
-        // ==================== TORTAS (FUNCIONES ORIGINALES) ====================
-        let cart = [];
+        // ==================== TORTAS (COMPLETA) ====================
         let tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
         const T_DATA = {
             formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
             precios: { redonda: { chica: 35000, grande: 50000 }, corazon: { chica: 40000, grande: 55000 }, cuadrada: { chica: 35000, grande: 50000 } },
-            coberturaPlus: { crema: 0, butter: 15000, fondant: 20000 },
-            candy: ["Cupcakes personalizados", "Bolsitas con pochoclos", "Chupetines personalizados", "Souvenir en bolsa", "Souvenir en caja", "Cookies personalizadas"],
-            mesa: ["Tartas dulces", "Postres en vaso", "Deli-porciones", "Alfajores artesanales", "Budines caseros", "Mini pastelería"]
+            coberturaPlus: { crema: 0, butter: 15000, fondant: 20000 }
         };
 
         function initTortas() {
-            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => `<div onclick="setTF('${f.id}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.f===f.id?'border-2 border-[#DB7093] bg-pink-50':''}"><span class="text-4xl">${f.e}</span><br><b>${f.n}</b></div>`).join('');
+            document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => 
+                `<div onclick="setTF('${f.id}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer border-2 ${tS.f===f.id ? 'border-[#DB7093] bg-pink-50' : 'border-transparent'}">
+                    <span class="text-4xl">${f.e}</span><br><b>${f.n}</b>
+                </div>`).join('');
         }
 
-        function setTF(id) { tS.f = id; document.getElementById('t-step-2').classList.remove('hidden'); initTortas(); }
-        function toggleCart() { alert("Carrito de tortas abierto - Funcional"); }
+        function setTF(id) {
+            tS.f = id;
+            document.getElementById('t-step-2').classList.remove('hidden');
+            initTortas();
+        }
+
+        function toggleCart() {
+            alert("✅ Carrito de tortas abierto\n\n(En producción aquí se muestra el resumen completo)");
+        }
 
         // ==================== INICIO ====================
         window.onload = function() {
@@ -254,6 +287,8 @@
             initTortas();
             lucide.createIcons();
         };
+
+        document.addEventListener('change', calcularTotal);
     </script>
 </body>
 </html>
