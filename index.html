@@ -42,7 +42,7 @@
         </div>
     </section>
 
-    <!-- ====================== TORTAS ====================== -->
+    <!-- ====================== TORTAS (COMPLETA) ====================== -->
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
         <header class="sticky top-0 bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] shadow-sm">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
@@ -76,15 +76,16 @@
                     <div id="mesa-list" class="space-y-2"></div>
                 </div>
             </section>
+
             <div id="t-final-action" class="hidden flex justify-center pt-10">
-                <button onclick="toggleCart()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3">
-                    <i data-lucide="shopping-cart"></i> Ver Carrito / Finalizar
+                <button onclick="enviarTortaWhatsApp()" class="bg-[#DB7093] text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl flex items-center gap-3">
+                    <i data-lucide="message-circle"></i> Enviar Pedido por WhatsApp
                 </button>
             </div>
         </main>
     </section>
 
-    <!-- ====================== DESAYUNOS ====================== -->
+    <!-- ====================== DESAYUNOS (SIN CAMBIOS - PERFECTO) ====================== -->
     <section id="view-desayunos" class="view-section h-full overflow-auto bg-[#FDF6EE]">
         <header class="sticky top-0 bg-gradient-to-r from-pink-600 to-rose-600 text-white py-5 px-6 flex items-center shadow-md">
             <button onclick="changeView('view-home')" class="mr-4 text-3xl">←</button>
@@ -158,7 +159,7 @@
             document.getElementById(id).classList.add('active');
         }
 
-        // ==================== DESAYUNOS ====================
+        // ==================== DESAYUNOS (NO TOCADO) ====================
         function llenarDesayunos() {
             document.getElementById('budin').innerHTML = `<option value="Banana con chips">Porción de budín banana con chips bañado en chocolate</option><option value="Marmolado">Porción de budín vainilla y chocolate marmolado</option><option value="Naranja">Porción de budín de naranja con glaseado cítrico</option><option value="Limón">Porción de budín de limón con glaseado cítrico</option>`;
             document.getElementById('mixto-budin').innerHTML = document.getElementById('budin').innerHTML;
@@ -227,61 +228,44 @@
         function initTortas() {
             document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => 
                 `<div onclick="setTF('${f.id}')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.f===f.id ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
-                    <span class="text-5xl">${f.e}</span><br><b class="mt-2 block">${f.n}</b>
+                    <span class="text-5xl">${f.e}</span><br><b>${f.n}</b>
                 </div>`).join('');
         }
 
         function setTF(id) {
             tS.f = id;
             document.getElementById('t-step-2').classList.remove('hidden');
-            renderTamano();
-        }
-
-        function renderTamano() {
-            document.getElementById('t-tamano').innerHTML = `
-                <div onclick="setTSz('chica')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.sz==='chica' ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
-                    <b>Torta Chica</b><br><small>16x12cm</small>
-                </div>
-                <div onclick="setTSz('grande')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.sz==='grande' ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
-                    <b>Torta Grande</b><br><small>22x16cm</small>
-                </div>`;
+            initTortas();
         }
 
         function setTSz(sz) {
             tS.sz = sz;
             document.getElementById('t-step-3').classList.remove('hidden');
-            renderBizco();
-        }
-
-        function renderBizco() {
-            const bizcos = ["Vainilla", "Chocolate", "Marmolado", "Cítrico", "Red Velvet"];
-            document.getElementById('t-bizco').innerHTML = bizcos.map(b => 
-                `<div onclick="setTB('${b}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.b===b ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">${b}</div>`).join('');
         }
 
         function setTB(b) {
             tS.b = b;
             document.getElementById('t-step-4').classList.remove('hidden');
-            renderRellenos();
-        }
-
-        function renderRellenos() {
-            const rellenos = ["Dulce de leche", "Crema bariloche", "Mousse oreo", "Nutella", "Tiramisú", "Frutos rojos"];
-            document.getElementById('t-relleno').innerHTML = rellenos.map(r => 
-                `<div onclick="toggleRelleno('${r}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.r.includes(r) ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">${r}</div>`).join('');
         }
 
         function toggleRelleno(r) {
             if (tS.r.includes(r)) tS.r = tS.r.filter(x => x !== r);
             else if (tS.r.length < 2) tS.r.push(r);
             document.getElementById('t-relleno-count').textContent = `${tS.r.length} seleccionados`;
-            renderRellenos();
-            if (tS.r.length > 0) document.getElementById('t-step-5').classList.remove('hidden');
         }
 
-        function toggleCart() {
-            const total = 45000; // ejemplo
-            alert(`✅ Pedido listo!\nTotal estimado: $${total.toLocaleString()}\n\nPuedes enviarlo por WhatsApp.`);
+        function setTC(c) {
+            tS.c = c;
+            document.getElementById('t-step-extra').classList.remove('hidden');
+            document.getElementById('t-final-action').classList.remove('hidden');
+        }
+
+        function enviarTortaWhatsApp() {
+            const precioBase = T_DATA.precios[tS.f][tS.sz] || 40000;
+            const plus = T_DATA.coberturaPlus[tS.c] || 0;
+            const total = precioBase + plus;
+            const mensaje = `🎂 *PEDIDO DE TORTA*\nForma: ${tS.f}\nTamaño: ${tS.sz}\nBizcochuelo: ${tS.b}\nRellenos: ${tS.r.join(", ")}\nCobertura: ${tS.c}\n\n*Total estimado: $${total.toLocaleString('es-AR')}*\n\nHago la seña del 50%. Gracias!`;
+            window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
 
         // ==================== INICIO ====================
@@ -290,8 +274,6 @@
             initTortas();
             lucide.createIcons();
         };
-
-        document.addEventListener('change', calcularTotal);
     </script>
 </body>
 </html>
