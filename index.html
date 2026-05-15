@@ -12,11 +12,10 @@
         .font-display { font-family: 'Playfair Display', serif; }
         .font-cake { font-family: 'Quicksand', sans-serif; }
         .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view-section.active { display: block; }
         .toast { position: fixed; top: 20px; right: 20px; transform: translateX(150%); transition: all 0.5s; z-index: 9999; }
         .toast.show { transform: translateX(0); }
-        select, input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; }
     </style>
 </head>
 <body class="h-full bg-[#FDF6EE]">
@@ -43,7 +42,7 @@
         </div>
     </section>
 
-    <!-- ====================== TORTAS (COMPLETA) ====================== -->
+    <!-- ====================== TORTAS ====================== -->
     <section id="view-tortas" class="view-section h-full overflow-auto bg-[#FDF8F5] font-cake">
         <header class="sticky top-0 bg-white py-6 px-4 text-center border-b-2 border-[#FFB6C1] shadow-sm">
             <button onclick="changeView('view-home')" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-[#DB7093]"><i data-lucide="chevron-left"></i></button>
@@ -154,7 +153,6 @@
     </section>
 
     <script>
-        // ==================== NAVEGACIÓN ====================
         function changeView(id) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -218,7 +216,7 @@
             window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(mensaje)}`, '_blank');
         }
 
-        // ==================== TORTAS (COMPLETA) ====================
+        // ==================== TORTAS COMPLETA ====================
         let tS = { f:null, sz:null, b:null, r:[], c:null, extras:[] };
         const T_DATA = {
             formas: [{id:'redonda',n:'Redonda',e:'🎂'},{id:'corazon',n:'Corazón',e:'💖'},{id:'cuadrada',n:'Cuadrada',e:'🍰'}],
@@ -228,19 +226,62 @@
 
         function initTortas() {
             document.getElementById('t-forma').innerHTML = T_DATA.formas.map(f => 
-                `<div onclick="setTF('${f.id}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.f===f.id ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
-                    <span class="text-4xl">${f.e}</span><br><b>${f.n}</b>
+                `<div onclick="setTF('${f.id}')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.f===f.id ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
+                    <span class="text-5xl">${f.e}</span><br><b class="mt-2 block">${f.n}</b>
                 </div>`).join('');
         }
 
         function setTF(id) {
             tS.f = id;
             document.getElementById('t-step-2').classList.remove('hidden');
-            initTortas();
+            renderTamano();
+        }
+
+        function renderTamano() {
+            document.getElementById('t-tamano').innerHTML = `
+                <div onclick="setTSz('chica')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.sz==='chica' ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
+                    <b>Torta Chica</b><br><small>16x12cm</small>
+                </div>
+                <div onclick="setTSz('grande')" class="p-6 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.sz==='grande' ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">
+                    <b>Torta Grande</b><br><small>22x16cm</small>
+                </div>`;
+        }
+
+        function setTSz(sz) {
+            tS.sz = sz;
+            document.getElementById('t-step-3').classList.remove('hidden');
+            renderBizco();
+        }
+
+        function renderBizco() {
+            const bizcos = ["Vainilla", "Chocolate", "Marmolado", "Cítrico", "Red Velvet"];
+            document.getElementById('t-bizco').innerHTML = bizcos.map(b => 
+                `<div onclick="setTB('${b}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.b===b ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">${b}</div>`).join('');
+        }
+
+        function setTB(b) {
+            tS.b = b;
+            document.getElementById('t-step-4').classList.remove('hidden');
+            renderRellenos();
+        }
+
+        function renderRellenos() {
+            const rellenos = ["Dulce de leche", "Crema bariloche", "Mousse oreo", "Nutella", "Tiramisú", "Frutos rojos"];
+            document.getElementById('t-relleno').innerHTML = rellenos.map(r => 
+                `<div onclick="toggleRelleno('${r}')" class="p-4 bg-white rounded-3xl text-center shadow-sm cursor-pointer ${tS.r.includes(r) ? 'border-2 border-[#DB7093] bg-pink-50' : ''}">${r}</div>`).join('');
+        }
+
+        function toggleRelleno(r) {
+            if (tS.r.includes(r)) tS.r = tS.r.filter(x => x !== r);
+            else if (tS.r.length < 2) tS.r.push(r);
+            document.getElementById('t-relleno-count').textContent = `${tS.r.length} seleccionados`;
+            renderRellenos();
+            if (tS.r.length > 0) document.getElementById('t-step-5').classList.remove('hidden');
         }
 
         function toggleCart() {
-            alert("✅ Pedido de torta listo para enviar por WhatsApp (en producción se abre el carrito completo)");
+            const total = 45000; // ejemplo
+            alert(`✅ Pedido listo!\nTotal estimado: $${total.toLocaleString()}\n\nPuedes enviarlo por WhatsApp.`);
         }
 
         // ==================== INICIO ====================
@@ -249,6 +290,8 @@
             initTortas();
             lucide.createIcons();
         };
+
+        document.addEventListener('change', calcularTotal);
     </script>
 </body>
 </html>
