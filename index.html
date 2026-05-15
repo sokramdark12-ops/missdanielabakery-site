@@ -2,83 +2,358 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora de Desayunos - Mi Emprendimiento</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Desayunos • Miss Daniela Bakery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
+
+        :root {
+            --rosa: #e91e63;
+            --beige: #f5e8d3;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fffaf0, #f5e8d3);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.15);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--rosa), #c2185b);
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .insta {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+
+        .calculadora {
+            padding: 25px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 18px;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--rosa);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+        }
+
+        .grupo {
+            background: #fff9f0;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #f0e0c0;
+        }
+
+        .grupo h4 {
+            margin: 0 0 15px 0;
+            color: var(--rosa);
+            font-size: 18px;
+            border-bottom: 2px solid #f8d7da;
+            padding-bottom: 8px;
+        }
+
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .item label {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .total {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--rosa);
+            text-align: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: #fff9f0;
+            border-radius: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+        }
+
+        .info {
+            font-size: 14px;
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .nota {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>🥐 Miss Daniela Bakery</h1>
+            <div class="insta">@missdanielabakery</div>
+        </header>
 
-    <h2>Calculadora de Desayunos Artesanales</h2>
-    <p>Personalizá tu bandeja y calculá el presupuesto al instante.</p>
+        <div class="calculadora">
+            <h2 style="text-align:center; margin-bottom:5px;">Calculadora de Desayunos</h2>
+            <p style="text-align:center; color:#666; margin-bottom:25px;">Personalizá tu bandeja y enviá tu pedido por WhatsApp</p>
 
-    <div class="calculadora">
-        <!-- SELECCIÓN DE BANDEJA -->
-        <label for="tipoBandeja">Seleccioná tu tipo de bandeja:</label>
-        <select id="tipoBandeja" onchange="mostrarOpciones()">
-            <option value="0">-- Elegir --</option>
-            <option value="45000" data-tipo="sweet">Desayuno Sweet ($45.000)</option>
-            <option value="45000" data-tipo="salado">Desayuno Salado ($45.000)</option>
-            <option value="50000" data-tipo="mixto">Desayuno Mixto ($50.000)</option>
-            <option value="65000" data-tipo="premium">Bandeja Premium ($65.000)</option>
-        </select>
+            <label for="tipoBandeja">Seleccioná tu tipo de bandeja:</label>
+            <select id="tipoBandeja" onchange="actualizarVista()">
+                <option value="0">-- Elegí tu desayuno --</option>
+                <option value="45000" data-tipo="sweet">🌸 Desayuno Sweet - $45.000</option>
+                <option value="45000" data-tipo="salado">🥪 Desayuno Salado - $45.000</option>
+                <option value="50000" data-tipo="mixto">🍯 Desayuno Mixto - $50.000</option>
+                <option value="65000" data-tipo="premium">✨ Bandeja Premium - $65.000</option>
+            </select>
 
-        <hr>
+            <div id="opciones" style="display:none;">
 
-        <!-- CONTENEDOR DINÁMICO DE OPCIONES -->
-        <div id="opcionesDetalle" style="display:none;">
-            <div id="grupo-sweet" class="grupo-opcion">
-                <h4>Opciones Dulces:</h4>
-                <p>Budín:</p>
-                <select class="item-desayuno" data-base="Budín">
-                    <option value="Banana con Chips">Banana con Chips</option>
-                    <option value="Marmolado">Marmolado</option>
-                    <option value="Naranja">Naranja</option>
-                    <option value="Limón">Limón</option>
-                </select>
+                <!-- SWEET -->
+                <div id="sweet-options" class="grupo">
+                    <h4>🌸 Opciones Dulces</h4>
+                    <div class="item">
+                        <label>Budín (elegí uno)</label>
+                        <select id="budin" class="item-select" data-base="Budín">
+                            <option value="Banana con chips y chocolate">Porción de budín banana con chips bañado en chocolate</option>
+                            <option value="Marmolado bañado">Porción de budín vainilla y chocolate marmolado</option>
+                            <option value="Naranja glaseado">Porción de budín de naranja con glaseado cítrico</option>
+                            <option value="Limón glaseado">Porción de budín de limón con glaseado cítrico</option>
+                        </select>
+                    </div>
 
-                <p>Porción Dulce:</p>
-                <select class="item-desayuno" data-base="Porción">
-                    <option value="Frola Membrillo">Pastafrola Membrillo</option>
-                    <option value="Frola Batata">Pastafrola Batata</option>
-                    <option value="Crumble de Manzana" data-extra="2000">Crumble de Manzana (+$2.000)</option>
-                </select>
+                    <div class="item">
+                        <label>Porción Dulce (elegí una)</label>
+                        <select id="porcion" class="item-select" data-base="Porción Dulce">
+                            <option value="Pastafrola Membrillo">Pastafrola de membrillo estilo crumble</option>
+                            <option value="Pastafrola Batata">Pastafrola de batata estilo crumble</option>
+                            <option value="Crumble Manzana" data-extra="2000">Crumble de manzana (+$2.000)</option>
+                        </select>
+                    </div>
 
-                <p>Alfajor:</p>
-                <select class="item-desayuno" data-base="Alfajor">
-                    <option value="Marroc">Dulce de Leche y Marroc</option>
-                    <option value="Fruta">Fruta y Glaseado</option>
-                    <option value="Patagónico" data-extra="1000">Patagónico (+$1.000)</option>
-                </select>
+                    <div class="item">
+                        <label>Alfajor (elegí uno)</label>
+                        <select id="alfajor" class="item-select" data-base="Alfajor">
+                            <option value="Dulce de Leche y Marroc">Alfajor de dulce de leche y marroc</option>
+                            <option value="Fruta glaseado">Alfajor de fruta con glaseado cítrico</option>
+                            <option value="Patagónico" data-extra="1000">Alfajor Patagónico (+$1.000)</option>
+                        </select>
+                    </div>
+
+                    <div class="item">
+                        <label>Cookies (elegí una)</label>
+                        <select id="cookies" class="item-select" data-base="Cookies">
+                            <option value="2 NY Marroc">2 Cookies NY rellenas de marroc</option>
+                            <option value="2 NY Bananita">2 Cookies NY rellenas de bananita dolca</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SALADO -->
+                <div id="salado-options" class="grupo">
+                    <h4>🥪 Opciones Saladas</h4>
+                    <div class="item">
+                        <label>Scones (elegí uno)</label>
+                        <select id="scones" class="item-select" data-base="Scones">
+                            <option value="4 Queso Orégano">4 Scones de queso y orégano</option>
+                            <option value="4 Queso Salame">4 Scones de queso y salame</option>
+                        </select>
+                    </div>
+
+                    <div class="item">
+                        <label>Chipá (elegí una)</label>
+                        <select id="chipa" class="item-select" data-base="Chipá">
+                            <option value="4 Clásicos">4 Chipá clásico variedad de quesos</option>
+                            <option value="4 Mixtos" data-extra="2000">4 Chipá mixto jamón y quesos (+$2.000)</option>
+                        </select>
+                    </div>
+
+                    <div class="item">
+                        <label>Sambuchito (elegí uno)</label>
+                        <select id="sambu" class="item-select" data-base="Sambuchito">
+                            <option value="Jamón Natural">Jamón natural + queso</option>
+                            <option value="Salame">Salame + queso</option>
+                            <option value="Jamón Crudo" data-extra="2000">Jamón crudo + queso (+$2.000)</option>
+                        </select>
+                    </div>
+
+                    <div class="item">
+                        <label>Jugo (elegí uno)</label>
+                        <select id="jugo" class="item-select" data-base="Jugo">
+                            <option value="Durazno">Jugo de Durazno</option>
+                            <option value="Naranja">Jugo de Naranja dulce</option>
+                            <option value="Manzana">Jugo de Manzana</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PERSONALIZACIÓN -->
+                <div class="grupo">
+                    <h4>🎨 Personalización</h4>
+                    <label for="textoTaza">Texto para la taza / chop personalizada:</label>
+                    <input type="text" id="textoTaza" placeholder="Ej: ¡Feliz Cumple Juan!" maxlength="60">
+                </div>
             </div>
 
-            <div id="grupo-salado" class="grupo-opcion">
-                <h4>Opciones Saladas:</h4>
-                <p>Chipá:</p>
-                <select class="item-desayuno" data-base="Chipá">
-                    <option value="Clásico">4 Chipá Clásicos</option>
-                    <option value="Mixto" data-extra="2000">4 Chipá Mixtos J&Q (+$2.000)</option>
-                </select>
-
-                <p>Sándwich:</p>
-                <select class="item-desayuno" data-base="Sándwich">
-                    <option value="Jamón y Queso">Jamón Natural y Queso</option>
-                    <option value="Salame y Queso">Salame y Queso</option>
-                    <option value="Jamón Crudo" data-extra="2000">Jamón Crudo y Queso (+$2.000)</option>
-                </select>
+            <div class="total">
+                Total: <span id="totalVisual">$0</span>
             </div>
-            
-            <div class="personalizacion">
-                <h4>Personalización:</h4>
-                <input type="text" id="textoTaza" placeholder="Nombre/Frase para la taza o chop">
-            </div>
-        </div>
 
-        <div class="resumen">
-            <h3>Total: <span id="totalVisual">$0</span></h3>
-            <p><small>* Los pedidos se señan con el 50%.</small></p>
-            <button onclick="enviarWhatsApp()">Enviar Pedido por WhatsApp</button>
+            <div class="info">
+                <small>✅ Incluye taza/chop personalizada + infusiones (café o té)<br>
+                🕒 Pedidos con anticipación • 50% de seña</small>
+            </div>
+
+            <button onclick="enviarWhatsApp()">📲 Enviar Pedido por WhatsApp</button>
+
+            <div class="nota">
+                <strong>💡 Recordá:</strong> Todas las bandejas son 100% artesanales y personalizadas. 
+                Te contactaremos para confirmar detalles y coordinar la entrega.
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function actualizarVista() {
+            const selector = document.getElementById('tipoBandeja');
+            const tipo = selector.options[selector.selectedIndex].getAttribute('data-tipo');
+            const opcionesDiv = document.getElementById('opciones');
+
+            document.getElementById('sweet-options').style.display = 'none';
+            document.getElementById('salado-options').style.display = 'none';
+
+            if (tipo) {
+                opcionesDiv.style.display = 'block';
+                if (tipo === 'sweet') {
+                    document.getElementById('sweet-options').style.display = 'block';
+                } else if (tipo === 'salado') {
+                    document.getElementById('salado-options').style.display = 'block';
+                } else if (tipo === 'mixto') {
+                    document.getElementById('sweet-options').style.display = 'block';
+                    document.getElementById('salado-options').style.display = 'block';
+                }
+            } else {
+                opcionesDiv.style.display = 'none';
+            }
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let base = parseInt(document.getElementById('tipoBandeja').value) || 0;
+            let extra = 0;
+
+            document.querySelectorAll('.item-select').forEach(sel => {
+                if (sel.offsetParent !== null) {
+                    const extraVal = sel.options[sel.selectedIndex].getAttribute('data-extra');
+                    if (extraVal) extra += parseInt(extraVal);
+                }
+            });
+
+            const total = base + extra;
+            document.getElementById('totalVisual').textContent = '$' + total.toLocaleString('es-AR');
+            return total;
+        }
+
+        document.addEventListener('change', calcularTotal);
+
+        function enviarWhatsApp() {
+            const total = calcularTotal();
+            const bandejaSelect = document.getElementById('tipoBandeja');
+            const bandeja = bandejaSelect.options[bandejaSelect.selectedIndex].text;
+
+            let detalle = "";
+
+            if (document.getElementById('sweet-options').style.display !== 'none') {
+                detalle += `🧁 *Budín:* ${document.getElementById('budin').value}\n`;
+                detalle += `🍰 *Porción dulce:* ${document.getElementById('porcion').value}\n`;
+                detalle += `🥐 *Alfajor:* ${document.getElementById('alfajor').value}\n`;
+                detalle += `🍪 *Cookies:* ${document.getElementById('cookies').value}\n\n`;
+            }
+
+            if (document.getElementById('salado-options').style.display !== 'none') {
+                detalle += `🥟 *Scones:* ${document.getElementById('scones').value}\n`;
+                detalle += `🧀 *Chipá:* ${document.getElementById('chipa').value}\n`;
+                detalle += `🥪 *Sambuchito:* ${document.getElementById('sambu').value}\n`;
+                detalle += `🧃 *Jugo:* ${document.getElementById('jugo').value}\n\n`;
+            }
+
+            const personalizacion = document.getElementById('textoTaza').value.trim() || "Sin personalización";
+
+            const mensaje = `¡Hola Miss Daniela Bakery! 🌸\n\n` +
+                            `Quiero encargar el siguiente desayuno:\n\n` +
+                            `*Bandeja:* ${bandeja}\n\n` +
+                            `${detalle}` +
+                            `*Personalización taza/chop:* ${personalizacion}\n\n` +
+                            `*Total:* $${total.toLocaleString('es-AR')}\n\n` +
+                            `✅ Hago la seña del 50% cuando me confirmes disponibilidad.\n` +
+                            `Gracias!`;
+
+            const telefono = "5491122539954";
+            const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+            
+            window.open(url, '_blank');
+        }
+
+        window.onload = calcularTotal;
+    </script>
 </body>
 </html>
