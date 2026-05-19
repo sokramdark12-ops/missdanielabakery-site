@@ -524,25 +524,45 @@
         // --- GENERAL ---
         function addGeneric(n,p,e,cat) { cart.push({n,p,e,cat}); showPushUp(`Agregado: ${n}`); upCart(); }
       
-        function upCart() {
-            const items = document.getElementById('cart-items');
-            items.innerHTML = cart.map((i,idx)=>`<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border-l-4 border-pink-400"><div><p class="text-sm font-bold">${i.e} ${i.n}</p><p class="text-[10px] italic opacity-50">${i.cat}</p></div><button onclick="remI(${idx})" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`).join('');
-          
-            let total = cart.reduce((a,b)=>a+b.p,0);
-            if(tS.c && tS.f && tS.sz) {
-                const basePrice = T_DATA.precios[tS.f][tS.sz];
-                const plusPrice = T_DATA.coberturaPlus[tS.c];
-                const pTorta = basePrice + plusPrice;
-                total += pTorta;
-                items.innerHTML += `<div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600 flex justify-between items-center"><div class="flex-1"><p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p><p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p><p class="text-xs font-bold">$${pTorta.toLocaleString()}</p></div><button onclick="remTorta()" class="text-red-400"><i data-lucide="trash-2" style="width:14px"></i></button></div>`;
-            }
-          
-            if(tS.extras.length > 0) {
-                items.innerHTML += `<div class="bg-blue-50 p-3 rounded-xl border-l-4 border-blue-400 text-[10px] font-bold">COTIZAR APARTE: ${tS.extras.join(', ')}</div>`;
-            }
-            document.getElementById('cart-total').textContent = `$${total.toLocaleString()}`;
-            lucide.createIcons();
-        }
+    function upCart() {
+    const items = document.getElementById('cart-items');
+    items.innerHTML = cart.map((i,idx)=>`
+        <div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border-l-4 border-pink-400">
+            <div>
+                <p class="text-sm font-bold">${i.e} ${i.n}</p>
+                <p class="text-[10px] italic opacity-50">${i.cat}</p>
+            </div>
+            <button onclick="remI(${idx})" class="w-9 h-9 flex items-center justify-center text-red-400 hover:bg-red-100 rounded-2xl transition-all">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
+            </button>
+        </div>
+    `).join('');
+ 
+    let total = cart.reduce((a,b)=>a+b.p,0);
+    if(tS.c && tS.f && tS.sz) {
+        const basePrice = T_DATA.precios[tS.f][tS.sz];
+        const plusPrice = T_DATA.coberturaPlus[tS.c];
+        const pTorta = basePrice + plusPrice;
+        total += pTorta;
+        items.innerHTML += `
+            <div class="bg-pink-50 p-3 rounded-xl border-l-4 border-pink-600 flex justify-between items-center">
+                <div class="flex-1">
+                    <p class="text-sm font-bold">🎂 Torta ${tS.f.toUpperCase()}</p>
+                    <p class="text-[10px] italic">Bizco: ${tS.b} | Rell: ${tS.r.join('+')}</p>
+                    <p class="text-xs font-bold">$${pTorta.toLocaleString()}</p>
+                </div>
+                <button onclick="remTorta()" class="w-9 h-9 flex items-center justify-center text-red-400 hover:bg-red-100 rounded-2xl transition-all">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+            </div>`;
+    }
+ 
+    if(tS.extras.length > 0) {
+        items.innerHTML += `<div class="bg-blue-50 p-3 rounded-xl border-l-4 border-blue-400 text-[10px] font-bold">COTIZAR APARTE: ${tS.extras.join(', ')}</div>`;
+    }
+    document.getElementById('cart-total').textContent = `$${total.toLocaleString()}`;
+    lucide.createIcons();
+}
         function remI(i) { cart.splice(i,1); upCart(); }
       
         function remTorta() {
