@@ -802,329 +802,349 @@
             calcularTotal();
         };
     // ====================== CÓDIGO DE BOMBONES ======================
- // ==================== DATOS ====================
-        const bombonesProductos = [
-            { id: "regalo-chica", nombre: "Caja Regalo Chica", unidades: "10 unidades", precioClasico: 14500, tipo: "simple" },
-            { id: "cuarto-kg", nombre: "Caja de ¼ Kg", unidades: "¼ kilogramo", precioClasico: 18500, tipo: "normal" },
-            { id: "chocofrase", nombre: "Caja Chocofrase Base", unidades: "", precioClasico: 22000, tipo: "normal" },
-            { id: "tematicas", nombre: "Cajas Temáticas", unidades: "22 unidades", precioClasico: 24500, tipo: "normal" },
-            { id: "medio-kg", nombre: "Caja de ½ Kg", unidades: "½ kilogramo", precioClasico: 32000, tipo: "normal" },
-            { id: "golden-premium", nombre: "Caja Golden Premium", unidades: "", precioClasico: 34000, tipo: "premium" }
-        ];
+    // ==================== VARIABLES DE BOMBONES ====================
+    let bombonesProductoSeleccionado = null;
+    let bombonesCategoriaSeleccionada = null;
+    let bombonesSaboresSeleccionados = [];
+    let bombonesCarrito = [];
 
-        const bombonesCategoriasBase = [
-            { id: "clasico", nombre: "Clásicos (Base)", limite: 1, sabores: ["Dulce de leche", "Ganache de chocolate semiamargo", "Marroc", "Bonobón", "Bananita dolca", "Menta"] },
-            { id: "especial", nombre: "Especiales (+ adicional)", limite: 2, sabores: ["Chocolate & licor de chocolate", "Chocolate & licor de dulce de leche", "Dulce de leche y ron", "Fernet praliné frutos secos", "Dulce de leche con nuez", "Mousse de Nutella"] },
-            { id: "personalizado", nombre: "Personalizados (+ adicional)", limite: 2, sabores: ["Sambayon", "Banana split", "Cheesecake con frutos rojos", "Tiramisú", "Lemon pie", "Dubai con pistacho", "Caramelo salado", "Chocolate y café", "Chocolate blanco y frutos rojos", "Oreo con chocolate negro"] }
-        ];
+    const bombonesProductos = [
+        { id: "regalo-chica", nombre: "Caja Regalo Chica", unidades: "10 unidades", precioClasico: 14500, tipo: "simple" },
+        { id: "cuarto-kg", nombre: "Caja de ¼ Kg", unidades: "¼ kilogramo", precioClasico: 18500, tipo: "normal" },
+        { id: "chocofrase", nombre: "Caja Chocofrase Base", unidades: "", precioClasico: 22000, tipo: "normal" },
+        { id: "tematicas", nombre: "Cajas Temáticas", unidades: "22 unidades", precioClasico: 24500, tipo: "normal" },
+        { id: "medio-kg", nombre: "Caja de ½ Kg", unidades: "½ kilogramo", precioClasico: 32000, tipo: "normal" },
+        { id: "golden-premium", nombre: "Caja Golden Premium", unidades: "", precioClasico: 34000, tipo: "premium" }
+    ];
 
-        const extrasPorProducto = {
-            "regalo-chica":    { especial: 1000, personalizado: null },
-            "cuarto-kg":       { especial: 1500, personalizado: 2500 },
-            "chocofrase":      { especial: 2500, personalizado: 3500 },
-            "tematicas":       { especial: 2500, personalizado: 3500 },
-            "medio-kg":        { especial: 3500, personalizado: 5500 },
-            "golden-premium":  { especial: 0, personalizado: 2500 }
-        };
-
-        let bombonesProductoSeleccionado = null;
-        let bombonesCategoriaSeleccionada = null;
-        let bombonesSaboresSeleccionados = [];
-        let bombonesCarrito = []; // Carrito separado de bombones (podes unirlo después)
-
-        // ==================== RENDER PRODUCTOS ====================
-        function renderBombonesProductos() {
-            const grid = document.getElementById('productos-grid');
-            grid.innerHTML = '';
-
-            productos.forEach(prod => {
-                const card = document.createElement('div');
-                card.className = `option-card bg-white rounded-3xl p-5 flex flex-col justify-between h-full`;
-
-                card.innerHTML = `
-                    <div>
-                        <div class="font-bold text-lg">${prod.nombre}</div>
-                        ${prod.unidades ? `<div class="text-xs text-gray-500 mt-0.5">${prod.unidades}</div>` : ''}
-                    </div>
-                    <div class="mt-6">
-                        <div class="text-xs text-gray-500">Precio base (Clásico)</div>
-                        <div class="text-2xl font-bold">$${prod.precioClasico.toLocaleString('es-AR')}</div>
-                    </div>
-                `;
-
-                card.onclick = () => seleccionarProducto(prod, card);
-                grid.appendChild(card);
-            });
+    const bombonesCategoriasBase = [
+        { 
+            id: "clasico", 
+            nombre: "Clásicos (Base)", 
+            limite: 1, 
+            sabores: ["Dulce de leche", "Ganache de chocolate semiamargo", "Marroc", "Bonobón", "Bananita dolca", "Menta"] 
+        },
+        { 
+            id: "especial", 
+            nombre: "Especiales (+ adicional)", 
+            limite: 2, 
+            sabores: ["Chocolate & licor de chocolate", "Chocolate & licor de dulce de leche", "Dulce de leche y ron", "Fernet praliné frutos secos", "Dulce de leche con nuez", "Mousse de Nutella"] 
+        },
+        { 
+            id: "personalizado", 
+            nombre: "Personalizados (+ adicional)", 
+            limite: 2, 
+            sabores: ["Sambayon", "Banana split", "Cheesecake con frutos rojos", "Tiramisú", "Lemon pie", "Dubai con pistacho", "Caramelo salado", "Chocolate y café", "Chocolate blanco y frutos rojos", "Oreo con chocolate negro"] 
         }
+    ];
 
-        // ==================== SELECCIONAR PRODUCTO ====================
-        function seleccionarProducto(prod, cardElement) {
-            document.querySelectorAll('#productos-grid .option-card').forEach(el => el.classList.remove('selected'));
-            cardElement.classList.add('selected');
+    const bombonesExtras = {
+        "regalo-chica":    { especial: 1000, personalizado: null },
+        "cuarto-kg":       { especial: 1500, personalizado: 2500 },
+        "chocofrase":      { especial: 2500, personalizado: 3500 },
+        "tematicas":       { especial: 2500, personalizado: 3500 },
+        "medio-kg":        { especial: 3500, personalizado: 5500 },
+        "golden-premium":  { especial: 0, personalizado: 2500 }
+    };
 
-            productoSeleccionado = prod;
-            categoriaSeleccionada = null;
-            saboresSeleccionados = [];
+    // ==================== FUNCIONES DE BOMBONES ====================
 
-            document.getElementById('pasos-2-3').classList.remove('hidden');
-            renderCategorias();
-            document.getElementById('sabores-container').innerHTML = '';
-            actualizarPrecio();
-        }
-
-        // ==================== RENDER CATEGORÍAS (CON RESTRICCIONES) ====================
-        function renderCategorias() {
-            const container = document.getElementById('categorias-grid');
-            container.innerHTML = '';
-
-            const extras = extrasPorProducto[productoSeleccionado.id] || { especial: 1500, personalizado: 2500 };
-            let catsFiltradas = [...categoriasBase];
-
-            // REGLAS ESPECIALES
-            if (productoSeleccionado.tipo === "simple") {
-                // Caja simple → No permite Personalizado
-                catsFiltradas = catsFiltradas.filter(c => c.id !== "personalizado");
-            }
-
-            if (productoSeleccionado.tipo === "premium") {
-                // Premium → Solo Especial y Personalizado
-                catsFiltradas = catsFiltradas.filter(c => c.id !== "clasico");
-            }
-
-            catsFiltradas.forEach(cat => {
-                let extra = 0;
-                if (cat.id === "especial") extra = extras.especial || 0;
-                if (cat.id === "personalizado") extra = extras.personalizado || 0;
-
-                const div = document.createElement('div');
-                div.className = `option-card p-5 rounded-3xl bg-white flex flex-col`;
-
-                let extraHTML = '';
-                if (extra > 0) {
-                    extraHTML = `<div class="text-emerald-600 text-sm font-semibold mt-1">+ $${extra.toLocaleString('es-AR')}</div>`;
-                } else {
-                    extraHTML = `<div class="text-gray-400 text-sm mt-1">Precio base</div>`;
-                }
-
-                div.innerHTML = `
-                    <div class="font-bold">${cat.nombre}</div>
-                    ${extraHTML}
-                `;
-
-                div.onclick = () => seleccionarCategoria({ ...cat, extraActual: extra }, div);
-                container.appendChild(div);
-            });
-        }
-
-        function seleccionarCategoria(cat, element) {
-            document.querySelectorAll('#categorias-grid .option-card').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
-
-            categoriaSeleccionada = cat;
-            saboresSeleccionados = [];
-            renderSabores();
-            actualizarPrecio();
-        }
-
-        // ==================== SABORES ====================
-        function renderSabores() {
-            const container = document.getElementById('sabores-container');
-            container.innerHTML = '';
-
-            if (!categoriaSeleccionada) return;
-
-            document.getElementById('limite-sabores').innerHTML = 
-                `Podés elegir hasta <strong>${categoriaSeleccionada.limite}</strong> sabor(es)`;
-
-            categoriaSeleccionada.sabores.forEach(sabor => {
-                const div = document.createElement('div');
-                div.className = `flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50`;
-
-                div.innerHTML = `
-                    <input type="checkbox" id="sabor-${sabor}" class="w-5 h-5 accent-[#3C2F2F]">
-                    <label for="sabor-${sabor}" class="cursor-pointer flex-1 text-sm">${sabor}</label>
-                `;
-
-                const checkbox = div.querySelector('input');
-                checkbox.onchange = () => toggleSabor(sabor, checkbox);
-                container.appendChild(div);
-            });
-        }
-
-        function toggleSabor(sabor, checkbox) {
-            if (checkbox.checked) {
-                if (saboresSeleccionados.length >= categoriaSeleccionada.limite) {
-                    checkbox.checked = false;
-                    alert(`Máximo ${categoriaSeleccionada.limite} sabores permitidos en esta categoría.`);
-                    return;
-                }
-                saboresSeleccionados.push(sabor);
-            } else {
-                saboresSeleccionados = saboresSeleccionados.filter(s => s !== sabor);
-            }
-            actualizarPrecio();
-        }
-
-        // ==================== PRECIO ====================
-        function actualizarPrecio() {
-            const precioEl = document.getElementById('precio-total');
-            const detalleEl = document.getElementById('detalle-precio');
-
-            if (!productoSeleccionado || !categoriaSeleccionada) {
-                precioEl.textContent = '$0';
-                detalleEl.textContent = '';
-                return;
-            }
-
-            let precio = productoSeleccionado.precioClasico;
-            if (categoriaSeleccionada.extraActual > 0) {
-                precio += categoriaSeleccionada.extraActual;
-            }
-
-            precioEl.textContent = `$${precio.toLocaleString('es-AR')}`;
-
-            let texto = `Base: $${productoSeleccionado.precioClasico.toLocaleString('es-AR')}`;
-            if (categoriaSeleccionada.extraActual > 0) {
-                texto += ` + $${categoriaSeleccionada.extraActual.toLocaleString('es-AR')}`;
-            }
-            detalleEl.textContent = texto;
-        }
-
-        // ==================== AGREGAR AL PEDIDO ====================
-        function agregarBombonesAlCarrito() {
-            if (!productoSeleccionado || !categoriaSeleccionada || saboresSeleccionados.length === 0) {
-                alert("Completá la selección de caja, categoría y sabores.");
-                return;
-            }
-
-            let precio = productoSeleccionado.precioClasico;
-            if (categoriaSeleccionada.extraActual > 0) {
-                precio += categoriaSeleccionada.extraActual;
-            }
-
-            carrito.push({
-                producto: productoSeleccionado.nombre,
-                categoria: categoriaSeleccionada.nombre,
-                sabores: [...saboresSeleccionados],
-                precio: precio
-            });
-
-            mostrarToast("Producto agregado al carrito");
-            actualizarContadorCarrito();
-            resetearTodo();
-        }
-
-        function actualizarContadorBombones() {
-            document.getElementById('contador-carrito').textContent = carrito.length;
-        }
-
-        // ==================== MOSTRAR CARRITO ====================
-        function mostrarCarritoBombones() {
-            const modal = document.getElementById('modal-carrito');
-            const contenido = document.getElementById('contenido-carrito');
-            const totalEl = document.getElementById('total-carrito');
-
-            contenido.innerHTML = '';
-
-            if (carrito.length === 0) {
-                contenido.innerHTML = `<p class="text-center py-8 text-gray-500">Tu carrito está vacío.</p>`;
-                totalEl.textContent = '$0';
-            } else {
-                let total = 0;
-
-                carrito.forEach((item, index) => {
-                    total += item.precio;
-
-                    const div = document.createElement('div');
-                    div.className = `border-b pb-3 mb-3`;
-                    div.innerHTML = `
-                        <div class="flex justify-between">
-                            <div>
-                                <p class="font-semibold">${item.producto}</p>
-                                <p class="text-sm text-gray-600">${item.categoria}</p>
-                                <p class="text-xs mt-1">Sabores: ${item.sabores.join(", ")}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">$${item.precio.toLocaleString('es-AR')}</p>
-                                <button onclick="eliminarDelCarrito(${index})" class="text-red-500 text-xs mt-1">Eliminar</button>
-                            </div>
-                        </div>
-                    `;
-                    contenido.appendChild(div);
-                });
-
-                totalEl.textContent = `$${total.toLocaleString('es-AR')}`;
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function eliminarDelCarrito(index) {
-            carrito.splice(index, 1);
-            actualizarContadorCarrito();
-            mostrarCarrito(); // refrescar modal
-        }
-
-        function cerrarModalCarrito() {
-            const modal = document.getElementById('modal-carrito');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-
-        function finalizarPedido() {
-            if (carrito.length === 0) return;
-
-            let mensaje = `🍫 *Pedido de Bombones - Miss Daniela Bakery*\n\n`;
-
-            carrito.forEach(item => {
-                mensaje += `• ${item.producto}\n`;
-                mensaje += `  Categoría: ${item.categoria}\n`;
-                mensaje += `  Sabores: ${item.sabores.join(" + ")}\n`;
-                mensaje += `  Precio: $${item.precio.toLocaleString('es-AR')}\n\n`;
-            });
-
-            const total = carrito.reduce((sum, item) => sum + item.precio, 0);
-            mensaje += `────────────────────\n`;
-            mensaje += `*TOTAL: $${total.toLocaleString('es-AR')}*`;
-
-            // Abrir WhatsApp
-            const telefono = "5491122539954";
-            window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
-
-            // Opcional: limpiar carrito después de enviar
-            // carrito = [];
-            // actualizarContadorCarrito();
-            // cerrarModalCarrito();
-        }
-
-        function resetearTodo() {
-            document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
-            document.getElementById('pasos-2-3').classList.add('hidden');
-            document.getElementById('sabores-container').innerHTML = '';
-            document.getElementById('limite-sabores').innerHTML = '';
-            document.getElementById('precio-total').textContent = '$0';
-            document.getElementById('detalle-precio').textContent = '';
-
-            productoSeleccionado = null;
-            categoriaSeleccionada = null;
-            saboresSeleccionados = [];
-        }
-
-        function mostrarToast(mensaje) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').innerText = mensaje;
-            toast.style.display = 'flex';
-            setTimeout(() => toast.style.display = 'none', 2200);
-        }
-
-        function initBombones() {
+    function initBombones() {
         renderBombonesProductos();
         actualizarContadorBombones();
     }
 
-        window.onload = init;
+    function renderBombonesProductos() {
+        const grid = document.getElementById('bombones-productos-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
 
+        bombonesProductos.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = `option-card bg-white rounded-3xl p-5 flex flex-col justify-between h-full cursor-pointer border border-gray-200`;
+
+            card.innerHTML = `
+                <div>
+                    <div class="font-bold text-lg">${prod.nombre}</div>
+                    ${prod.unidades ? `<div class="text-xs text-gray-500 mt-0.5">${prod.unidades}</div>` : ''}
+                </div>
+                <div class="mt-6">
+                    <div class="text-xs text-gray-500">Precio base (Clásico)</div>
+                    <div class="text-2xl font-bold">$${prod.precioClasico.toLocaleString('es-AR')}</div>
+                </div>
+            `;
+
+            card.onclick = () => seleccionarProductoBombones(prod, card);
+            grid.appendChild(card);
+        });
+    }
+
+    function seleccionarProductoBombones(prod, cardElement) {
+        document.querySelectorAll('#bombones-productos-grid .option-card').forEach(el => el.classList.remove('selected'));
+        cardElement.classList.add('selected');
+
+        bombonesProductoSeleccionado = prod;
+        bombonesCategoriaSeleccionada = null;
+        bombonesSaboresSeleccionados = [];
+
+        document.getElementById('bombones-pasos-2-3').classList.remove('hidden');
+        renderBombonesCategorias();
+        document.getElementById('bombones-sabores-container').innerHTML = '';
+        actualizarPrecioBombones();
+    }
+
+    function renderBombonesCategorias() {
+        const container = document.getElementById('bombones-categorias-grid');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const extras = bombonesExtras[bombonesProductoSeleccionado.id] || { especial: 1500, personalizado: 2500 };
+        let categoriasFiltradas = [...bombonesCategoriasBase];
+
+        // REGLAS ESPECIALES
+        if (bombonesProductoSeleccionado.tipo === "simple") {
+            categoriasFiltradas = categoriasFiltradas.filter(c => c.id !== "personalizado");
+        }
+        if (bombonesProductoSeleccionado.tipo === "premium") {
+            categoriasFiltradas = categoriasFiltradas.filter(c => c.id !== "clasico");
+        }
+
+        categoriasFiltradas.forEach(cat => {
+            let extra = 0;
+            if (cat.id === "especial") extra = extras.especial || 0;
+            if (cat.id === "personalizado") extra = extras.personalizado || 0;
+
+            const div = document.createElement('div');
+            div.className = `option-card p-5 rounded-3xl bg-white flex flex-col cursor-pointer border border-gray-200`;
+
+            let extraHTML = '';
+            if (extra > 0) {
+                extraHTML = `<div class="text-emerald-600 text-sm font-semibold mt-1">+ $${extra.toLocaleString('es-AR')}</div>`;
+            } else {
+                extraHTML = `<div class="text-gray-400 text-sm mt-1">Precio base</div>`;
+            }
+
+            div.innerHTML = `
+                <div class="font-bold">${cat.nombre}</div>
+                ${extraHTML}
+            `;
+
+            div.onclick = () => seleccionarCategoriaBombones({ ...cat, extraActual: extra }, div);
+            container.appendChild(div);
+        });
+    }
+
+    function seleccionarCategoriaBombones(cat, element) {
+        document.querySelectorAll('#bombones-categorias-grid .option-card').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+
+        bombonesCategoriaSeleccionada = cat;
+        bombonesSaboresSeleccionados = [];
+        renderBombonesSabores();
+        actualizarPrecioBombones();
+    }
+
+    function renderBombonesSabores() {
+        const container = document.getElementById('bombones-sabores-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!bombonesCategoriaSeleccionada) return;
+
+        document.getElementById('bombones-limite-sabores').innerHTML = 
+            `Podés elegir hasta <strong>${bombonesCategoriaSeleccionada.limite}</strong> sabor(es)`;
+
+        bombonesCategoriaSeleccionada.sabores.forEach(sabor => {
+            const div = document.createElement('div');
+            div.className = `flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50`;
+
+            div.innerHTML = `
+                <input type="checkbox" id="bsabor-${sabor}" class="w-5 h-5 accent-[#3C2F2F]">
+                <label for="bsabor-${sabor}" class="cursor-pointer flex-1 text-sm">${sabor}</label>
+            `;
+
+            const checkbox = div.querySelector('input');
+            checkbox.onchange = () => toggleSaborBombones(sabor, checkbox);
+            container.appendChild(div);
+        });
+    }
+
+    function toggleSaborBombones(sabor, checkbox) {
+        if (checkbox.checked) {
+            if (bombonesSaboresSeleccionados.length >= bombonesCategoriaSeleccionada.limite) {
+                checkbox.checked = false;
+                alert(`Máximo ${bombonesCategoriaSeleccionada.limite} sabores permitidos.`);
+                return;
+            }
+            bombonesSaboresSeleccionados.push(sabor);
+        } else {
+            bombonesSaboresSeleccionados = bombonesSaboresSeleccionados.filter(s => s !== sabor);
+        }
+        actualizarPrecioBombones();
+    }
+
+    function actualizarPrecioBombones() {
+        const precioEl = document.getElementById('bombones-precio-total');
+        if (!precioEl) return;
+
+        if (!bombonesProductoSeleccionado || !bombonesCategoriaSeleccionada) {
+            precioEl.textContent = '$0';
+            return;
+        }
+
+        let precio = bombonesProductoSeleccionado.precioClasico;
+        if (bombonesCategoriaSeleccionada.extraActual > 0) {
+            precio += bombonesCategoriaSeleccionada.extraActual;
+        }
+
+        precioEl.textContent = `$${precio.toLocaleString('es-AR')}`;
+    }
+
+    function agregarBombonesAlCarrito() {
+        if (!bombonesProductoSeleccionado || !bombonesCategoriaSeleccionada || bombonesSaboresSeleccionados.length === 0) {
+            alert("Completá la selección de caja, categoría y sabores.");
+            return;
+        }
+
+        let precio = bombonesProductoSeleccionado.precioClasico;
+        if (bombonesCategoriaSeleccionada.extraActual > 0) {
+            precio += bombonesCategoriaSeleccionada.extraActual;
+        }
+
+        bombonesCarrito.push({
+            producto: bombonesProductoSeleccionado.nombre,
+            categoria: bombonesCategoriaSeleccionada.nombre,
+            sabores: [...bombonesSaboresSeleccionados],
+            precio: precio
+        });
+
+        mostrarToast("Producto agregado al carrito de bombones");
+        actualizarContadorBombones();
+        resetearBombones();
+    }
+
+    function resetearBombones() {
+        document.querySelectorAll('#bombones-productos-grid .option-card').forEach(el => el.classList.remove('selected'));
+        document.getElementById('bombones-pasos-2-3').classList.add('hidden');
+        document.getElementById('bombones-sabores-container').innerHTML = '';
+        document.getElementById('bombones-limite-sabores').innerHTML = '';
+        document.getElementById('bombones-precio-total').textContent = '$0';
+
+        bombonesProductoSeleccionado = null;
+        bombonesCategoriaSeleccionada = null;
+        bombonesSaboresSeleccionados = [];
+    }
+
+    function actualizarContadorBombones() {
+        const el = document.getElementById('contador-carrito-bombones');
+        if (el) el.textContent = bombonesCarrito.length;
+    }
+
+    function mostrarCarritoBombones() {
+        // Modal simple de carrito de bombones
+        let html = `<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]" onclick="this.remove()">
+            <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-lg mx-4 rounded-3xl p-6">
+                <h3 class="text-xl font-bold mb-4">Carrito de Bombones</h3>
+                <div id="lista-carrito-bombones" class="max-h-[350px] overflow-auto mb-4"></div>
+                
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total</span>
+                    <span id="total-bombones-carrito">$0</span>
+                </div>
+                
+                <button onclick="enviarPedidoBombonesWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-bold">
+                    Enviar por WhatsApp
+                </button>
+            </div>
+        </div>`;
+
+        document.body.insertAdjacentHTML('beforeend', html);
+        renderListaCarritoBombones();
+    }
+
+    function renderListaCarritoBombones() {
+        const contenedor = document.getElementById('lista-carrito-bombones');
+        const totalEl = document.getElementById('total-bombones-carrito');
+        if (!contenedor) return;
+
+        contenedor.innerHTML = '';
+
+        if (bombonesCarrito.length === 0) {
+            contenedor.innerHTML = `<p class="text-center py-6 text-gray-500">El carrito está vacío.</p>`;
+            totalEl.textContent = '$0';
+            return;
+        }
+
+        let total = 0;
+
+        bombonesCarrito.forEach((item, index) => {
+            total += item.precio;
+            const div = document.createElement('div');
+            div.className = `border-b pb-3 mb-3 text-sm`;
+            div.innerHTML = `
+                <div class="flex justify-between">
+                    <div>
+                        <strong>${item.producto}</strong><br>
+                        <span class="text-gray-600">${item.categoria}</span><br>
+                        <span class="text-xs">Sabores: ${item.sabores.join(" + ")}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-bold">$${item.precio.toLocaleString('es-AR')}</span><br>
+                        <button onclick="eliminarItemBombones(${index}, this)" class="text-red-500 text-xs">Eliminar</button>
+                    </div>
+                </div>
+            `;
+            contenedor.appendChild(div);
+        });
+
+        totalEl.textContent = `$${total.toLocaleString('es-AR')}`;
+    }
+
+    function eliminarItemBombones(index, element) {
+        bombonesCarrito.splice(index, 1);
+        actualizarContadorBombones();
+        renderListaCarritoBombones();
+    }
+
+    function enviarPedidoBombonesWhatsApp() {
+        if (bombonesCarrito.length === 0) return;
+
+        let mensaje = `🍫 *Pedido de Bombones - Miss Daniela Bakery*\n\n`;
+
+        bombonesCarrito.forEach(item => {
+            mensaje += `• ${item.producto}\n`;
+            mensaje += `  ${item.categoria}\n`;
+            mensaje += `  Sabores: ${item.sabores.join(" + ")}\n`;
+            mensaje += `  $${item.precio.toLocaleString('es-AR')}\n\n`;
+        });
+
+        const total = bombonesCarrito.reduce((sum, item) => sum + item.precio, 0);
+        mensaje += `────────────────────\n*TOTAL: $${total.toLocaleString('es-AR')}*`;
+
+        window.open(`https://wa.me/5491122539954?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+
+    function mostrarToast(msg) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        document.getElementById('toast-msg').innerText = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    // ==================== INICIALIZAR BOMBONES AL CAMBIAR DE VISTA ====================
+    const originalChangeViewBombones = changeView;
+    changeView = function(id) {
+        originalChangeViewBombones(id);
+        if (id === 'view-bombones') {
+            setTimeout(() => {
+                initBombones();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }, 100);
+        }
+    };
+
+    console.log('%c[Bombones] Código cargado correctamente', 'color:#3C2F2F');
     // ====================== FIN CÓDIGO BOMBONES ======================
     </script>
 </body>
