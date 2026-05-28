@@ -152,6 +152,11 @@
                     <span class="text-3xl block mb-2">🥐</span>
                     <span class="font-bold text-xl block group-hover:text-white">Desayunos y Bandejas</span>
                 </button>
+                <button onclick="changeView('view-bombones')" 
+                    class="group p-6 rounded-2xl border-2 border-[#3C2F2F] hover:bg-[#3C2F2F] transition-all">
+                    <span class="text-3xl block mb-2">🍫</span>
+                    <span class="font-bold text-xl block group-hover:text-white">Bombones</span>
+                </button>
             </div>
         </div>
     </section>
@@ -382,6 +387,60 @@
             </div>
         </main>
     </section>
+    <!-- ============================================ -->
+<!-- ============= SECCIÓN BOMBONES ============= -->
+<!-- ============================================ -->
+<section id="view-bombones" class="view-section h-full overflow-auto bg-[#FDF6EE]">
+    <header class="sticky top-0 z-50 bg-[#3C2F2F] text-white py-4 px-6 flex items-center shadow-md">
+        <button onclick="changeView('view-home')" class="p-2 hover:bg-white/10 rounded-full">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <h2 class="font-display text-center flex-1 text-xl">Bombones</h2>
+        <div class="w-10"></div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-6 pb-20">
+        <div class="mb-6">
+            <h3 class="font-bold text-xl mb-1">Elige tu caja de bombones</h3>
+            <p class="text-sm text-gray-500">Seleccioná el producto y el tipo de personalización</p>
+        </div>
+
+        <!-- Grid de productos -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="bombones-grid"></div>
+
+        <!-- Configurador -->
+        <div class="bg-white rounded-3xl p-6 border border-gray-100 mb-8">
+            <div id="bombones-config" class="hidden">
+                <h4 class="font-bold mb-4" id="bombones-producto-nombre"></h4>
+
+                <!-- Tipos -->
+                <div class="mb-4">
+                    <p class="text-sm font-semibold mb-2 text-gray-600">Tipo de personalización</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="bombones-tipos"></div>
+                </div>
+
+                <!-- Cantidad y botón -->
+                <div class="flex items-end gap-4">
+                    <div>
+                        <label class="text-sm font-semibold">Cantidad</label>
+                        <div class="flex items-center border rounded-2xl overflow-hidden w-fit mt-1">
+                            <button onclick="bombonesCambiarCantidad(-1)" class="px-4 py-2 text-xl font-bold">-</button>
+                            <input type="number" id="bombones-cantidad" value="1" class="w-14 text-center font-bold">
+                            <button onclick="bombonesCambiarCantidad(1)" class="px-4 py-2 text-xl font-bold">+</button>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <button onclick="agregarBombonesAlCarrito()" 
+                                class="w-full bg-[#3C2F2F] hover:bg-black text-white py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="plus"></i> 
+                            <span>Agregar al pedido</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>
     <div id="cart-modal" class="modal-overlay" onclick="if(event.target===this)toggleCart()">
         <div class="bg-white w-full max-w-md m-4 rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
             <h3 class="font-display text-2xl mb-6 text-gray-800 border-b pb-2">Resumen de Pedido</h3>
@@ -722,6 +781,117 @@
         window.onload = function() {
             calcularTotal();
         };
+        <script>
+    // ====================== CÓDIGO DE BOMBONES ======================
+
+    const bombonesData = [
+        { id: "regalo-chica", nombre: "Caja Regalo Chica (10 u.)", clasica: 14500, especial: 15500, personalizado: null },
+        { id: "cuarto-kg", nombre: "Caja de ¼ Kg", clasica: 18500, especial: 20000, personalizado: 21000 },
+        { id: "chocofrase", nombre: "Caja Chocofrase Base", clasica: 22000, especial: 24500, personalizado: 25500 },
+        { id: "tematicas", nombre: "Cajas Temáticas (22 u.)", clasica: 24500, especial: 27000, personalizado: 28000 },
+        { id: "medio-kg", nombre: "Caja de ½ Kg", clasica: 32000, especial: 35500, personalizado: 37500 },
+        { id: "golden-premium", nombre: "Caja Golden Premium", clasica: null, especial: 34000, personalizado: 36500 }
+    ];
+
+    let bombonesSeleccionado = null;
+    let bombonesTipoSeleccionado = null;
+
+    function initBombones() {
+        const grid = document.getElementById('bombones-grid');
+        grid.innerHTML = '';
+
+        bombonesData.forEach(prod => {
+            const precios = [prod.clasica, prod.especial, prod.personalizado].filter(p => p);
+            const desde = Math.min(...precios);
+
+            const div = document.createElement('div');
+            div.className = `option-card p-5 bg-white rounded-2xl border border-gray-200 cursor-pointer`;
+            div.innerHTML = `
+                <div class="font-bold">${prod.nombre}</div>
+                <div class="text-xs text-gray-500 mt-1">Desde</div>
+                <div class="text-2xl font-bold">$${desde.toLocaleString('es-AR')}</div>
+            `;
+            div.onclick = () => seleccionarProductoBombones(prod, div);
+            grid.appendChild(div);
+        });
+    }
+
+    function seleccionarProductoBombones(prod, element) {
+        document.querySelectorAll('#bombones-grid .option-card').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+
+        bombonesSeleccionado = prod;
+        bombonesTipoSeleccionado = null;
+
+        document.getElementById('bombones-config').classList.remove('hidden');
+        document.getElementById('bombones-producto-nombre').innerHTML = prod.nombre;
+        renderTiposBombones(prod);
+    }
+
+    function renderTiposBombones(prod) {
+        const container = document.getElementById('bombones-tipos');
+        container.innerHTML = '';
+
+        const tipos = [
+            { key: 'clasica', label: 'Clásica (1 sabor)', precio: prod.clasica },
+            { key: 'especial', label: 'Especial (hasta 2 sabores)', precio: prod.especial },
+            { key: 'personalizado', label: 'Personalizado (hasta 2 sabores)', precio: prod.personalizado }
+        ];
+
+        tipos.forEach(tipo => {
+            if (!tipo.precio) return;
+
+            const btn = document.createElement('div');
+            btn.className = `option-card p-4 rounded-2xl bg-white border text-center cursor-pointer`;
+            btn.innerHTML = `
+                <div class="font-bold">${tipo.label}</div>
+                <div class="text-lg font-bold mt-1">$${tipo.precio.toLocaleString('es-AR')}</div>
+            `;
+            btn.onclick = () => seleccionarTipoBombones(tipo, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function seleccionarTipoBombones(tipo, element) {
+        document.querySelectorAll('#bombones-tipos .option-card').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        bombonesTipoSeleccionado = tipo;
+    }
+
+    function bombonesCambiarCantidad(delta) {
+        const input = document.getElementById('bombones-cantidad');
+        let valor = parseInt(input.value) || 1;
+        input.value = Math.max(1, valor + delta);
+    }
+
+    function agregarBombonesAlCarrito() {
+        if (!bombonesSeleccionado || !bombonesTipoSeleccionado) {
+            alert("Por favor seleccioná un producto y un tipo de personalización");
+            return;
+        }
+
+        const cantidad = parseInt(document.getElementById('bombones-cantidad').value) || 1;
+        const precioUnitario = bombonesTipoSeleccionado.precio;
+
+        cart.push({
+            n: `${bombonesSeleccionado.nombre} - ${bombonesTipoSeleccionado.label}`,
+            p: precioUnitario * cantidad,
+            e: "🍫",
+            cat: "Bombones"
+        });
+
+        showPushUp(`Agregado: ${bombonesSeleccionado.nombre}`);
+        upCart();
+
+        // Resetear selección
+        document.getElementById('bombones-config').classList.add('hidden');
+        document.querySelectorAll('#bombones-grid .option-card').forEach(el => el.classList.remove('selected'));
+        bombonesSeleccionado = null;
+        bombonesTipoSeleccionado = null;
+    }
+
+    // ====================== FIN CÓDIGO BOMBONES ======================
+        </script>
     </script>
 </body>
 </html>
